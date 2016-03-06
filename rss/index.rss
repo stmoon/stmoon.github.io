@@ -1,4 +1,53 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Program Lock</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.7</generator><lastBuildDate>Sun, 06 Mar 2016 12:49:24 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>하나둘 간다.</title><description>&lt;p&gt;이건 테스트이다.&lt;/p&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Program Lock</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.7</generator><lastBuildDate>Sun, 06 Mar 2016 13:05:14 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Setting up a Ghost Blog with Github Pages</title><description>&lt;h3 id="install"&gt;Install&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;npm 설치&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id="howtosettingwithgithub"&gt;How to setting with github&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;# (in a new tab) get back to the blog folder
+$ cd ~/Dropbox/blog
+$ buster setup --gh-repo=\
+"https://github.com/&amp;lt;username&amp;gt;/&amp;lt;username&amp;gt;.github.io.git"
+$ buster generate
+$ buster deploy
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;나중에 다시 연결 시에는 로컬에서 서버 시작하고, generate와 deploy 하면&lt;/li&gt;&lt;/ul&gt;</description><link>http://localhost:2368/setting-up-a-ghost-blog-with-github-pages/</link><guid isPermaLink="false">a838ef44-e0db-4e0b-b500-c903765a26c4</guid><category>ghost</category><category>page</category><dc:creator>SungTae Moon</dc:creator><pubDate>Sun, 06 Mar 2016 13:00:50 GMT</pubDate><content:encoded>&lt;h3 id="install"&gt;Install&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;npm 설치&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id="howtosettingwithgithub"&gt;How to setting with github&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;# (in a new tab) get back to the blog folder
+$ cd ~/Dropbox/blog
+$ buster setup --gh-repo=\
+"https://github.com/&amp;lt;username&amp;gt;/&amp;lt;username&amp;gt;.github.io.git"
+$ buster generate
+$ buster deploy
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;나중에 다시 연결 시에는 로컬에서 서버 시작하고, generate와 deploy 하면 된다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;$ npm start
+
+
+$ buster generate
+$ buster deploy
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="reference"&gt;Reference&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;a href="http://blog.sunnyg.io/2015/09/24/ghost-with-github/"&gt;영문버전설명&lt;/a&gt;  &lt;/li&gt;
+&lt;li&gt;&lt;a href="http://blog.mollywhite.net/how-to-display-mathematical-equations-in-ghost/"&gt;GHost에서 수식 사용하기&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;</content:encoded></item><item><title>하나둘 간다.</title><description>&lt;p&gt;이건 테스트이다.&lt;/p&gt;
 
 &lt;ol&gt;
 &lt;li&gt;수식으로 삽입하기:&lt;/li&gt;
@@ -22,7 +71,7 @@
 &lt;li&gt;문단 안에 바로 수식 삽입하기:&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;\({e}^{i\pi}+1=0\)&lt;/p&gt;</content:encoded></item><item><title>Test</title><description>&lt;p&gt;test&lt;/p&gt;</description><link>http://localhost:2368/test/</link><guid isPermaLink="false">25860b3b-2ea0-43c2-b715-05476f5570b6</guid><dc:creator>SungTae Moon</dc:creator><pubDate>Sun, 06 Mar 2016 11:05:50 GMT</pubDate><content:encoded>&lt;p&gt;test&lt;/p&gt;</content:encoded></item><item><title>Welcome to Ghost</title><description>&lt;p&gt;You're live! Nice. We've put together a little post to introduce you to the Ghost editor and get you started. You can manage your content by signing in to the admin area at &lt;code&gt;&amp;lt;your blog URL&amp;gt;/ghost/&lt;/code&gt;. When you arrive, you can select this post from a list&lt;/p&gt;</description><link>http://localhost:2368/welcome-to-ghost/</link><guid isPermaLink="false">16d0989b-fedc-419c-878b-4d7643231bf3</guid><category>Getting Started</category><dc:creator>SungTae Moon</dc:creator><pubDate>Sun, 06 Mar 2016 10:50:27 GMT</pubDate><content:encoded>&lt;p&gt;You're live! Nice. We've put together a little post to introduce you to the Ghost editor and get you started. You can manage your content by signing in to the admin area at &lt;code&gt;&amp;lt;your blog URL&amp;gt;/ghost/&lt;/code&gt;. When you arrive, you can select this post from a list on the left and see a preview of it on the right. Click the little pencil icon at the top of the preview to edit this post and read the next section!&lt;/p&gt;
+&lt;p&gt;\({e}^{i\pi}+1=0\)&lt;/p&gt;</content:encoded></item><item><title>Welcome to Ghost</title><description>&lt;p&gt;You're live! Nice. We've put together a little post to introduce you to the Ghost editor and get you started. You can manage your content by signing in to the admin area at &lt;code&gt;&amp;lt;your blog URL&amp;gt;/ghost/&lt;/code&gt;. When you arrive, you can select this post from a list&lt;/p&gt;</description><link>http://localhost:2368/welcome-to-ghost/</link><guid isPermaLink="false">16d0989b-fedc-419c-878b-4d7643231bf3</guid><category>Getting Started</category><dc:creator>SungTae Moon</dc:creator><pubDate>Sun, 06 Mar 2016 10:50:27 GMT</pubDate><content:encoded>&lt;p&gt;You're live! Nice. We've put together a little post to introduce you to the Ghost editor and get you started. You can manage your content by signing in to the admin area at &lt;code&gt;&amp;lt;your blog URL&amp;gt;/ghost/&lt;/code&gt;. When you arrive, you can select this post from a list on the left and see a preview of it on the right. Click the little pencil icon at the top of the preview to edit this post and read the next section!&lt;/p&gt;
 
 &lt;p&gt;TEST&lt;/p&gt;
 
