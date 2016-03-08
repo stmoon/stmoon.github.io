@@ -1,4 +1,4 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Program Lock</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.7</generator><lastBuildDate>Sun, 06 Mar 2016 14:43:26 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Fake GPS</title><description>&lt;h4 id="introduction"&gt;Introduction&lt;/h4&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Program Lock</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.7</generator><lastBuildDate>Tue, 08 Mar 2016 06:14:11 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Fake GPS</title><description>&lt;h4 id="introduction"&gt;Introduction&lt;/h4&gt;
 
 &lt;p&gt;안녕하세요. 오늘은 Fake GPS에 대해 알아보고자 합니다. &lt;/p&gt;
 
@@ -39,9 +39,18 @@
 
 &lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/03/ROS_milestone.png" alt="ROS MileStone"&gt;&lt;/p&gt;
 
+&lt;h4 id="prerequisites"&gt;Prerequisites&lt;/h4&gt;
+
+&lt;p&gt;그러면 그럼 이제 각설하고, 본격적으로 어떻게 Fake GPS를 구동하는지 구체적으로 살펴보도록 하겠습니다. 우선 ROS가 설치된 컴퓨터가 필요합니다. 앞에서 말씀드린 것 처럼 ROS는 Indigo를 사용했습니다. 그리고 나서 MAVROS와 Vicon_bridge를 설치합니다. 설치하는 방법은 ros 홈페이지가보시면 상세히 잘 나와있습니다.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;MAVROS&lt;/li&gt;
+&lt;li&gt;Vicon_bridge&lt;/li&gt;
+&lt;/ul&gt;
+
 &lt;h4 id="step1"&gt;Step 1&lt;/h4&gt;
 
-&lt;p&gt;그러면 그럼 이제 각설하고, 본격적으로 어떻게 Fake GPS를 구동하는지 구체적으로 살펴보도록 하겠습니다. 앞에서 설명했던 것 처럼 Fake GPS는 ROS 기반으로 동작합니다. 따라서 ROS가 동작할 만한 판을 만들어 주어야 합니다.이는 ROS를 처음 사용할 시에는 무조건 해주어야 하는건데, 이를 통해 ROS의 각 노드들이 통신할 수 있게 되지요.&lt;/p&gt;
+&lt;p&gt;앞에서 설명했던 것 처럼 Fake GPS는 ROS 기반으로 동작합니다. 따라서 ROS가 동작할 만한 판을 만들어 주어야 합니다.이는 ROS를 처음 사용할 시에는 무조건 해주어야 하는건데, 이를 통해 ROS의 각 노드들이 통신할 수 있게 되지요.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;$ roscore
 &lt;/code&gt;&lt;/pre&gt;
@@ -50,7 +59,7 @@
 
 &lt;h4 id="step2"&gt;Step 2&lt;/h4&gt;
 
-&lt;p&gt;이제 ROS를 동작할 수 있는 기반이 만들어졌고, 이제 본격적으로 FakeGPS를 만들어봅시다. 먼저 모션캡쳐와 연동을 해야 합니다. 모션 캡쳐로부터 드론의 6 DOF를 받야아 하는데, ROS에서 이미 개발된 vicon_bridge를 사용하도록 하겠습니다. 이를 사용하면 vicon으로부터 특정 드론에 붙어 있는 마커를 통해 특정 패턴 정보를 받아 볼 수 있게 됩니다.&lt;/p&gt;
+&lt;p&gt;이제 ROS를 동작할 수 있는 기반이 만들어졌고, 본격적으로 FakeGPS 환경을 만들어봅시다. 먼저 모션캡쳐와 연동을 해야 합니다. 모션 캡쳐로부터 드론의 6 DOF를 받야아 하는데, ROS에서 이미 개발된 vicon_bridge를 사용하도록 하겠습니다. 이를 사용하면 vicon으로부터 특정 드론에 붙어 있는 마커를 통해 특정 패턴 정보를 받아 볼 수 있게 됩니다.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;$ sh launch_fake_gps.sh
 &lt;/code&gt;&lt;/pre&gt;
@@ -59,22 +68,24 @@
 
 &lt;h4 id="step3"&gt;Step 3&lt;/h4&gt;
 
-&lt;p&gt;이후, 실제 GPS 신호인 것 처럼 만들어 줍니다. 사실 모션 캡쳐는 최대 1000 Hz까지도 동작하지만, Pixhawk에서는 주로 GPS 신호를 5 Hz로 받고 있습니다. 따라서, 데이터 갱신 주기를 변경해 주어야 합니다. 그리고 모션 캡쳐는 1 mm 이하의 정확도로 측정이 가능한데, 실제 GPS는 오차가 매우 크기 때문에  white noise와 같은 노이즈 성분을 추가하여 GPS 상황과 유사하게 만들어 줍니다. 그리고 GPS는 지연 시간이 있기 때문에 지연 시간 또한 만들어줍니다. 이런 모든 것은 ROS에서 제공하는 ros_reconfigure 툴을 사용하여 수정이 가능하니, 외부에 나가 GPS신호에 대해 대략 분석해보고 좋을 때 나쁠 때를 만들어 보고 그런 상황을 재현할 수 있게 되는 거지요. 이게 결국 Fake GPS를 만들어주는 중요한 뽀인트 중 하나일 것 같군요.&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;sh launch_fake_gps_distorted.sh  
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이후, 실제 GPS 신호인 것 처럼 만들어 줍니다. 사실 모션 캡쳐는 최대 1000 Hz까지도 동작하지만, Pixhawk에서는 주로 GPS 신호를 5 Hz로 받고 있습니다. 따라서, 데이터 갱신 주기를 변경해 주어야 합니다. 그리고 모션 캡쳐는 1 mm 이하의 정확도로 측정이 가능한데, 실제 GPS는 오차가 매우 크기 때문에  white noise와 같은 노이즈 성분을 추가하여 GPS 상황과 유사하게 만들어 줍니다. 그리고 GPS는 지연 시간이 있기 때문에 지연 시간 또한 만들어줍니다. 이런 모든 것은 ROS에서 제공하는 ros_reconfigure 툴을 사용하여 수정이 가능하니, 외부에 나가 GPS신호에 대해 대략 분석해보고 좋을 때 나쁠 때의 상황을 재현할 수 있게 되는 거지요. 이게 결국 Fake GPS를 만들어주는 중요한 뽀인트 중 하나일 것 같군요.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;$ rosrun rqt_reconfigure rqt_reconfigure
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;ul&gt;
-&lt;li&gt;publish rate = 5.0Hz&lt;/li&gt;
-&lt;li&gt;tf&lt;em&gt;frame&lt;/em&gt;in = vicon/yourModelName/yourModelName (e.g. &lt;/li&gt;
-&lt;li&gt;vicon/DJI&lt;em&gt;450/DJI&lt;/em&gt;450)&lt;/li&gt;
-&lt;li&gt;delay = 200ms&lt;/li&gt;
-&lt;li&gt;sigma_xy = 0.05m&lt;/li&gt;
-&lt;li&gt;sigma_z = 0.05m&lt;/li&gt;
-&lt;/ul&gt;
+&lt;blockquote&gt;
+  &lt;ul&gt;
+  &lt;li&gt;publish rate = 5.0Hz&lt;/li&gt;
+  &lt;li&gt;tf&lt;em&gt;frame&lt;/em&gt;in = vicon/yourModelName/yourModelName (e.g. &lt;/li&gt;
+  &lt;li&gt;vicon/DJI&lt;em&gt;450/DJI&lt;/em&gt;450)&lt;/li&gt;
+  &lt;li&gt;delay = 200ms&lt;/li&gt;
+  &lt;li&gt;sigma_xy = 0.05m&lt;/li&gt;
+  &lt;li&gt;sigma_z = 0.05m&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/blockquote&gt;
 
 &lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/03/FakeGPS_step3.png" alt=""&gt;&lt;/p&gt;
 
@@ -83,17 +94,17 @@
 &lt;p&gt;이제 Pixhawk를 Fake GPS가 연동 될 수 있도록 만들어주어야 할 때가 왔군요. Pixhawk는 내부에 Param 형태로 설정값을 변경할 수 있도록 되어 있습니다. 이 또한 ROS와 비슷하네요. 아무리 봐도 Lorenz Meier는 분명 ROS 매니아 였거나 그동안 많이 사용해보았던 흔적들이 보입니다. 나중에 한번 역추적해보도록 하겠습니다. 
 자 어찌 되었든, 크게 세가지 부분을 변경해야 합니다. 첫째, MAV_USEHILGPS입니다. &lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;MAV_USEHILGPS to 1 (enable HIL GPS)  
+&lt;pre&gt;&lt;code&gt;MAV_USEHILGPS to 1 (enable HIL GPS, go to PARAMETERS-&amp;gt;MAVLink)  
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;이 부분을 enable시켜주면 HILS에서 생성된 GPS를 사용하겠다는 의미입니다. 그런데 약간 문제가 있습니다. 모션캡쳐가 설치된 환경에서도 가끔씩 GPS 신호가 약하게 잡히는 경우가 있다는 점입니다. 아마 해보시면, 그런 문제가 생길 수 있을 것입니다.  결국 이렇게 되면 GPS 신호가 두군데에서 들어오게 되고, Pixhawk 내부에서는 엄청난 혼란에 빠지게 됩니다. 특히, 이를 사용하여 드론의 속도등을 계산하게 되는데, 실제 신호는 한국으로 되어 있고, FakeGPS 신호는 스위스를 기반으로 두고 있다면, 드론 입장에서는 워프가 발생하는 거지요. 이 문제에 대해서는 수정 사항을 코드에 업데이트 하고 있습니다. 아마 버전 1.2.2?에 적용될 예정이니 참고하세요 &lt;/p&gt;
+&lt;p&gt;이 부분을 enable시켜주면 HILS에서 생성된 GPS를 사용하겠다는 의미입니다. 그런데 약간 문제가 있습니다. 모션캡쳐가 설치된 환경에서도 가끔씩 GPS 신호가 약하게 잡히는 경우가 있다는 점입니다. 아마 해보시면, 그런 문제가 생길 수 있을 것입니다.  결국 이렇게 되면 GPS 신호가 두군데에서 들어오게 되고, Pixhawk 내부에서는 엄청난 혼란에 빠지게 됩니다. 특히, 이를 사용하여 드론의 속도등을 계산하게 되는데, 실제 신호는 한국으로 되어 있고, FakeGPS 신호는 스위스를 기반으로 두고 있다면, 드론 입장에서는 워프가 발생하는 거지요. 이 문제에 대해서는 수정 사항을 코드에 업데이트 하고 있습니다. 아마 버전 1.3.0에 적용될 예정이니 참고하세요 &lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;ATT_EXT_HDG_M to 2 (use heading from motion capture)  
+&lt;pre&gt;&lt;code&gt;ATT_EXT_HDG_M to 2 (use heading from motion capture, go to PARAMETERS-&amp;gt;Attitude Q estimator)  
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;두번째는 드론의 헤딩 정보를 모션캡쳐로 부터 오는 데이터로 변경하는 것입니다. 실내에서는 지자기 센서가 혼란을 일으킬 수 있는 많은 물질들이 있어 실제 실내에서 지자기 센서를 사용해보면 매우 불안정 합니다. 따라서 이 정보를 모션 캡쳐를 이용하여 보상해주어야 하는 거지요. Pixhawk 내부에서는 우선 북쪽을 지자기 센서를 통해 대충 알아내고, 모션캡쳐로 부터 헤딩 위치 보상을 해주어 동작하도록되어 있습니다.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;INAV_DISAB_MOCAP to 1 (disable mocap estimation).  
+&lt;pre&gt;&lt;code&gt;INAV_DISAB_MOCAP to 1 (disable mocap estimation, go to PARAMETERS-&amp;gt;Position Estimator INAV).  
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;다음은 모션 캡쳐 위치 예측 모드를 꺼줍니다. 어? 왜 모션 캡쳐를 사용하여 위치 인식하는 것이 목적인데 모션캡쳐 위치 예측 모드를 꺼야 하냐구요? 저희는 GPS 를 모사하는 것이지 모션캡쳐기반의 위치 인식을 하면 안됩니다. 그러면 모사하는 의미가 없는거지요. 아주 정밀한 위치를 측정해버리기 때문이지요.&lt;/p&gt;
@@ -109,23 +120,28 @@
 
 &lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/03/FakeGPS_step4.png" alt=""&gt;&lt;/p&gt;
 
-&lt;h4 id="nodemap"&gt;Node Map&lt;/h4&gt;
+&lt;h4 id="nodegraph"&gt;Node Graph&lt;/h4&gt;
 
-&lt;p&gt;지금까지 설명한 것을 그림으로 그리면 다음과 같습니다.&lt;/p&gt;
+&lt;p&gt;지금까지 설명한 것을 그림으로 그리면 다음과 같습니다.ROS는 이런 그림까지 지원해주니, 전체 시스템을 바라볼때 쉽게 확인할 수 있겠지요? 참 여기서 설명하지 않은 S2&lt;em&gt;drop&lt;/em&gt;XXX은 무시하셔도 됩니다.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/03/FakeGPS_step5.png" alt=""&gt;&lt;/p&gt;
 
 &lt;h4 id="testresult"&gt;Test Result&lt;/h4&gt;
 
-&lt;p&gt;모션 캡쳐를 통해 실외 환경을 모사하게 되면 사실 다양한 환경을 직접 만들 수 있다. 그 중 하나가 바로 position estimator가 어느 정도 정확도로 잘 동작하는지를 확인 가능하다. 아래 그림은 이상적인 GPS환경 (EPH: 0.07, EPV: 0.05)인 경우에서의 동작 화면이다. 실제는 아마 &lt;/p&gt;
+&lt;p&gt;모션 캡쳐를 통해 실외 환경을 모사하게 되면 사실 다양한 환경을 직접 만들 수 있다. 그 중 하나가 바로 position estimator이다. Pixhawk의 경우 GPS-INS 방법을 사용하는데, GPS의 EPH 및 EPV에 따라 어느 정도 정밀하게 측정할 수 있는가를 확인할 수 있다. 아래 그림은 이상적인 GPS환경 (EPH: 0.07, EPV: 0.05)인 경우에서의 동작 화면이다.  &lt;/p&gt;
 
 &lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/03/FakeGPS_Result.png" alt=""&gt;&lt;/p&gt;
 
 &lt;h4 id="reference"&gt;Reference&lt;/h4&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;sup id="fnref:1"&gt;&lt;a href="http://localhost:2368/fake-gps/#fn:1" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt; : &lt;a href="http://"&gt;영문버전&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content:encoded></item><item><title>Setting up a Ghost Blog with Github Pages</title><description>&lt;h3 id="install"&gt;Install&lt;/h3&gt;
+&lt;li&gt;&lt;sup id="fnref:1"&gt;&lt;a href="http://localhost:2368/fake-gps/#fn:1" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt;: &lt;a href="http://"&gt;영문버전&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;sup id="fnref:2"&gt;&lt;a href="http://localhost:2368/fake-gps/#fn:2" rel="footnote"&gt;2&lt;/a&gt;&lt;/sup&gt;: &lt;a href="https://github.com/PX4/Firmware/pull/3768"&gt;Pixhawk Reqeust #3768&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=""&gt;후기&lt;/h4&gt;
+
+&lt;p&gt;처음 작성하다 보니, 많은 문제가 있는 것 같습니다. 그리고 Pixhawk에 대한 분석한 내용을 연재로 해볼까 생각이 들었습니다. 저도 잘은 모르지만, 작성하면서 저도 배울 수 있을 것 같네요.&lt;/p&gt;</content:encoded></item><item><title>Setting up a Ghost Blog with Github Pages</title><description>&lt;h3 id="install"&gt;Install&lt;/h3&gt;
 
 &lt;ul&gt;
 &lt;li&gt;npm 설치&lt;/li&gt;
