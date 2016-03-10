@@ -1,4 +1,44 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Program Lock</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.7</generator><lastBuildDate>Tue, 08 Mar 2016 06:19:02 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Fake GPS</title><description>&lt;h4 id="introduction"&gt;Introduction&lt;/h4&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Program Lock</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.7</generator><lastBuildDate>Thu, 10 Mar 2016 22:15:45 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Pixhawk 분석</title><description>&lt;h5 id="introduction"&gt;Introduction&lt;/h5&gt;
+
+&lt;p&gt;안녕하세요 문성태입니다. 요전 포스팅한 글을 써보다가 문득 지금까지 Pixhawk를 분석한 내용을 적어보면 좋을 것 같아서, Pixhawk 분석 연재를 시작 해볼까 합니다. (뭐... 일이 바쁘면 중간에 그만둘 수도 있지만.. 쿨럭.) 한번 도전해 보도록 하겠습니다!&lt;/p&gt;
+
+&lt;h5 id=""&gt;목차&lt;/h5&gt;
+
+&lt;p&gt;일단, 대충 목차를 잡아보도록 하겠습니다. 초보자도 쉽게 따라올 수 있도록 하는게 제 목적이고, 나중에는 비행&lt;/p&gt;</description><link>http://localhost:2368/pixhawk-bunseog/</link><guid isPermaLink="false">3c7a7859-3287-40c4-8d41-04dc30ed6e22</guid><dc:creator>SungTae Moon</dc:creator><pubDate>Thu, 10 Mar 2016 21:53:10 GMT</pubDate><content:encoded>&lt;h5 id="introduction"&gt;Introduction&lt;/h5&gt;
+
+&lt;p&gt;안녕하세요 문성태입니다. 요전 포스팅한 글을 써보다가 문득 지금까지 Pixhawk를 분석한 내용을 적어보면 좋을 것 같아서, Pixhawk 분석 연재를 시작 해볼까 합니다. (뭐... 일이 바쁘면 중간에 그만둘 수도 있지만.. 쿨럭.) 한번 도전해 보도록 하겠습니다!&lt;/p&gt;
+
+&lt;h5 id=""&gt;목차&lt;/h5&gt;
+
+&lt;p&gt;일단, 대충 목차를 잡아보도록 하겠습니다. 초보자도 쉽게 따라올 수 있도록 하는게 제 목적이고, 나중에는 비행 제어 알고리즘 동작 원리까지 분석해볼까 합니다. 사실 저는 컴퓨터 공학이 전공이어서 아무래도 코드위주로 설명을 드릴 예정입니다. 연재 순서는 아무래도 뒤죽 박죽이 될 수 있을 수도 있지만, 최대한 순서데로 해볼려고 합니다.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Pixhawk란 무엇인가.  &lt;/li&gt;
+&lt;li&gt;Pixhawk 사용해서 드론 만들어 보기&lt;/li&gt;
+&lt;li&gt;Pixhawk 소스코드로 빌드해보기&lt;/li&gt;
+&lt;li&gt;Pixhawk 소스 코드 트리 구조 바라보기&lt;/li&gt;
+&lt;li&gt;Pixahwk에 모듈 추가해보기 (Hello world)&lt;/li&gt;
+&lt;li&gt;Pixhawk 내부 구조 파헤치기 (Overview)&lt;/li&gt;
+&lt;li&gt;설정값(gain value) 변경하기&lt;/li&gt;
+&lt;li&gt;모듈간 통신을 통해 데이터 주고 받기&lt;/li&gt;
+&lt;li&gt;나만의 디버깅 로그 추가하기&lt;/li&gt;
+&lt;li&gt;position estimator 분석하기 (for multi copter)&lt;/li&gt;
+&lt;li&gt;position controller 분석하기 (for multi copter)&lt;/li&gt;
+&lt;li&gt;attitude estimator 분석하기 (for multi copter)&lt;/li&gt;
+&lt;li&gt;attitude controller 분석하기 (for multi copter)&lt;/li&gt;
+&lt;li&gt;commander 분석하기&lt;/li&gt;
+&lt;li&gt;navigator 분석하기&lt;/li&gt;
+&lt;li&gt;HILS(Hardware In The Loop) 시스템 구축하기&lt;/li&gt;
+&lt;li&gt;SITL(Software In The Loop) 시스템 구축하기&lt;/li&gt;
+&lt;li&gt;Fake GPS 만들기 (ROS 연동)&lt;/li&gt;
+&lt;li&gt;깃허브를 통한 코드 공헌해보기&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h5 id=""&gt;후기&lt;/h5&gt;
+
+&lt;p&gt;막상 목차를 잡아보니 후덜덜 하네요... 과연 다 할 수 있을까 싶기도 하구요... 하지만, 최~~~~대한 노력해보도록 하겠습니다!&lt;/p&gt;
+
+&lt;p&gt;문서의 오리지날 버전은 &lt;a href="https://stmoon.github.io/"&gt;https://stmoon.github.io/&lt;/a&gt; 을 참고하세요. &lt;/p&gt;</content:encoded></item><item><title>Fake GPS</title><description>&lt;h4 id="introduction"&gt;Introduction&lt;/h4&gt;
 
 &lt;p&gt;안녕하세요. 오늘은 Fake GPS에 대해 알아보고자 합니다. &lt;/p&gt;
 
@@ -190,31 +230,7 @@ $ buster deploy
 &lt;ol&gt;
 &lt;li&gt;&lt;a href="http://blog.sunnyg.io/2015/09/24/ghost-with-github/"&gt;영문버전설명&lt;/a&gt;  &lt;/li&gt;
 &lt;li&gt;&lt;a href="http://blog.mollywhite.net/how-to-display-mathematical-equations-in-ghost/"&gt;GHost에서 수식 사용하기&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;</content:encoded></item><item><title>하나둘 간다.</title><description>&lt;p&gt;이건 테스트이다.&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;수식으로 삽입하기:&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;\( x(t)=\frac{-b\pm \sqrt{{b}^{2}-4ac}}{2a} \)&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;문단 안에 바로 수식 삽입하기:&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;\({e}^{i\pi}+1=0\)&lt;/p&gt;</description><link>http://localhost:2368/hanadul-ganda/</link><guid isPermaLink="false">7366e8da-c5a5-4e8b-a190-96bdfab8b5be</guid><dc:creator>SungTae Moon</dc:creator><pubDate>Sun, 06 Mar 2016 11:07:02 GMT</pubDate><content:encoded>&lt;p&gt;이건 테스트이다.&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;수식으로 삽입하기:&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;\( x(t)=\frac{-b\pm \sqrt{{b}^{2}-4ac}}{2a} \)&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;문단 안에 바로 수식 삽입하기:&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;\({e}^{i\pi}+1=0\)&lt;/p&gt;</content:encoded></item><item><title>Welcome to Ghost</title><description>&lt;p&gt;You're live! Nice. We've put together a little post to introduce you to the Ghost editor and get you started. You can manage your content by signing in to the admin area at &lt;code&gt;&amp;lt;your blog URL&amp;gt;/ghost/&lt;/code&gt;. When you arrive, you can select this post from a list&lt;/p&gt;</description><link>http://localhost:2368/welcome-to-ghost/</link><guid isPermaLink="false">16d0989b-fedc-419c-878b-4d7643231bf3</guid><category>Getting Started</category><dc:creator>SungTae Moon</dc:creator><pubDate>Sun, 06 Mar 2016 10:50:27 GMT</pubDate><content:encoded>&lt;p&gt;You're live! Nice. We've put together a little post to introduce you to the Ghost editor and get you started. You can manage your content by signing in to the admin area at &lt;code&gt;&amp;lt;your blog URL&amp;gt;/ghost/&lt;/code&gt;. When you arrive, you can select this post from a list on the left and see a preview of it on the right. Click the little pencil icon at the top of the preview to edit this post and read the next section!&lt;/p&gt;
+&lt;/ol&gt;</content:encoded></item><item><title>Welcome to Ghost</title><description>&lt;p&gt;You're live! Nice. We've put together a little post to introduce you to the Ghost editor and get you started. You can manage your content by signing in to the admin area at &lt;code&gt;&amp;lt;your blog URL&amp;gt;/ghost/&lt;/code&gt;. When you arrive, you can select this post from a list&lt;/p&gt;</description><link>http://localhost:2368/welcome-to-ghost/</link><guid isPermaLink="false">16d0989b-fedc-419c-878b-4d7643231bf3</guid><category>Getting Started</category><dc:creator>SungTae Moon</dc:creator><pubDate>Sun, 06 Mar 2016 10:50:27 GMT</pubDate><content:encoded>&lt;p&gt;You're live! Nice. We've put together a little post to introduce you to the Ghost editor and get you started. You can manage your content by signing in to the admin area at &lt;code&gt;&amp;lt;your blog URL&amp;gt;/ghost/&lt;/code&gt;. When you arrive, you can select this post from a list on the left and see a preview of it on the right. Click the little pencil icon at the top of the preview to edit this post and read the next section!&lt;/p&gt;
 
 &lt;p&gt;TEST&lt;/p&gt;
 
