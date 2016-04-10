@@ -1,0 +1,319 @@
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Pixhawk 사용해서 드론 만들어 보기</title>
+    <meta name="description" content="">
+
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" href="../favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="../assets/css/screen.css?v=f27b82c1f1">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic%7COpen+Sans:700,400">
+
+    <link rel="canonical" href="index.html">
+    <meta name="referrer" content="origin">
+    
+    <meta property="og:site_name" content="Program Lock">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Pixhawk 사용해서 드론 만들어 보기">
+    <meta property="og:description" content="안녕하세요 여러분.. Pixhawk에 대해 연재를 해본다고 했는데, 갈길은 멀고 시간은 없네요.. 생업에 바쁘다 보니..여러분들의 많은 양해 부탁드립니다. Introduction 앞으로의 연재는 Top-Down방식으로 주로 설명하고자 합니다. 따라서 우선 픽스호크를 가지고 드론을 만들어보는 것 부터 하고자 합니다. 전에도 말씀드렸다시피 저는 컴퓨터 과학이 전공이어서 드론을 잘은 모릅니다. 그래서 이 부분은 정확하게 설명드리긴 어렵겠지만,">
+    <meta property="og:url" content="http://localhost:2368/pixhawk-sayonghaeseo-deuron-mandeuleo-bogi/">
+    <meta property="article:published_time" content="2016-04-10T12:12:10.209Z">
+    <meta property="article:modified_time" content="2016-04-10T12:12:33.415Z">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Pixhawk 사용해서 드론 만들어 보기">
+    <meta name="twitter:description" content="안녕하세요 여러분.. Pixhawk에 대해 연재를 해본다고 했는데, 갈길은 멀고 시간은 없네요.. 생업에 바쁘다 보니..여러분들의 많은 양해 부탁드립니다. Introduction 앞으로의 연재는 Top-Down방식으로 주로 설명하고자 합니다. 따라서 우선 픽스호크를 가지고 드론을 만들어보는 것 부터 하고자 합니다. 전에도 말씀드렸다시피 저는 컴퓨터 과학이 전공이어서 드론을 잘은 모릅니다. 그래서 이 부분은 정확하게 설명드리긴 어렵겠지만,">
+    <meta name="twitter:url" content="http://localhost:2368/pixhawk-sayonghaeseo-deuron-mandeuleo-bogi/">
+    
+    <script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "publisher": "Program Lock",
+    "author": {
+        "@type": "Person",
+        "name": "SungTae Moon",
+        "image": "http://localhost:2368/content/images/2016/03/140901_drone_writer_hei-100x113-1.jpg",
+        "url": "http://localhost:2368/author/sungtae/"
+    },
+    "headline": "Pixhawk 사용해서 드론 만들어 보기",
+    "url": "http://localhost:2368/pixhawk-sayonghaeseo-deuron-mandeuleo-bogi/",
+    "datePublished": "2016-04-10T12:12:10.209Z",
+    "dateModified": "2016-04-10T12:12:33.415Z",
+    "description": "안녕하세요 여러분.. Pixhawk에 대해 연재를 해본다고 했는데, 갈길은 멀고 시간은 없네요.. 생업에 바쁘다 보니..여러분들의 많은 양해 부탁드립니다. Introduction 앞으로의 연재는 Top-Down방식으로 주로 설명하고자 합니다. 따라서 우선 픽스호크를 가지고 드론을 만들어보는 것 부터 하고자 합니다. 전에도 말씀드렸다시피 저는 컴퓨터 과학이 전공이어서 드론을 잘은 모릅니다. 그래서 이 부분은 정확하게 설명드리긴 어렵겠지만,"
+}
+    </script>
+
+    <meta name="generator" content="Ghost 0.7">
+    <link rel="alternate" type="application/rss+xml" title="Program Lock" href="../rss/index.html">
+</head>
+<body class="post-template nav-closed">
+
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="index.html#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+            <li class="nav-home" role="presentation"><a href="../">Home</a></li>
+            <li class="nav-admin" role="presentation"><a href="http://localhost:2368/ghost/">admin</a></li>
+            <li class="nav-pixhawk" role="presentation"><a href="../tag/pixhawk/">Pixhawk</a></li>
+    </ul>
+    <a class="subscribe-button icon-feed" href="../rss/index.rss">Subscribe</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        
+
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+            <a class="menu-button icon-menu" href="index.html#"><span class="word">Menu</span></a>
+    </nav>
+</header>
+
+<main class="content" role="main">
+    <article class="post">
+
+        <header class="post-header">
+            <h1 class="post-title">Pixhawk 사용해서 드론 만들어 보기</h1>
+            <section class="post-meta">
+                <time class="post-date" datetime="2016-04-10">10 April 2016</time> 
+            </section>
+        </header>
+
+        <section class="post-content">
+            <p>안녕하세요 여러분.. Pixhawk에 대해 연재를 해본다고 했는데, 갈길은 멀고 시간은 없네요.. 생업에 바쁘다 보니..여러분들의 많은 양해 부탁드립니다.</p>
+
+<h4 id="introduction">Introduction</h4>
+
+<p>앞으로의 연재는 Top-Down방식으로 주로 설명하고자 합니다. 따라서 우선 픽스호크를 가지고 드론을 만들어보는 것 부터 하고자 합니다. 전에도 말씀드렸다시피 저는 컴퓨터 과학이 전공이어서 드론을 잘은 모릅니다. 그래서 이 부분은 정확하게 설명드리긴 어렵겠지만, 어찌되었든 제가 가지고 있는 경험을 바탕으로 설명드리겠습니다.</p>
+
+<p>자 그럼 시작해보겠습니다. </p>
+
+<h4 id="pixhawkecosystem">Pixhawk Eco-System</h4>
+
+<p>픽스호크를 사용해 드론을 만들어보기에 앞서, 간단하게나마 픽스호크의 운용 시스템을 알려드리겠습니다. 여기서 말한 운용 시스템이라고 하는 것은 픽스호크에서 제공하는 여러 종류의 사이트 및 프로그램 들이라고 보시면 될 것 같습니다. (구체적인 용어가 생각나지 않아서 운용 시스템이라고 제가 명한겁니다.)</p>
+
+<p>픽스호크에서 제공하는 운용 시스템은 크게 아래와 같이 나누어 볼 수 있을 것 같습니다.</p>
+
+<ol>
+<li>문서 시스템  </li>
+<li>코드 관리 시스템  </li>
+<li>Q&amp;A를 위한 그룹 시스템 </li>
+</ol>
+
+<p>뭐.. 다들 아시겠지만, 조금 거창하게 말씀드리는 것 같네요. 문서 시스템은 처음에는 <a href="https://pixhawk.ethz.ch/">pixhawk project</a>
+ 라는 사이트에서 시작했습니다. 이 사이트에 가보시면 초기 버전들을 보실 수 있습니다. 여러분 초기 버전이라고 구식이라 생각하지 마시길 바랍니다. 사실 코드에서 초기 버전은 그 프로그램의 처음 철학이 그대로 담겨 있기 마련입니다. 우리도 무슨일을 시작할때 처음에는 어떤 식으로 일을 시작하겠다고 하면서 프레임워크같은 것을 미리 만들어두죠. 하지만 아직 구체화가 안되어 있고 뼈대만 있다보니,많은 부분이 부족하지만, 쉽게 그 뼈대를 볼 수 있다는 장점이 있습니다. 그래서 저는 주로 처음에 오픈소스를 바라볼때 초기 버전을 살펴봅니다. 왜냐하면 그 버전에는 그 코드의 철학이 담겨 있거든요. 그리고 코드량이 비교적 적기 때문에 눈에도 쉽게 들어오죠. 이런 이유 때문에 초기 버전을 잘 눈여겨 보시길 바랍니다. 초기 버전 개발 사이트에서 픽스호크 코드가 공개되면서 3DR Robotics사에서 제품을 만들고 나면서 2차 개발 사이트인 <a href="https://pixhawk.org/">pixhawk</a>가 탄생합니다. 이 사이트 부터는 뭔가 구체적으로 바뀌지요. 내용도 매우 방대해지구요. 저도 사실 여기서부터 시작을 했습니다. 
+<img src="../content/images/2016/04/pixhawk---.jpg" alt="pixhawk사이트">
+그런데 이 사이트는 링크를 제대로 해 놓지 않는 경우가 있다는 점을 유의하세요. 그래서 메뉴만 보고 들어가보시면 뭐.. 별거 없네... 라고 생각하실 수 있습니다. 제대로된 맵이 없다는 점이 단점입니다. 그래서 꼭 오른쪽 상단의 search를 사용하세요. 그리고 한가지 더 팁!!! 아래쪽에 보시면 recent change라는게 보입니다. 이거를 잘 사용하시면 변화되고 있는 것을 볼수 있습니다. 어느 정도 이 사이트에 자주 들어오면, 그 다음부터는 변화된 부분만 보면 된다는 거지요... 마치 코드의 업데이트된 부분만 살펴보는 것처럼 말이지요.. 이 사이트 내용은 아직도 어느정도 유효합니다. 필요시 여기에서 많이 찾아보시길 바랍니다. 아. 그리고 여기서 부터는 각각 시스템마다 사이트가 달라집니다. 예를 들면 지상국 시스템인 qgroundcontrol 이라든지, 통신 프로토콜인 mavlink 등등이 따로 떨어져나갔습니다. 여기서는 비행조종컴퓨터인 픽스호크에 국한하여 설명드립니다.</p>
+
+<p>이후 최근에는 <a href="http://dev.px4.io/">devpx4</a>라는 곳으로 바뀝니다. 바뀐지는 얼마 안된걸로 기억됩니다. 아마... 작년 하반기 정도? 이제 본격적으로 development guide라는 사이트로 운용되고, gitbook이라는 시스템으로 동작됩니다. 여기서부터는 사이트 맵이 확실해집니다.저는 그게 가장 좋더라구요. ^^ 어찌되었든 뭔가 체계적으로 변화했습니다. 하지만.. 아직 포팅이 완벽하게 되지 않은 느낌입니다. 참고로 이번 연재에서 설명드릴 드론만들기 정보는 두번째 사이트인 pixhawk에 있는 내용을 가지고 하고자 합니다. </p>
+
+<p>자. 그럼 지금까지 픽스호크 대표 사이트에 대해 설명드렸습니다. 정리하면 세 개의 사이트가 있고, 각각 가지고 있는 정보 및 의미를 말씀드렸으니, 참고하여 잘 사용하시길 바랍니다. 다시 말씀드리지만, 우리는 오픈소스를 가지고 비행조종컴퓨터를 분석하려고 합니다. 따라서 가장 중요한 것은 코드의 철학을 잘 이해하는 것입니다. 왜냐하면 오픈소스이다 보니 소소한 부분은 정~말 많이 바뀝니다. 이거 따라가다 보면 정신없습니다. 중요한 것은 큰 골격, 즉 뼈대를 잘 바라보아야 하고, 그러기 위해서는 이런 사이트들을 잘 보시면서 그런 뼈대를 빨리 잡아가야하는 것입니다. 옛것도 중요하다는 거.. 잊지 말아주세용..</p>
+
+<p>이제 두번째인 코드 관리 시스템입니다. 여러분들도 많이 아시겠지만, 최근 코드 관리, 특히 오픈소스는 github로 몰아가는 것 같습니다. 저도 처음에 오픈소스에 참여하지 않을때는 svn이나 mercury 같은걸 썼는데, github를 알고 나서는 여기에 올빵하고 있습니다. 매우 직관적이고, 잘 만들어져있거든요. 혹시 git 이나 github를 잘 모르시는 분들은 꼭.. 이들을 잘 숙지하시길 바랍니다. 아마 기회 될때 저도 설명하겠지만, 저보다 훨~~씬 잘 설명해주신 분들이 많아서 예습하시고 오시면 더욱 좋을 것 같네요. 어찌되었든... 코드 관리는 <a href="https://github.com/PX4/">px4github</a>에서 관리합니다. 그리고 이중 pixhawk firmware는 <a href="https://github.com/PX4/Firmware">https://github.com/PX4/Firmware</a> 사이트에서 관리하오니, 한번 들어가 보시길 간곡히 부탁드립니다. 
+<img src="../content/images/2016/04/pixhawk----1.jpg" alt="pixhawk github">
+중요한 것은 픽스호크 코드 관리 시스템에 익숙해지셔야 한다는 것입니다. 이 시스템을 제대로 숙지하지 않으시면 분명 어제까지는 잘 날던 드론이 오늘은 잘 날지 못하는 이상한 현상이 나오게 됩니다. 거짓말 같아 보이시죠? 한번 이런 현상이 닥치면 아.. 그렇구나 하실 겁니다. 꼭 기억하실것은 오픈소스는 하루에도 몇번씩이나 코드가 바뀐다는 것입니다. 현재 내가 사용하는 코드가 언제 개발된 코드인지 확인할려면 꼭 확인해야겠지요? 그리고 이 코드에는 개발자용 버전, 안정된 버전 등등 많은 버전이 존재합니다. 따라서 꼭 확인하고 선택해야 합니다. 이 코드가 그 코드가 아닐 수 있다는 점 꼭 명심하시길 바랍니다.
+이 내용에 대해서는 앞으로도 자주 언급될 예정이니 오늘은 여기에서 마치겠습니다.</p>
+
+<p>마지막으로 Q&amp;A를 위한 사이트입니다. 픽스호크를 사용하시다보면 많은 질문들이 있겠지요. 이럴경우 사용하시는 사이트 입니다. 픽스호크에서는 구글 그룹스의 <a href="https://groups.google.com/forum/#!forum/px4users">px4users</a>을 사용합니다. 여기에 가보시면 정말 많은 질문들이 있고 개발자들이 정말 빨리 답변을 해줍니다. 물론 해주지 않은 경우도 많이 있지만, 그래도 일단 문제점이 발생하면 여기에 질문을 던져보고 확인해보는게 빠릅니다. </p>
+
+<h4 id="letsdevelopdronewithpixhawk">Let's develop drone with Pixhawk</h4>
+
+<p>그럼 우선 모든것을 각설하고, 픽스호크를 사용해 드론을 한번 만들어보죠. 앞에서도 말씀드렸지만, 저는 컴퓨터 과학이 전공이어서 하드웨어는 정말 잘 모릅니다. 그래서 제 경험을 바탕으로 설명드릴거구요. 여기에서는 DJI-450을 기준으로 설명드리겠습니다. </p>
+
+<p>자 우선 픽스호크를 다시 한번 보시죠.
+<img src="../content/images/2016/04/pixhawk-view.jpg" alt="pixhawk">
+픽스호크는 앞면에 DF-13 타입 커넥터가 줄줄이 보이네요. 여기에 통신, GPS, safety button 등등을 꽂아야 합니다. 너무 작고 해서 처음에는 탈부착하기가 정말 힘듭니다. 그리고 여기에서 제공하는 케이블 외에 별도 케이블을 만들어 사용해보면 케이블에 스트레스가 가해지는 경우가 많아서 잘 끊어지기도 합니다. 저는 개인적으로 이런 형태가 픽스호크에서는 가장 맘에 들지 않더군요. 실제 비행시험을 해보면 이 부분 커넥터 연결이 잘 안되는 경우 때문에 시간 소비한 적이 한두번이 아니었습니다. 여러분은 저와 같은 실수를 범하지 않기 위해 왠만하면 정품 케이블을 이용하시고, 이 부분이 사람의 손에 잘 닿지 않는 곳에 놓아주시길 바랍니다. 
+그리고 왼쪽 옆면에 보면 12345,등 숫자가 적혀있는 부분이 보이실 겁니다. 이 부분은 PWM 신호를 주는 부분이라고 보시면 될 것 같습니다. 모터 신호도 이쪽에서 출력해주고요. RC도 이 부분에 연결합니다. 
+또 다른 옆면에는 micro USB 연결 부분이 보이네요. 이 부분은 펌웨어를 업데이트하거나, 디버깅할때 주로 사용합니다. 그리고 micro USB 옆에 보면 조그마한 구멍 보이시나요. 이 것은 리셋 버튼입니다. 사용하다가 문제 있으면 리셋하시면 됩니다. 
+참 그리고 DF13 커넥터 부분에 가운데 쯤에 동그라한 LED 점등 부분이 보이시나요. 이 부분은 상태 정보를 LED로 보여주는 부분인데 처음 보시면 정말 밝아 눈이 나빠질 정도입니다. 랩에서 단순히 시험하실 때에는 저는 여기에 테이프를 붙혀 밝기를 조절하면서 사용한답니다. 참고하시길... 그리고 이보다 더 자세한 것을 알고 싶으신 분은 <a href="https://pixhawk.org/modules/pixhawk">이곳</a>을 참고하세요. 핀 정보 부터 기타 정보까지 아주 상세하게 나와 있습니다. </p>
+
+<p>그럼 이제 각종 커넥터에 무엇을 꽂아 사용할지 알아보시죠. 다행히도 Jetrho Hazelhurst라는 분이 그림으로 잘 설명해두었더군요.
+<img src="../content/images/2016/04/PixhawkQuad.jpg" alt="pixhawkconnect">
+이제 어느정도 눈에 들어오시는지요. 이 그림에서 Buzzer라는 게 있는데 상당히 시끄럽습니다. 필요없으시면 굳이 사용하지 않으셔도 됩니다. 그 외 나머지는 꼭 있어야 할 것들만 있어보입니다. 참. 3DR Robotics사에서 통신용으로 별도의 모듈을 팔긴하는데 915 MHz와 433 MHz만 존재합니다. 불행히도 우리나라에서는 둘 다 사용하지 못하니 다른 것을 사용하시길 바랍니다. 기본적으로 시리얼 통신이니 2.4GHz의 지그비를 사용하시는게 좋을 것 같습니다.</p>
+
+<p>연결 부위는 이렇게 하시면 되고, 실제 드론에 탑재하는 방법을 살펴보겠습니다. 이 부분 또한 Pixhawk에서 제공하는 <a href="https://pixhawk.org/platforms/multicopters/dji_flamewheel_450?s%5B%5D=dji&amp;s%5B%5D=450">DJI-450</a>을 활용하였습니다. 이 사이트에 가보시면 자세히 설명되어 있으니 참고하셔서 개발하시면 됩니다. 물론 다른 형태의 드론으로도 사용 가능합니다. 참고로 이번 연재에서는 실제 드론을 날려서 하지는 않고, 주로 시뮬레이션에서 동작을 하면서 코드를 분석할려고 합니다. 따라서 준비물은 노트북 그리고 가능하면 pixhawk 하나 정도면 끝입니다.</p>
+
+<p>자 여기까지 잘 따라오셨나요? 이제 비행조종컴퓨터에 펌웨어를 올릴 차례입니다. 펌웨어는 어떻게 올리냐구요? 이번에는 소스코드를 사용하지 않고 단순하게 <a href="http://www.qgroundcontrol.org/">qgroundcontrol</a>을 사용할려고 합니다. qgroundcontrol은 pixhawk 팀에서 개발한 지상국 시스템으로 QT로 개발되었습니다. 따라서 윈도우/리눅스/맥 OS 등등에서 모두 활용가능합니다. 심지어 안드로이드까지... 우선 저는 리눅스에서 개발을 하니 리눅스 환경을 가정하고 설명드립니다. <a href="http://www.qgroundcontrol.org/downloads">다운로드</a>사이트에 가보시면 
+최신 qgroundcontrol을 받을 수 있습니다. 다운로드된 파일의 압축을 푸시면 하나의 스크립트 파일이 있을 것입니다. 단순하게 이것을 실행하시면 됩니다. </p>
+
+<pre><code class="language- ">&gt;&gt; ls
+Qt  flightgear  qgroundcontrol  qgroundcontrol-start.sh  
+&gt;&gt; ./qgroundcontrol-start.sh  
+</code></pre>
+
+<p>그럼 이런 화면이 나옵니다. 
+<img src="../content/images/2016/04/qgroundcontrol.jpg" alt="qgroundcontrol">
+여기에서 설정 부분 (메뉴 아이콘에서 두번째)을 누르시면 펌웨어 다운로드 부분이 보입니다.
+<img src="../content/images/2016/04/qgroundcontrol_setting.jpg" alt="qgroundcontrol_setting">
+그런 다음 픽스호크를 연결하면 자동으로 펌웨어를 설치합니다.
+<img src="../content/images/2016/04/qgroundcontrol_install.jpg" alt="qgourndcontrol_install"></p>
+
+<p>여기까지 따라오셨나요? 아마 쉬운 내용이어서 대부분 다들 아실 것 같지만, 처음에도 말씀드렸다시피 본 강좌는 생초보도도 따라올 수 있게 하기 위해서 만들어졌으니 아시는 내용이시면 스킵하셔도 됩니다.</p>
+
+<p>자 여기까지 하셨으면 이제 아마 아래와 같이 여러 메뉴가 나와있을 것 같군요.
+<img src="../content/images/2016/04/qgroundcontrol_step1.jpg" alt="qgroundcontrol_step1">
+아마 여러분들은 Sensors쪽도 빨간색일 것 같습니다. 여기가 빨간색인 것은 센서 보정작업이 안되어 있기 때문입니다. 나중에 보저작업을 해주셔야 합니다. 아마 여러분 눈을 자꾸 거슬리는 빨간불 LED가 깜빡거릴것입니다. 이것은 아직 비행 준비가 안되어 있다는 것을 의미합니다. </p>
+
+<p>이제 비행 기체를 선택해보겠습니다.
+<img src="../content/images/2016/04/qgc_step2.png" alt="qgroundcontrol_step2">
+저희는 DJI-F450 기체를 사용하니 DJI-F450을 선택하면 되겠지요? 사실 이것을 선택하는 이유는 각 기체마다 PID 게인값이라든지 등등의 특성이 서로 틀리기 때문입니다. 만약 직접 개발한 기체라면 그런 게인들을 직접 찾으셔야겠지요. 그래서 pixhawk에서는 이런 게인값들을 각 기체마다 스크립트 파일로 미리 만들어 놓고 Airframe에서 선택하도록 하는 것입니다. 결국 픽스호크는 파라미터 리스트를 만들어 놓고 이 값들을 조정하여 기체에 특성에 맞도록 하는 것이지요. 아래 그림이 바로 그런 파라미터 값을 직접 손보는 곳입니다.</p>
+
+<p><img src="../content/images/2016/04/qgc_step3.png" alt="qgroundcontrol_step3">
+아래 보니 System이라는 노란색으로 된 부분에 SYS_AUTOSTART라는게 보이나요? 여기에 4011로 적혀있군요. 4011이 나타내는 게 바로 DJI-F450이라는 것입니다. 
+실제 4011 스크립트에 적혀있는 것을 보면 아래와 같습니다.</p>
+
+<pre><code>#!nsh
+#
+# @name DJI Flame Wheel F450
+#
+# @type Quadrotor x
+#
+# @output AUX1 feed-through of RC AUX1 channel
+# @output AUX2 feed-through of RC AUX2 channel
+# @output AUX3 feed-through of RC AUX3 channel
+#
+# @maintainer Lorenz Meier &lt;lorenz@px4.io&gt;
+#
+
+sh /etc/init.d/4001_quad_x
+
+if [ $AUTOCNF == yes ]  
+then  
+    param set MC_ROLL_P 7.0
+    param set MC_ROLLRATE_P 0.15
+    param set MC_ROLLRATE_I 0.05
+    param set MC_ROLLRATE_D 0.003
+    param set MC_PITCH_P 7.0
+    param set MC_PITCHRATE_P 0.15
+    param set MC_PITCHRATE_I 0.05
+    param set MC_PITCHRATE_D 0.003
+    param set MC_YAW_P 2.8
+    param set MC_YAWRATE_P 0.3
+    param set MC_YAWRATE_I 0.1
+    param set MC_YAWRATE_D 0.0
+    # DJI ESCs do not support calibration and need a higher min
+    param set PWM_MIN 1230
+fi  
+</code></pre>
+
+<p>결국은 스크립트이다~ 라는것입니다. </p>
+
+<p>여기까지 하셨으면 앞에서 말씀드린 센서 보정을 하시고, RC 설정하시면 끝입니다. 물론 베터리 셀 갯수 등 설정하는것도 잘 맞추어야 하구요. </p>
+
+<p>그런 다음 천천히 한번 날려보시면 될 것 같습니다. 처음에는 프로펠러 없이 RC로 roll/pitch/yaw를 체크해보시길 바랍니다. 프로펠러도 없이 어떻게 하냐구요? 전문가분들이 하시는 거 보니깐, 테이프를 모터에다가 붙이시고, 돌려봐서 RPM 변화량을 보시더군요. 한번 해보시길 권장합니다. </p>
+
+<h4 id="epilogue">Epilogue</h4>
+
+<p>최근 많은 분들이 제가 쓴 글을 보시고 문의도 해주시고, 응원도 해주셔서 개인적으로 너무 감사드리고 있습니다. 한분한분 정성껏 답변을 다 못해드려 죄송하구요. 아무쪼록 조금이나마 도움이 되드리기 위해 열심히 작성해 보겠습니다.</p>
+
+<p>업데이트 속도가 늦더라도 이해해 주시길 바랍니다. (생업이 바빠서.. ㅠㅠ)</p>
+        </section>
+
+        <footer class="post-footer">
+
+
+            <figure class="author-image">
+                <a class="img" href="../author/sungtae/" style="background-image: url(../content/images/2016/03/140901_drone_writer_hei-100x113-1.jpg)"><span class="hidden">SungTae Moon's Picture</span></a>
+            </figure>
+
+            <section class="author">
+                <h4><a href="../author/sungtae/">SungTae Moon</a></h4>
+
+                    <p>Read <a href="../author/sungtae/">more posts</a> by this author.</p>
+                <div class="author-meta">
+                    
+                    
+                </div>
+            </section>
+
+
+            <section class="share">
+                <h4>Share this post</h4>
+                <a class="icon-twitter" href="https://twitter.com/intent/tweet?text=Pixhawk%20%EC%82%AC%EC%9A%A9%ED%95%B4%EC%84%9C%20%EB%93%9C%EB%A1%A0%20%EB%A7%8C%EB%93%A4%EC%96%B4%20%EB%B3%B4%EA%B8%B0&amp;url=http://localhost:2368/pixhawk-sayonghaeseo-deuron-mandeuleo-bogi/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <span class="hidden">Twitter</span>
+                </a>
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:2368/pixhawk-sayonghaeseo-deuron-mandeuleo-bogi/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <span class="hidden">Facebook</span>
+                </a>
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://localhost:2368/pixhawk-sayonghaeseo-deuron-mandeuleo-bogi/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <span class="hidden">Google+</span>
+                </a>
+            </section>
+
+        </footer>
+
+    </article>
+</main>
+
+<aside class="read-next">
+    <a class="read-next-story prev no-cover" href="../pixhawkran/">
+        <section class="post">
+            <h2>Pixhawk란</h2>
+            <p>Introduction Pixhawk를 처음 접하게 된 것은 아마 2013년으로 기억합니다. 그때는 Parrot사의 AR.Drone이 핫~하게 뜨고 있었지요. AR.Drone의…</p>
+        </section>
+    </a>
+</aside>
+
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>  
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'stmoon'; // required: replace example with your forum shortname
+    var disqus_identifier = '10';
+	 
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+        <footer class="site-footer clearfix">
+            <section class="copyright"><a href="../">Program Lock</a> © 2016</section>
+            <section class="poweredby">Proudly published with <a href="https://ghost.org">Ghost</a></section>
+        </footer>
+
+    </div>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    
+
+    <script type="text/javascript" src="../assets/js/jquery.fitvids.js?v=f27b82c1f1"></script>
+    <script type="text/javascript" src="../assets/js/index.js?v=f27b82c1f1"></script>
+
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>  
+
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>  
+
+
+    <script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'stmoon'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+     var s = document.createElement('script'); s.async = true;
+     s.type = 'text/javascript';
+     s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+     (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+     }());
+     </script>
+
+</body>
