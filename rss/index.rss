@@ -1,4 +1,4 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Program Lock</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.7</generator><lastBuildDate>Sat, 14 May 2016 13:42:57 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Pixhawk 소스 코드 트리 구조 바라보기</title><description>&lt;h5 id="introduction"&gt;Introduction&lt;/h5&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Program Lock</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.7</generator><lastBuildDate>Sat, 14 May 2016 13:44:27 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Pixhawk 소스 코드 트리 구조 바라보기</title><description>&lt;h5 id="introduction"&gt;Introduction&lt;/h5&gt;
 
 &lt;p&gt;안녕하세요 오랫만에 찾아뵙습니다. 항상 업데이트가 늦어서 미안한 마음으로 연재를 시작하겠습니다. 글 쓰는 재주가 그리 없지만, 'Pixhwak 까발리기' 글에 많은 관심을 가주시는 분들이 많아 너무 감사합니다. 그래서 많은 분들이 네이버 쪽지나 혹은 네이버 이메일로 문의를 주시는 분들이 계시는데, 제가 네이버 메일과 쪽지를 사용하지 않아서 거기에 올려주시는 글을 잘 읽지 못합니다.&lt;/p&gt;</description><link>http://localhost:2368/pixhawk-soseu-kodeu-teuri-gujo-barabogi/</link><guid isPermaLink="false">510183bc-c7dc-4577-9d2a-7317f9288036</guid><category>pixhawk</category><dc:creator>SungTae Moon</dc:creator><pubDate>Sat, 14 May 2016 13:17:47 GMT</pubDate><content:encoded>&lt;h5 id="introduction"&gt;Introduction&lt;/h5&gt;
 
@@ -693,8 +693,8 @@ Pixhawk는 처음 개발 시 드론 시스템을 개발하였기 때문에 단�
 &lt;ol&gt;
 &lt;li&gt;&lt;a href="http://stmoon.github.io/pixhawkran/"&gt;Pixhawk란 무엇인가.&lt;/a&gt;  &lt;/li&gt;
 &lt;li&gt;&lt;a href="http://stmoon.github.io/pixhawk-sayonghaeseo-deuron-mandeuleo-bogi/"&gt;Pixhawk 사용해서 드론 만들어 보기&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Pixhawk 소스코드로 빌드해보기&lt;/li&gt;
-&lt;li&gt;Pixhawk 소스 코드 트리 구조 바라보기&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stmoon.github.io/pixhawk-soseukodeuro-bildeuhaebogi/"&gt;Pixhawk 소스코드로 빌드해보기&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stmoon.github.io/pixhawk-soseu-kodeu-teuri-gujo-barabogi/"&gt;Pixhawk 소스 코드 트리 구조 바라보기&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Pixahwk에 모듈 추가해보기 (Hello world)&lt;/li&gt;
 &lt;li&gt;Pixhawk 내부 구조 파헤치기 (Overview)&lt;/li&gt;
 &lt;li&gt;설정값(gain value) 변경하기&lt;/li&gt;
