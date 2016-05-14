@@ -1,4 +1,4 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Program Lock</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.7</generator><lastBuildDate>Sat, 14 May 2016 13:44:27 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Pixhawk 소스 코드 트리 구조 바라보기</title><description>&lt;h5 id="introduction"&gt;Introduction&lt;/h5&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Program Lock</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.7</generator><lastBuildDate>Sat, 14 May 2016 13:47:36 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Pixhawk 소스 코드 트리 구조 바라보기</title><description>&lt;h5 id="introduction"&gt;Introduction&lt;/h5&gt;
 
 &lt;p&gt;안녕하세요 오랫만에 찾아뵙습니다. 항상 업데이트가 늦어서 미안한 마음으로 연재를 시작하겠습니다. 글 쓰는 재주가 그리 없지만, 'Pixhwak 까발리기' 글에 많은 관심을 가주시는 분들이 많아 너무 감사합니다. 그래서 많은 분들이 네이버 쪽지나 혹은 네이버 이메일로 문의를 주시는 분들이 계시는데, 제가 네이버 메일과 쪽지를 사용하지 않아서 거기에 올려주시는 글을 잘 읽지 못합니다.&lt;/p&gt;</description><link>http://localhost:2368/pixhawk-soseu-kodeu-teuri-gujo-barabogi/</link><guid isPermaLink="false">510183bc-c7dc-4577-9d2a-7317f9288036</guid><category>pixhawk</category><dc:creator>SungTae Moon</dc:creator><pubDate>Sat, 14 May 2016 13:17:47 GMT</pubDate><content:encoded>&lt;h5 id="introduction"&gt;Introduction&lt;/h5&gt;
 
@@ -102,11 +102,11 @@ PARAM_DEFINE_INT32(SDLOG_UTC_OFFSET, 0);
 
 &lt;h6 id="mavlink"&gt;mavlink&lt;/h6&gt;
 
-&lt;p&gt;mavlink 디렉토리는 지상국 시스템과 Pixhawk 기반 드론의 통신 프로토콜로 mavlink 라는 오픈소스 코드를 그대로 사용하고 있습니다. 앞에서 설명한 NuttX와 같은 방법이고 저희는 그대로 사용하면 됩니다. 만약 지상국 시스템과 Pixhawk의 통신 중에 나만의 통신 프로토콜 만들려면 어떻게 해야하냐구요? 그때는 당연히~&lt;del&gt; 이 부분을 수정하셔야 합니다. 기회가 되면 이 부분도 알려드리겠습니다.&lt;/del&gt;&lt;/p&gt;
+&lt;p&gt;mavlink 디렉토리는 지상국 시스템과 Pixhawk 기반 드론의 통신 프로토콜로 mavlink 라는 오픈소스 코드를 그대로 사용하고 있습니다. 앞에서 설명한 NuttX와 같은 방법이고 저희는 그대로 사용하면 됩니다. 만약 지상국 시스템과 Pixhawk의 통신 중에 나만의 통신 프로토콜 만들려면 어떻게 해야하냐구요? 그때는 당연히~ 이 부분을 수정하셔야 합니다. 기회가 되면 이 부분도 알려드리겠습니다.&lt;/p&gt;
 
 &lt;h6 id="misc"&gt;misc&lt;/h6&gt;
 
-&lt;p&gt;misc 디레토리는 그외에 분류안된 부분이 들어있다고 보시면 됩니다. 현재는 tones라는 소리 정의를 하고 있습니다. 소리 정의라고 하는 것은 기체 상태를 간단한 소리로 알려주는 방법인데 그 띠리리 이런 소리 정의를 말합니다. &lt;/p&gt;
+&lt;p&gt;misc 디레토리는 그외에 분류안된 부분이 들어있다고 보시면 됩니다. 현재는 tones라는 소리 정의를 하고 있습니다. 소리 정의라고 하는 것은 기체 상태를 간단한 소리로 알려주는 방법인데 그 띠리리~ 이런 소리 정의를 말합니다. &lt;/p&gt;
 
 &lt;h6 id="msg"&gt;msg&lt;/h6&gt;
 
