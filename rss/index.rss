@@ -1,0 +1,1121 @@
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Program Lock</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.8</generator><lastBuildDate>Sun, 29 May 2016 13:15:12 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>SITL (Software In The Loop) 시스템 구축하기</title><description>&lt;h5 id="introduction"&gt;Introduction&lt;/h5&gt;
+
+&lt;p&gt;여러분 안녕하세요 그 동안 잘 지내셨는지요. 이전 연재 "Pixhawk 소스 코드로 빌드하기"의 마지막에서 SITL에 대한 설명을 드린다고 해놓곤 깜빡하고, 원래 순서데로 연재를 하고 있었네요. 이점 양해 말씀드리면서 SITL에 대한 시스템 구축을 먼저 하고 넘어가도록 하겠습니다. 전에도 말씀드렸다시피 본 연재글은 Pixhawk의 SITL 기반으로 코드 분석을 진행될 것이기 때문에 제가&lt;/p&gt;</description><link>http://localhost:2368/hils-hardware-in-the-loop-siseutem-gucughagi/</link><guid isPermaLink="false">33d0dc29-c2b1-4285-9ee3-cc48d0f53247</guid><category>pixhawk</category><dc:creator>SungTae Moon</dc:creator><pubDate>Sun, 29 May 2016 11:46:19 GMT</pubDate><content:encoded>&lt;h5 id="introduction"&gt;Introduction&lt;/h5&gt;
+
+&lt;p&gt;여러분 안녕하세요 그 동안 잘 지내셨는지요. 이전 연재 "Pixhawk 소스 코드로 빌드하기"의 마지막에서 SITL에 대한 설명을 드린다고 해놓곤 깜빡하고, 원래 순서데로 연재를 하고 있었네요. 이점 양해 말씀드리면서 SITL에 대한 시스템 구축을 먼저 하고 넘어가도록 하겠습니다. 전에도 말씀드렸다시피 본 연재글은 Pixhawk의 SITL 기반으로 코드 분석을 진행될 것이기 때문에 제가 생각해도 오늘 강좌를 먼저 하는 게 나을 것 같습니다. 많은 양해 부탁드립니다. 자.. 그럼 시작해 볼까요?&lt;/p&gt;
+
+&lt;h5 id="gazebositl"&gt;Gazebo SITL&lt;/h5&gt;
+
+&lt;p&gt;이 부분은 앞에서 말씀 드린 부분과 어느정도 중복이 될 것 같긴한데, 그래도 다시 한번 짚고 넘어간다는 마음으로 진행하겠습니다. (벌써 쓸거리가 떨어진건가요 흑흑 ㅠㅠ) 전에도 말씀드렸지만, Pixhawk의 eco-system은 어느정도 잘 정비가 되어진 것 같습니다. 그중 하나가 바로 SITL이지요. SITL은 순수 소프트웨어 기반의 시뮬레이션이라고 보면 될것 같습니다. 사실 이 용어에 대해서는 여전히 많은 견해들이 있지만, 저는 Pixhawk에서 정의한 용어를 그대로 사용하도록 하겠습니다. 어찌되었든 SITL은 하드웨어는 필요없는 순수한 소프트웨어 위주입니다. 그래서 처음에 공부하는 입장에서는 SITL이 편하지요. 그런데.. 절대 시뮬레이션을 맹신하시는 것도 그닥 좋지 않습니다. 시뮬레이션은 시뮬레이션 뿐입니다. 어느 드라마에서 나온 "현장이란 말입니다."와 약간 일맥상통한다는 느낌입니다. 맞습니다 시뮬레이션에서는 정말 잘되었는데 왜 밖에서 비행하면 이모양입니까... 라고 말이 나올정도지요. 그때부터는 사실 노하우가 정말 많이 필요하지만, 이것은 제 생각으로는 책상에서 배워서 되는 것은 아니고 몸으로 체험하면서 얻는 경험이라고 보시면 될것 같습니다. 따라서.. 여러분들도 어느정도 이론이 정립되면 거기서 끝내지말고 실제 환경에 적용하는 습관을 들이시길 바랍니다. 아.. 약간 딴 방향으로 흘렀군요. 죄송합니다. &lt;/p&gt;
+
+&lt;p&gt;그러면 왜 SITL과 같은 것을 하나요? 하나도 맞지 않는다면서 말이지요. 그건 바로 알고리즘 검증때문이라고 생각합니다. 새로 개발한 알고리즘을 체크하기 위해서는 우선 아주 좋은 환경에서.. 매번 똑같은 환경에서 시험을 해야 개선점이 보일 겁니다. 그래서 SITL이 필요한 거지요. 우리는? 맞습니다. 공부하기 위해서 SITL이 필요한거지요. 매번 같은 환경을 만들 수 있을 거니깐요. 뭐.. 다들 아시는 내용이시겠지만, 주절주절 한번 해보았습니다. 이제 SITL로 진행하고자 하는 이유를 아시겠지요? 그럼 이제 본격적으로 시작해보도록 하겠습니다.&lt;/p&gt;
+
+&lt;h5 id="gazebo"&gt;Gazebo&lt;/h5&gt;
+
+&lt;p&gt;Pixhawk에서는 SITL을 위해 기본적으로 Gazebo라는 것을 사용합니다. Gazebo.. 표윤석 박사님이 열창하시는 ROS를 공부하신 분이라면 잘 아시겠지만, 그렇지않은 분들을 위해 간단히 설명드리겠습니다. Gazebo는 쉽게 말씀드리면 오픈소스 기반의 로봇 시뮬레이터입니다. 2002년 Nate Koenig라는 사람에 의해 개발이 시작되었으며 지금은 ROS와 함께 오픈소스 로봇 시스템을 이끌어가고 있는 프로그램이지요. 최근에는 유명한 로봇 첼린지 대회에서 기본 시뮬레이터로도 사용이 되고 있다고 합니다. 그렇다면 왜이리 Gazebo가 유명해진걸까요? Gazebo는 다양한 기능이 있지만, 우선 다양한 물리엔진을 탑재하고 있습니다. 그래서 실제 환경에 근접하게 만들 수 있다는 것이지요. 하지만 절대 실제 환경과는 똑같지 않습니다. (맹신은 절대 안됩니다.) gazebo의 기본 운영 시스템은 우분투이구요. 맥에서도 잘 동작되는 듯 싶습니다. 윈도우는 ... 아직 인것 같고, gazebo 8.0 부터는 될것 같습니다. 어찌되었든 메이저는 아니므로 우리는 역시 우분투로 갑니다. 그외에도 gazebo는 그래픽스 부분도 뛰어나고, 다양한 로봇 모델링도 되어있는 것 같습니다. 하지만 더 좋은 것은 역시나 개발자들이 쉽게 접근 할 수 있도록 하는 플러그인 방식이라는 것입니다. 즉, 사용자가 플러그인 방식으로 센서 노이즈라든지 환경등을 직접 개발하여 적용할 수 있습니다. 그리고 ROS와의 연동이 매우 잘 되므로 ROS의 기능을 사용할 수도 있게 된거지요.&lt;/p&gt;
+
+&lt;h5 id="buildrun"&gt;Build &amp;amp; Run&lt;/h5&gt;
+
+&lt;p&gt;우선 Gazebo부터 설치해보도록 하지요. gazebo를 우분투에서 설치하는 것은 &lt;a href="http://localhost:2368/hils-hardware-in-the-loop-siseutem-gucughagi/!http://gazebosim.org/tutorials?tut=install_ubuntu&amp;amp;ver=6.0&amp;amp;cat=install"&gt;gazebosim.org&lt;/a&gt;에 가보면 쉽게 설치할 수 있습니다.
+우리는 역시나 apt-get을 사용하여 설치하고자 합니다. 기본적으로도 되어있지만,우선 apt-get을 받기 위한 서버 위치를 받습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" &amp;gt; /etc/apt/sources.list.d/gazebo-stable.list'  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;다음으로 키를 셋업합니다. 기본적으로 제공되는 패키지외의 다른 정보를 받기 위해서는 이런 일련의 작업이 필요하다고 생각하시면 됩니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;wget http://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;다음으로 apt-get으로 설치를 하시지요&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo apt-get update  
+sudo apt-get install gazebo6  
+# For developers that work on top of Gazebo, one extra package
+sudo apt-get install libgazebo6-dev  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;우분투에서는 gazebo 6.0을 받기를 권장하고 있습니다. 맥은 7.0을 받아야 하구요. 왜 그래야하는지는 정확히는 모르겠지만, 아마 버전과 매치되는 뭔가가 있는 것 같습니다.
+여기까지 하셨으면, 이제 pixhawk의 SITL을 사용할 준비는 다되었습니다. 축하드립니다. 짝짝짝~  &lt;/p&gt;
+
+&lt;p&gt;이제 Pixhawk에서 SITL을 구동해보도록 하겠습니다. Pixhawk에서는 이미 몇가지 드론 모델을 만들어놓았고, Pixhawk내의 자세제어와 같은 알고리즘등을 직접 사용할 수 있도록 되어있습니다. 전에 받으셨던 Pixhawk 소스코드를 보시면 Tools/sitl&lt;em&gt;gazebo에 그 소스코드를 보실 수 있습니다. 참 이 소스 코드는 PX4/Firmware에서 관리하는 게 아니고 PX4/sitl&lt;/em&gt;gazebo에서 관리합니다. 그 말씀인 즉, 이 코드 바꾸시고 잘못 업데이트하시면 날아갈 수 있다는 뜻입니다. 따로 관리를 해주셔야 합니다. 이 부분이 이해 안되시는 분은 git을 조금 더 공부해주시면 감사하겠습니다. git은 여러번 말씀드리지만, 오픈소스 공부를 위해 반드시 익혀야 하는 버전관리 툴입니다. 모든 기능을 아실 필요는 없고, 우선 익숙해 지는게 중요합니다. 많이 사용해보시고, 많이 어려움을 겪다 보시면 쉽게 친숙해질겁니다. 미운정이 든다고나 할까요. ㅋㅋㅋ (썰렁했다면 이해해주시길 ...)&lt;/p&gt;
+
+&lt;p&gt;이제 Pixahwk의 SITL 부분을 빌드해보도록 하겠습니다. 현재까지는 소스코드 분석이 아직 들어가지 않았으므로 아무 버전을 이용해도 좋습니다. 여기서는 master 버전을 사용해보도록 하겠습니다. 그전 강좌를 따라 하셔서 받으신 분들은 아래와 같이 깃허브로부터 최신 버전을 업데이트 합니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ git pull
+$ git submodule update
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이후 sitl용으로 빌드를 합니다.저희는 "posix&lt;em&gt;sitl&lt;/em&gt;default"를 사용하도록 하겠습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ make posix_sitl_default
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;에러없이 잘 컴파일 되셨나요? 아마 에러가 있으신 분들도 계시겠지요? 계시판에 올려주시면 제가 아는 만큼 답변드리겠습니다. (요즘은 대신 답해주시는 분들이 계셔서 너무너무 감사하고 있습니다.)&lt;/p&gt;
+
+&lt;p&gt;다음으로 실행을 시켜보도록 하겠습니다. Pixhawk에서는 다양한 비행체 모델을 가지고 있습니다. 그 중 하나를 선택하셔서 하시면 됩니다. 최근에 VTOL에 대해 문의하시는 분들이 많으신것 같은데, 그 역시 SITL에서 제공하고 있으니,참고하시길 바랍니다. 어찌되었든 다음 중 하나 골라서 실행하시면 자신만의 비행체를 동작시킬 수 있습니다. 자세한 내용은 &lt;a href="http://localhost:2368/hils-hardware-in-the-loop-siseutem-gucughagi/!http://dev.px4.io/simulation-gazebo.html"&gt;dev.px4.io&lt;/a&gt;사이트를 차고하시길 바랍니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ make posix_sitl_default gazebo_iris
+$ make posix_sitl_default gazebo_standard_vtol
+$ make posix_sitl_default gazebo_tailsitter
+$ make posix_sitl_default gazebo_plane
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;뭐 멀티콥터부터 고정익 비행기, VTOL, TailSitter 형태의 비행체까지 정말 다양하지요? 저희는 여기서 gazebo_iris에 대해서 주로 다룰 예정입니다. 참고로 IRIS는 3DR Robotics사에서 개발한 멀티콥터로 Pixhawk가 탑재된 기본 멀티콥터입니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/05/iris.jpg" alt="IRIS"&gt;&lt;/p&gt;
+
+&lt;p&gt;자 실행을 시키시면 터미널 창에 뭐라뭐라 나오면서 gazebo화면이 똭! 뜰겁니다. 
+&lt;img src="http://localhost:2368/content/images/2016/05/gazebo.jpg" alt="gazebo_iris"&gt;
+처음 반응은 우와~ 이지요. 그다음에 뭘 할 수 있나요? 이거 어찌하는 거지? 저도 처음에는 이랬습니다. &lt;/p&gt;
+
+&lt;p&gt;우선 가장 간단히 할 수 있는 것은 터미널 창을 통해 takeoff 명령을 내려보는 겁니다. 터미널 창은 pixhawk 내부 시스템이라 보시면 됩니다. 실제 Pixhawk 펌웨어에서 뿌려주는 메시지가 여기에 그대로 나옵니다. 터미널에서 엔터를 치시면 아래와 같은 프롬프트가 나올겁니다.   &lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pxh&amp;gt;  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;
+여기에 help 라는 명령어를 실행시키시면 수행할 수 있는 명령어들이 보입니다. 우리는 이중 commander 명령어를 통해 takeoff를 수행해보도록 하겠습니다. 참, 혹시 중간에 다른 메세지들이 뜰수도 있습니다. 이는 무시하시고 타이핑 하십시요. &lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pxh&amp;gt;commander takeoff  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;명령어를 치셨다면 엔터키를 누르고 gazebo쪽을 보세요. 그럼 IRIS가 takeoff하는 것을 보실 수 있습니다. 짜잔~  (여기까지 하셨으면 스스로를 다독거려주시길.. gazebo를 통해 pixhawk SITL을 수행하신겁니다!!)&lt;/p&gt;
+
+&lt;h5 id="qgroundcontrol"&gt;QGroundControl&lt;/h5&gt;
+
+&lt;p&gt;자..그럼 다음에는 무엇을 해볼까요? 경로점을 만들고, 한번 이동해볼까요? ............ 생각해보니 문제는 지상국 시스템이 없군요. 뭔가 멋진 GUI를 가진 지상국 시스템 말이지요. 비행 상태 부터 명령을 보내는 모든 것들을 말이지요. Pixhawk는 자상하게도 그런 지상국 시스템을 오픈소스로 풀어놓았답니다. 암튼 대단합니다. 이또한 Lorenz Meier가 관리자로 있으니, 이사람은 도대체 뭐하는 사람일까요? 하루에도 수십개의 commit을 해야할 것 같은데... 저 처럼 게으른 사람은 절대 할 수 없을 것 같습니다. ㅠㅠ&lt;/p&gt;
+
+&lt;p&gt;각설하고 QGroundControl에 대해 알아보지요. QGruondControl은 앞에서 말씀드린데로 오픈소스이고, QT로 개발되었습니다. 혹시 QT에 대해서 잘 모르시는 분들은 그냥 Visual Studio와 같은 개발 환경쯤이라고 생각하시면 됩니다. 개인적으로 정말 좋아하는 개발환경입니다. 왜냐구요? QT는 한번 개발해 놓으면 윈도우, 리눅스, 맥 가리지 않고 사용할수 잇습니다. 요즘은 안드로이드 폰이나 아이폰과 같은데에서도 사용할 수 있으니 정말 대단하지요? "그럼 QGroundControl은 QT로 개발되었으니, 아이폰이나 안드로이드폰에서도 동작 가능하다는 얘기인가요?" 맞습니다! 저도 서브로 넥서스에 QGroundControl 설치하여 사용하고 있습니다. 최근 버전인 2.9.7은 많이 화려해지고 있어서 더 좋습니다. 자세한 내용은 웹사이트를 참고하시길 바랍니다. &lt;a href="http://qgroundcontrol.io/"&gt;QGroundControl 웹사이트&lt;/a&gt;도 pixhawk와 같이 새롭게 단장이 되었습니다. 하지만 우리는 아직 익숙한 &lt;a href="http://www.qgroundcontrol.org/"&gt;예전 웹사이트&lt;/a&gt;를 찾아가 보도록 하겠습니다. 이쪽에 가보시면 Download라는 메뉴가 있는데, 여기를 클릭하셔서 다운로드 받으시면 됩니다. Stable Version과 Daily Version이 있는데 요즘은 Daily Version만 바이너리로 제공하는 것 같습니다. 어찌되었든 여기에서 다운로드 받으셔서 실행시킵니다.&lt;/p&gt;
+
+&lt;p&gt;실행시키는 방법은 아래와 같습니다. &lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ ./qgroundcontrol-start.sh
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;두번째 똭! 하고 멋진 QGroundControl이 뜹니다. 
+&lt;img src="http://localhost:2368/content/images/2016/05/qgroundcontrol.jpg" alt="Qgroundcontrol"&gt;&lt;/p&gt;
+
+&lt;p&gt;이제 gazebo와 QGroundControl을 연동시켜보도록 하겠습니다. 우선 앞에서 설명한 것처럼 pixhawk를 수행 시킵니다. &lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ make posix_sitl_default gazebo_iris
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이후에 gazebo를 수행시킵니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ ./qgroundcontrol-start.sh
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;그러면 자동으로 qgroundcontrol이 gazebo와 연동이 되면서 동작됩니다. 자동으로 연동되면 아이콘 메뉴 아래쪽으로 파란색 라인이 끝까지 이어지는게 보이실 겁니다. 그리고 나서 옆에 기체 상태 부분이 표시되고, 지도에서 기체가 보이실 겁니다. 이제 여기서 미션 명령을 내려보도록 하겠습니다. 아이콘 메뉴를 보시면 왼쪽에서 세번째 A-&gt;B로 되어 있는 아이콘이 있습니다. 이것을 클릭하시면 화면이 미션 설정 화면이 나타납니다. 이후 오른쪽에 잇는 "+" 버튼을 누르시고 원하는 위치를 더블클릭 하시면 그 화면이 waypoint (경로점)를 추가할 수 있습니다. 어느 정도 설정을 하셨으면 이제 비행을 해보도록 하겠습니다. 비행을 하시려면 먼저 ARM (프로펠러를 최소화로 동작 시키는 행위?)을 해야합니다. 아이콘 메뉴에서 4번째 (종이비행기 처럼 생긴 아이콘) 아이콘을 누르시면 화면 하단 중앙 부분에 ARM을 할 수 있는 게 보입니다. 이것을 밀어서 ARM을 시킵니다. 이후 Mission으로 비행 모드를 변경시키면 원하는 경로를 통해 비행하는 것을 보실 수 있습니다. 짜잔~ 그런데 말로만 하니 참 어려우시죠? 그래서 동영상 하나 준비해보았습니다. ^^ 따라해보시면 될것 같습니다. 아 중간에 실수로 waypoint를 잘못 조작하는 부분이 있습니다. 이 부분은 따라하지 않으셔도 됩니다. 
+&lt;a href="https://youtu.be/IvHQW6PorDg"&gt;따라해보기동영상&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;여기까지하신 분들은 두번째 자신에게 칭찬해주시길 바랍니다. 다독다독~. 자기 자신을 자주 칭찬해 주세요.. 대단하신 겁니다. 쵝오!!&lt;/p&gt;
+
+&lt;h5 id="howtowork"&gt;How to work&lt;/h5&gt;
+
+&lt;p&gt;여러분 이제 여러분은 SITL을 하기 위한 준비가 다 되었습니다. 그러면 내부가 어떻게 동작되는지 알아볼까요? 우선 전체 그림부터 보시죠. 
+&lt;img src="http://localhost:2368/content/images/2016/05/deploy_port.jpg" alt=""&gt;&lt;/p&gt;
+
+&lt;p&gt;지금까지 저희가 수행했던 SITL은 크게 세 부분으로 나누어 집니다. 시뮬레이션을 위한 Gazebo와 비행 제어를 위한 Pixhawk, 그리고 지상국 시스템인 QGroundControl입니다. 이 세개의 프로그램은 UDP를 통해 Mavlink 메세지를 전달받습니다.중요한 것은 UDP로 통신하고 있다는 것이지요. 그 말인 즉, 각 모듈들을 분산해서 컴퓨터 3대에서 처리 가능하다는 말입니다. 분산처리가 가능하다는 것은 엄청난 혜택으로 이어질 수 있으니 참고하세요. 
+앞에서 보신 "make posix&lt;em&gt;sitl&lt;/em&gt;default gazebo_iris"을 수행시키면 gazebo가 실행이 되고, pixhawk 부분도 실행됩니다. &lt;/p&gt;
+
+&lt;p&gt;우선 gazebo가 실행되는 것은 Tools/sitl_gazebo/worlds/iris.world 부분이 실행됩니다. XML로 되어있고 여기를 잘 보시면 내부에서 iris 모델이 실행되고, 그 모델의 plugin 이 실행됩니다. 이 부분은 나중에 다시한번 설명드리도록 하겠습니다. 지금은 큰 그림에 집중하세요. &lt;/p&gt;
+
+&lt;p&gt;이후 pixhawk가 실행되는데 pixhawk가 실행되는 위치는 posix-configs/SITL/init/rcS&lt;em&gt;gazebo&lt;/em&gt;iris 입니다. 이부분을 잘 보시면, 실제 동작되어지는 태스크들을 볼 수 있습니다. 이 부분도 나중에 다시 구체적으로 설명드리도록 하겠습니다. 이 절에서는 서로 어떻게 통신하는지에 대해서만 집중하도록 하겠습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;~
+mavlink start -u 14556 -r 2000000  
+mavlink start -u 14557 -r 2000000 -m onboard -o 14540  
+mavlink stream -r 80 -s POSITION_TARGET_LOCAL_NED -u 14556  
+mavlink stream -r 80 -s LOCAL_POSITION_NED -u 14556  
+~
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;우선 mavlink라는 명령어가 보이네요. 이 명령어는 pixhawk에서 mavlink 메세지를 수신하고 송신하는 기능을 가지고 있습니다. 데몬 형식으로 계속 수행되는 방식으로 동작됩니다. 그 데몬 형식을 수행시키는 게 바로 "mavlink start" 입니다. 인자를 보니 "-u 15446"이 보이네요 이것은 UDP로 통신을 하고 15446 포트 번호로 mavlink 데이터를 수신받겠다는 의미입니다. 그리고 "-o 14540"은 14540 포트로 Mavlink 데이터를 송신하겠다는 의미입니다. "-o" 옵션이 없으면 기본적으로 14550을 쓰겠다는 의미입니다. 왜 이것을 두번이나 실행시킬까요? 그것은 mavlink 데이터를 받아야 하는게 다른 두개가 있다는 뜻이겠지요. 하나는 지상국 시스템이고 다른 하나는 지상국 시스템일수도 있지만, "-m onboard"로 봐서 온보드 시스템에서 받겠다는 의미일 것 같습니다. 온보드 시스템이 뭐냐구요? 음.. 사실 Pixhawk는 비행제어에만 특화된 보드입니다. 따라서 영상 처리같은것을 하기에는 무리데스네~ 이지요. 영상 처리는 주로 어떤 임무 수행과 같은 경우에 쓰이는데 온보드 시스템은 그런 임무 수행용이라고 보시면 될 것같습니다. 따라서 고성능 위주가 될 가능성이 높구요. &lt;/p&gt;
+
+&lt;p&gt;아.. 그리고 "mavlink stream"이 나옵니다. 이건 외부로 부터 mavlink 스트림 데이터를 수신하겠다는 것으로 받아들이시면 될것 같습니다. "-u 14556"은 UDP 14556으로 Mavlink 데이터를 수신받겠다는 얘기입니다. &lt;/p&gt;
+
+&lt;h5 id="conclusion"&gt;Conclusion&lt;/h5&gt;
+
+&lt;p&gt;자 여기까지 해서 SITL 시스템 구축하는 방법에 대해 알아보았습니다. 아직 정확한 코드에 대해서는 들어가지 않았지만, 
+이번에는 조금 어려웠을지 모르겠네요. 저도 처음에는 쉽게 생각했다가 글을 쓰면서 좀더 생각을 가다듬고 정리한 것 같습니다. 여기까지 따라오셨다면 일단 Pixhawk 시스템 설치를 어느정도 완료했다고 보시면 될 것 같습니다. 앞으로는 본격적으로 Pixhawk 코드에 대해 하나씩 분석해 나아가보도록 하겠습니다. 항상 말씀드리지만, 중요한 것은 큰 그림을 이해하는 것입니다. 그리고 내가 분석할 부분을 확실하게 정하시고, 그 부분을 위주로 하시길 바랍니다. 처음부터 "난 Pixhawk 의 모든것을 다 파헤쳐버리겠어!"라고 하시면 중도에 파묻히게 될수도 있으니깐요.. 자 그럼 다음 연재는 정해진 순서데로 다시 시작하도록 하겠습니다. 그때까지 안녕히계세요~~~&lt;/p&gt;
+
+&lt;p&gt;P.S. &lt;br&gt;
+혹시 제가 작성한 부분 중 잘못된 부분이 있을 수 있으니 댓글 부탁드립니다.  &lt;/p&gt;</content:encoded></item><item><title>Pixhawk 소스 코드 트리 구조 바라보기</title><description>&lt;h5 id="introduction"&gt;Introduction&lt;/h5&gt;
+
+&lt;p&gt;안녕하세요 오랫만에 찾아뵙습니다. 항상 업데이트가 늦어서 미안한 마음으로 연재를 시작하겠습니다. 글 쓰는 재주가 그리 없지만, 'Pixhwak 까발리기' 글에 많은 관심을 가주시는 분들이 많아 너무 감사합니다. 그래서 많은 분들이 네이버 쪽지나 혹은 네이버 이메일로 문의를 주시는 분들이 계시는데, 제가 네이버 메일과 쪽지를 사용하지 않아서 거기에 올려주시는 글을 잘 읽지 못합니다.&lt;/p&gt;</description><link>http://localhost:2368/pixhawk-soseu-kodeu-teuri-gujo-barabogi/</link><guid isPermaLink="false">510183bc-c7dc-4577-9d2a-7317f9288036</guid><category>pixhawk</category><dc:creator>SungTae Moon</dc:creator><pubDate>Sat, 14 May 2016 13:17:47 GMT</pubDate><content:encoded>&lt;h5 id="introduction"&gt;Introduction&lt;/h5&gt;
+
+&lt;p&gt;안녕하세요 오랫만에 찾아뵙습니다. 항상 업데이트가 늦어서 미안한 마음으로 연재를 시작하겠습니다. 글 쓰는 재주가 그리 없지만, 'Pixhwak 까발리기' 글에 많은 관심을 가주시는 분들이 많아 너무 감사합니다. 그래서 많은 분들이 네이버 쪽지나 혹은 네이버 이메일로 문의를 주시는 분들이 계시는데, 제가 네이버 메일과 쪽지를 사용하지 않아서 거기에 올려주시는 글을 잘 읽지 못합니다. 그래서 가능하시면 오로카 계시판에 문의를 해주시면 최선을 다해 답변해드리도록 하겠습니다.
+자.. 그럼 오늘은 Pixhawk 소스 코드에 대해 한번 알아보고자 합니다. 시작해볼까요... 홧팅!!&lt;/p&gt;
+
+&lt;h5 id="pixhawk"&gt;Pixhawk 분석에 앞서&lt;/h5&gt;
+
+&lt;p&gt;많은 분들이 문의를 해주시는 것 중에 "Pixhawk 소스코드를 어떻게 분석하나요?" 입니다. 그 중에 어떤 분들은 처음부터 분석하기 위해 Makefile을 보신다거나, 처음 소스코드를 보면 일단 숨이 턱 막히지요. 처음부터 항상 주장하는 오픈소스를 잘 사용하라고 말씀드렸지만, 정작 오픈소스를 어떻게 잘 사용하는지는 설명을 못 드렸지요. 맞습니다.여러분들은 오픈소스를 잘 활용하라는 말을 많이 들었지만, "어떻게 사용하라는 얘기야"라고 불만이 있으셨을 것입니다. 그렇다고, 제가 말씀드리는 방법이 맞는 방법이라고 100% 확답할 수 없지만, 어찌되었든 제가 알고 있는 노하우로 설명드리겠습니다. 
+다시 앞으로 넘어가서 "어디서 부터 시작해야할까요?"부터 시작해보시죠. 뭐 사실 비법은 없습니다. 그렇지만, 제가 생각하고 있는 시작부분은 우선 사용해보라는 것입니다. 소스 코드 분석에 앞서, 우선 그 오픈소스를 사용해봅니다. 그렇면 대충 어떤 기능이 있고, 어떤 방법으로 동작되는지 알수 있습니다. 당연한 얘기인가요? 맞습니다. 그런데 꼭 아셔야할 것은 사용하면서 본인이 필요한 부분을 찾으시라는 것입니다. "드론이 어떻게 위치를 예측하는지 알고 싶어"라고 생각하고 계신다면, 그 부분을 많이 사용해 보세요. 그리고 그 기능에 대해 우선 많이 익히시길 바랍니다.&lt;/p&gt;
+
+&lt;p&gt;오픈소스를 잘 이용하셨다면, 이제 하셔야 할 부분은 전체 구조를 파악하는 것입니다. 루트 디렉토리에서 디렉토리 구조로 먼저 살펴보시길 바랍니다. 디렉토리 이름을 보면 대충 어떤 구조로 되어있구나를 알 수 있습니다. 실제 Pixhawk 구조를 보시죠.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/05/Pixhawk_directory.jpg" alt="Pixhawk Directory"&gt;&lt;/p&gt;
+
+&lt;p&gt;대충 살펴보시면, Image, Tools, src, ROMFS, NuttX 등이 나오는 것을 보실 수 있습니다. 정확하게 무엇인지는 모르겠지만, src 디렉토리에는 실제 소스코드가 들어있을 것 같고, Tools에는 Pixhawk 펌웨어를 만들기 위한 도구들이 들어있을 것 같군요. NuttX라는 익숙한 용어도 나오구요. ROMFS도 나오네요... (전에 한번 설명드린 기억이...)  이걸 통해 우리는 대충 이런 구조로 되어있구나를 알 수 있습니다. 디렉토리 말고 파일만 봐도, 몇가지 단서를 알 수 있습니다. CMakeLists.txt를 보니, cmake를 사용한 것을 알 수 있고, Firmware.sublime-project를 보고, sublime text 툴을 IDE로 사용하나보다도 알 수 있습니다. launch를 보고 왠지 ROS와 연동될 것 같다는 느낌도 받으시구요. 지금까지 말씀드린 느낌이 오지 않으셨다면 많은 툴들에 대한 경험이 없으시기 때문입니다. 사실 상관없습니다. 그런데 많은 오픈소스를 살펴보다보면 금방 느낌이 오실 겁니다. &lt;/p&gt;
+
+&lt;p&gt;자 다음으로 하실 일은 README 파일을 찾아보시길 바랍니다. README 파일은 많은 정보가 함축되어 있을 가능성이 높습니다. 어떤 경우는 INSTALL도 있지만, README 파일에 모두 포함되는 경우도 많습니다. 그래서 이 README는 꼭 살펴보시고, 여기에서 부터 시작하시는 게 좋습니다. 설치하는 방법이라든지, 아니면, 버전 정보라든지 참고 사이트 등이 나오니깐요.&lt;/p&gt;
+
+&lt;p&gt;다음으로 가능하면 github에서 디렉토리 구조를 살펴보시길 바랍니다.
+&lt;img src="http://localhost:2368/content/images/2016/05/pixhawdirectory_github.png" alt="Pixhawk Directory at github"&gt;
+전에도 한번 말씀드렸지만, 오픈소스는 다른 오픈소스를 많이 사용하는 경우가 많습니다. 물론 단순한 오픈소스는 그렇지 않겠지만요. 그래서 다른 오픈소스를 사용하는 경우는 분석하는 부분에서 우선 제외시킵니다. 그냥 가져다 쓰는 거다라는 거지요. 만약 내가 분석하고자 하는 부분이 가져다 쓰는 오픈소스 부분이었다면 현재 분석하는 오픈소스에 대해 "여긴 아닌가벼" 하고 가져다 쓰는 오프소스를 분석하시길 바랍니다. github에서는 그런 가져다 쓰는 오픈소스 부분을 쉽게 알수 있습니다. 그림에서 보시면 회색으로된 디렉토리 그림이 보이시죠? NuttX 부분이네요. &lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;NuttX@f0f4dbc  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;즉 NuttX는 다른 오픈소스에서 개발되고 있고, Pixhawk는 NuttX를 그대로 사용하겠다는 얘기입니다. 옆에 @f0f4dbc라고 적혀있는 부분은 git에서 다루는 버전 정보라고 보시면 될 것 같네요.&lt;/p&gt;
+
+&lt;p&gt;자 여기까지 되었으면 이제부터 본격적으로 오픈소스를 분석할 차례입니다. 우선 나무 보다는 숲을 먼저 보셔야 합니다. 전체적인 시스템 흐름을 아셔야 하는 거지요. 이건 말이 쉽지 정말 어려운 부분이긴 합니다. 많은 노하우와 많은 오픈소스 분석을 해보아야 알 수 있는 것이기도 하지요. 만약 관련된 사이트가 있다면 조금은 쉽습니다. 그 사이트에 튜토리얼이 있거나, 동작 방식이 나와있으면 쉽게 파악이 가능하지요. 만약 그런것도 없다. 그런경우는 우선 같은 개발 시스템을 설치하십시요. 여기서는 sublime 혹은 QTCreator를 사용하여 개발 환경을 맞게 설치하시고, 거기서 부터 시작해야 합니다. 
+절대 makefile이나 cmakelist 파일부터 차근차근 분석해보겠다라고 하시면 안됩니다. 오픈소스는 가져다 쓰는 게 목적이고, 그 중 내가 원하는 부분을 찾아 수정하는 게 최우선입니다. "오픈소스를 모조리 분석하겠어" 라고 생각하고 하나부터 차근차근 하는 방법은 그리 좋은 방법은 아닐 것 같습니다. 우선 내가 원하는 부분을 찾아 분석하고자 하면서 그 주변을 분석하고 전체를 분석해야지 처음부터 깊숙히 들어가 분석할려면 지쳐쓰러질 수 있다는 얘기입니다.&lt;/p&gt;
+
+&lt;p&gt;자 지금까지 말씀드리는 내용은 어쩌면 당연한 얘기일 수도 있을 것 같습니다. 그럼 이제 본격적으로 Pixhawk 소스 구조에 대해 알아보겠습니다.&lt;/p&gt;
+
+&lt;h5 id="source"&gt;Source 구조 분석석&lt;/h5&gt;
+
+&lt;p&gt;앞에서 설명한 github 디렉토리 그림을 다시 사용하겠습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/05/pixhawdirectory_github.png" alt="Pixhawk Directory at github"&gt;&lt;/p&gt;
+
+&lt;p&gt;우선 각 디렉토리에 대해 자세히 설명드리겟습니다. (저도 잘 사용하지 않은 부분도 많이 있지만 아는만큼 설명드리겠습니다. 많은 양해 부탁드립니다. 꾸벅 -- __)&lt;/p&gt;
+
+&lt;h6 id="debug"&gt;Debug&lt;/h6&gt;
+
+&lt;p&gt;Pixhawk는 JTAG를 이용하여 디버깅할 수 있고, 그런 설정 부분등이 있습니다. OpenOCD를 사용하고 있고, GDB를 사용합니다. 저는 아직 JTAG까지 사용해서 해보지는 못했습니다. 이미 bootloader가 있고, Firmware는 USB를 통해 시리얼로 업로드가 될 수 있기 때문에 알고리즘 개발이 위주라면 굳이 사용하지 않으셔도 될 것 같네요.&lt;/p&gt;
+
+&lt;h6 id="documentation"&gt;Documentation&lt;/h6&gt;
+
+&lt;p&gt;Pixhawk는 내부 코드가 Doxygen 방법으로 주석이 달려있습니다. 예를 들면, 아래처럼 되어있습니다. Doxygen은 이런 주석을 분석하여 문서로 자동 생성해줍니다.  &lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-`"&gt;/**
+ * UTC offset (unit: min)
+ *
+ * the difference in hours and minutes from Coordinated 
+ * Universal Time (UTC) for a your place and date.
+ *
+ * for example, In case of South Korea(UTC+09:00), 
+ * UTC offset is 540 min (9*60)
+ *
+ * refer to https://en.wikipedia.org/wiki/List_of_UTC_time_offsets
+ *
+ * @unit min
+ * @min -1000
+ * @max  1000
+ * @group SD Logging
+ */
+PARAM_DEFINE_INT32(SDLOG_UTC_OFFSET, 0);  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;`
+이런 주석이 doxygen을 통해 문서화 되면 PDF나 html방식으로 생성됩니다.
+&lt;img src="http://localhost:2368/content/images/2016/05/Doxygen_example.png" alt="Doxygen Sample"&gt;
+놀랍게도 아주 좋은 형태로 바뀌지요. 아. 이 그림은 예제입니다 Pixhawk 관련 문서는 아닙니다. 아쉽게도 Pixhawk는 문서화가 처음에는 잘 나가다가 최근 몇년동안은 업데이트를 하지 않는 것 같습니다. 하지만, 처음 보시는 분들은 한번 정도 내부 디렉토리 안에 있는 파일들을 열어 살펴보시길 바랍니다. 의외로 좋은 정보들이 많이 있으니깐요.&lt;/p&gt;
+
+&lt;h6 id="images"&gt;Images&lt;/h6&gt;
+
+&lt;p&gt;Images는 Pixhawk를 컴파일해서 펌웨어 이미지를 만들기 위해 필요한 정보들이 들어있습니다. 전에도 말씀드렸지만 Pixhawk 하드웨어는 여러 종류가 있고, 각 하드웨어에 맞춰 필요한 정보등이 .prototype이라는 파일로 들어 있습니다. 이 정보를 사용하여 이미지를 만들면 .bin이라는 형태로 여기에 생성됩니다.&lt;/p&gt;
+
+&lt;h6 id="nuttx"&gt;NuttX&lt;/h6&gt;
+
+&lt;p&gt;NuttX는 Pixhawk가 사용하는 실시간 운영체제입니다. 이를 기반으로 Pixhawk가 동작되는데, 별도의 다른 오픈소스이니 우리는 그냥 사용만 하기로 합시다. 아 이런게 있나보다 생각하시고, 필요할때 가져다 쓰는 구조로 사용하세요. 나중에 하드웨어 속성 변경이 필요한 경우라든지 이런 경우는 NuttX 설정을 변경할 필요가 생기는데 그렇다고 소스 코드를 변경할 일은 거의 없습니다. 단순히 설정만 변경합니다. 설정은 nuttx-configs 디렉토리에서 변경하면 됩니다.&lt;/p&gt;
+
+&lt;h6 id="romfs"&gt;ROMFS&lt;/h6&gt;
+
+&lt;p&gt;ROMFS는 ROM FileSystem 약어로 Pixhawk 펌웨어가 올라가면 파일 시스템이 생기는데 여기에 들어가는 파일들이 들어 있습니다. 정말 중요한 부분 중 하나이고, 나중에 이 부분을 잘 살펴보셔야 합니다. 여기에는 Pixhawk가 동작되는 처음 시작을 알리는 스크립트인 rcS가 들어있습니다. 나중에 이 부분도 함께 분석해보도록 하겠습니다. 그외에도 각 기체마다 필요한 설정값들, 파라미터 등이 여기에 포함되어 있습니다. 꼭 동작 방법을 숙지해야 하는 부분입니다.&lt;/p&gt;
+
+&lt;h6 id="tools"&gt;Tools&lt;/h6&gt;
+
+&lt;p&gt;Tools 디렉토리에는 스크립트 형태로 소스 컴파일 시 필요한 스크립트라든지, 코딩 스타일 체크라든지 등등의 스크립트가 들어 있습니다. 여기서 중요한 것은 앞으로 SITL을 위한 gazebo 에 필요한 코드들도 여기에 포함되어 있습니다. 이 부분도 나중에 함께 분석하실 것 같습니다. 이 코드는 별도 오프소스로 개발되고 있어서 NuttX와 같은 방식이라 보시면 될 것같습니다. 하지만 NuttX와 달리 우리는 이 부분 오픈소스를 조금은 건드릴 수 도 있습니다. 참고하세요 &lt;/p&gt;
+
+&lt;h6 id="cmake"&gt;cmake&lt;/h6&gt;
+
+&lt;p&gt;이 부분은 Pixhawk 내부 컴파일 절차등이 포함되어있습니다. 예를 들어 여러 모듈이 있고, 각 하드웨어에 따라 컴파일할 모듈들이 틀릴수 있다면, 이 부분에서 어떤 모듈을 빼고, 어떤 모듈을 더할 건지 등등이 여기에서 이루어집니다. 또한 내가 나만의 모듈을 만들었다면 그 모듈을 컴파일해서 추가하는 것을 하기 위해서는 이 부분에 내가 생성한 모듈 이름을 추가해야 합니다.&lt;/p&gt;
+
+&lt;h6 id="integrationtests"&gt;integrationtests&lt;/h6&gt;
+
+&lt;p&gt;이 부분은 저도 정확히는 잘 모르겠지만, 컴파일 후 기본적인 기능에 대해 테스트하는 부분이라고 생각하시면 될 것 같습니다. 중요한 부분은 아니니 넘어가셔도 될 것 같네요&lt;/p&gt;
+
+&lt;h6 id="launch"&gt;launch&lt;/h6&gt;
+
+&lt;p&gt;launch 디렉토리는 SITL을 ROS와 연동하기 위해 개발된 부분입니다. 초창기에는 ROS를 통해 SITL을 이용했지만, 최근에는 ROS없이 SITL을 동작하도록 변경되고 있습니다. 하지만 여전히 ROS를 통해 이루어지는 방법도 진행이 되는것 같긴합니다. 저희는 ROS까지는 사용하지 않겠지만, 필요하신 분은 ROS 기반 SITL을 사용하셔도 무방합니다.&lt;/p&gt;
+
+&lt;h6 id="mavlink"&gt;mavlink&lt;/h6&gt;
+
+&lt;p&gt;mavlink 디렉토리는 지상국 시스템과 Pixhawk 기반 드론의 통신 프로토콜로 mavlink 라는 오픈소스 코드를 그대로 사용하고 있습니다. 앞에서 설명한 NuttX와 같은 방법이고 저희는 그대로 사용하면 됩니다. 만약 지상국 시스템과 Pixhawk의 통신 중에 나만의 통신 프로토콜 만들려면 어떻게 해야하냐구요? 그때는 당연히~ 이 부분을 수정하셔야 합니다. 기회가 되면 이 부분도 알려드리겠습니다.&lt;/p&gt;
+
+&lt;h6 id="misc"&gt;misc&lt;/h6&gt;
+
+&lt;p&gt;misc 디레토리는 그외에 분류안된 부분이 들어있다고 보시면 됩니다. 현재는 tones라는 소리 정의를 하고 있습니다. 소리 정의라고 하는 것은 기체 상태를 간단한 소리로 알려주는 방법인데 그 띠리리~ 이런 소리 정의를 말합니다. &lt;/p&gt;
+
+&lt;h6 id="msg"&gt;msg&lt;/h6&gt;
+
+&lt;p&gt;msg 디렉토리는 전에 말씀드린 uORB의 메세지 정의를 나타냅니다. 혹시 까먹으신 분들을 위해 uORB는 모듈과 모듈같의 통신을 하기 위한 기반 시스템이고, 모듈간 통신 프로토콜 정의가 바로 msg 디렉토리안에 들어있습니다. 예를 들어 actuator_armed 메세지를 보시면 다음과 같습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;uint64 timestamp    # Microseconds since system boot  
+bool armed        # Set to true if system is armed  
+bool prearmed        # Set to true if the actuator safety is disabled but motors are not armed  
+bool ready_to_arm    # Set to true if system is ready to be armed  
+bool lockdown        # Set to true if actuators are forced to being disabled (due to emergency or HIL)  
+bool force_failsafe    # Set to true if the actuators are forced to the failsafe position  
+bool in_esc_calibration_mode # IO/FMU should ignore messages from the actuator controls topics  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;텍스트 타입이고, 아래와 같은 구조로 되어 있군요.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[타입] [변수명] #주석
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;생각해보니, 텍스트 타입인데, 나중에 이 코드가 아래와 같이 header파일로 바뀌는군요.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;/**
+ * @addtogroup topics
+ * @{
+ */
+
+
+#ifdef __cplusplus
+struct __EXPORT actuator_armed_s {  
+#else
+struct actuator_armed_s {  
+#endif
+    uint64_t timestamp;
+    bool armed;
+    bool prearmed;
+    bool ready_to_arm;
+    bool lockdown;
+    bool force_failsafe;
+    bool in_esc_calibration_mode;
+#ifdef __cplusplus
+
+#endif
+};
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;누가 어떻게 이렇게 바뀌도록 하는 걸까요? 맞습니다. 바로 Tools에 스크립트가 이렇게 만들어 주는 겁니다. 대충 Tools 디렉토리의 스크립트가 하는 내용이 이해가 되시나요?  &lt;/p&gt;
+
+&lt;h6 id="nuttxconfigs"&gt;nuttx-configs&lt;/h6&gt;
+
+&lt;p&gt;이 디렉토리는 NuttX에 대한 설정들이 포함되어 있습니다. 예를 들어 보지요. Pixhawk는 기본적으로 시리얼 baud rate이 57600으로 되어 있습니다. 그런데 이 부분을 115200으로 바꾸고 싶습니다. 이런 부분은 운영체제에서 관장하기 때문에 이 부분을 바꾸어주는 부분이 바로 nuttx-config 부분입니다.&lt;/p&gt;
+
+&lt;h6 id="posixconfigs"&gt;posix-configs&lt;/h6&gt;
+
+&lt;p&gt;posix-configs는 앞에서 설명드리는 nuttx-configs와 일맥 상통합니다. 여기서는 posix, 즉 우리가 주로 사용할 SITL을 위해 동작하게 될 우분투 운영체제가 할 일들이 나와있습니다. 실제적으로는 동작시킬 프로그램들 내용등이 여기에 포함되어 있습니다.&lt;/p&gt;
+
+&lt;h6 id="src"&gt;src&lt;/h6&gt;
+
+&lt;p&gt;src 디렉토리.. 여러분 잘 아시겠지요? 우리가 파헤쳐야할 소스코드가 들어있는 디렉토리입니다. 사실 저도 여기를 모두 다 파헤치지 못해 일부만 설명드리겠지만, 어마어마한 코드들이 여기에 들어있습니다. 여기서 내가 필요한 모듈만 찾아서 분석하시면 됩니다. 이 부분은 워낙 방대하니 내부 디렉토리 구조를 한번 더 살펴보겠습니다. 디렉토리만 8개입니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ ls
+drivers  examples  firmware  include  lib  modules  platforms  systemcmds  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;drivers 디렉토리는 주로 센서 드라이버가 있습니다. 만약 추가적으로 센서를 내가 드론에 추가하겠다. 그럼 이 부분에 모듈을 추가하시면 됩니다.&lt;/li&gt;
+&lt;li&gt;example 디렉토리는 예제 샘플 코드가 들어있습니다. 우리도 이 예제를 통해 모듈을 추가하는 방법을 살펴볼 예정입니다.&lt;/li&gt;
+&lt;li&gt;firmware 디렉토리는 설치에 필요한 설정등이 있습니다. 그리 중요하진 않습니다. 실제 코드는 없습니다.&lt;/li&gt;
+&lt;li&gt;include 디렉토리는 헤더 파일이 들어있는데, 모둔 헤더파일이 들어있는건 아니고, 기본이 되는 px4.h가 들어있습니다.&lt;/li&gt;
+&lt;li&gt;lib 디레토리는 라이브러리들이 포함되어 있는 디렉토리입니다. 태스크로 수행되지 않고 태스크에 사용될 라이브러리들을 말합니다.&lt;/li&gt;
+&lt;li&gt;modules 디렉토리는 우리가 주로 많이 다룰 핵심 모듈들이 있는 디렉토리입니다. 예를 들어 위치 예측 모듈 이라든지, 자세 제어 모듈 등이 여기에 포함됩니다.&lt;/li&gt;
+&lt;li&gt;platforms 디렉토리는 nuttx와 posix 를 구분하여 각 운영체제에 맞춰 필요한 라이브러리들이 여기에 포함되어 있습니다. 이런게 필요한 이유는 각 플랫폼 마다 같은 기능인데, 함수 이름이 틀리는 경우가 있기 때문입니다.&lt;/li&gt;
+&lt;li&gt;systemcmds 디렉토리는 시스템에 필요한 명령어에 대한 소스코드가 여기에 포함되어 있습니다. 예를 들어, version 정보를 보는 ver라는 명령어라든지 파라리터 정보를 보거나 수정하는 param 명령어등이 그 중 하나라고 볼 수 있습니다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h6 id="unittests"&gt;unittests&lt;/h6&gt;
+
+&lt;p&gt;unittests 디렉토리는 말그대로 unit test를 하기 위한 코드들이 여기에 들어있습니다. 개발을 하다보면 unit test는 꼭해야하는데, 그런 부분이 여기에 들어있네요. 이걸 보면, "아. 그냥 코드를 중구난방으로 개발하는게 아니고, 뭔가 프로세스가 있구나"라고 생각하게 됩니다. 나중에 내부 코드를 보시면 그 코드 개발자의 철학도 어느정도 보이시게 될겁니다.&lt;/p&gt;
+
+&lt;h5 id=""&gt;마치며&lt;/h5&gt;
+
+&lt;p&gt;여러분 어느정도 Pixhawk 코드 구조를 확인하셨는데, 대략 어느 부분을 집중적으로 분석해야겠다는게 보이시나요? 오픈소스라는게 음.. 그냥 가져다 쓰면 되겠네.. 라고 생각할 수 있지만, 그리 쉽지 않다는 건 여러분도 잘 아실겁니다. 특히나 처음 접하실때는 정말 어렵지요. 하지만, 내가 원하는 부분만 잘 찾은다면, 어느정도 찾아갈 방향이 보이게 되고, 그 방향으로 가다보면, 전체 그림이 머리속에 들어오게 되어 분석하기 쉬워지게 됩니다. 그 전체 그림을 머리속에 집어넣기가 어렵지만, 여러분은 분명 잘 하실거라 믿어 의심치 않습니다. 그럼 절대 포기하지 마시고, 끝까지 한번 해보시길 바랍니다. (생각해 보니 저에게 할말이네요.. ㅜㅜ)&lt;/p&gt;</content:encoded></item><item><title>Pixhawk 소스코드로 빌드해보기</title><description>&lt;h5 id="introduction"&gt;Introduction&lt;/h5&gt;
+
+&lt;p&gt;안녕하세요 또 오랫만에 찾아뵙습니다. 요즘 많은 분들이 제가 쓴 글에 관심을 가져주셔서 정말 정말 감사합니다. 한분한분 질문하신 내용 성의껏 대답해드려야 하는데, 아는게 많이 부족하여 정확한 답변 못드리는 점 너그러이 용서해주시길 바랍니다.&lt;/p&gt;
+
+&lt;p&gt;자.. 오늘은 여러분들에게 이제 Pixhawk 소스 코드를 빌드해보는 것을 해보고자 합니다. 지난 강좌에서는 QGroundControl을 이용해서 단순하게 Pixhawk 펌웨어를&lt;/p&gt;</description><link>http://localhost:2368/pixhawk-soseukodeuro-bildeuhaebogi/</link><guid isPermaLink="false">148bc157-b474-4266-8c37-29942cb21c7d</guid><category>pixhawk</category><dc:creator>SungTae Moon</dc:creator><pubDate>Tue, 26 Apr 2016 21:58:01 GMT</pubDate><content:encoded>&lt;h5 id="introduction"&gt;Introduction&lt;/h5&gt;
+
+&lt;p&gt;안녕하세요 또 오랫만에 찾아뵙습니다. 요즘 많은 분들이 제가 쓴 글에 관심을 가져주셔서 정말 정말 감사합니다. 한분한분 질문하신 내용 성의껏 대답해드려야 하는데, 아는게 많이 부족하여 정확한 답변 못드리는 점 너그러이 용서해주시길 바랍니다.&lt;/p&gt;
+
+&lt;p&gt;자.. 오늘은 여러분들에게 이제 Pixhawk 소스 코드를 빌드해보는 것을 해보고자 합니다. 지난 강좌에서는 QGroundControl을 이용해서 단순하게 Pixhawk 펌웨어를 다운로드 받아서 비행제어컴퓨터를 동작해보았는 것을 해보았지요. 이 방법은 아주 쉽지만, 이미 만들어진 것만을 사용하기 때문에 별로 재미는 없습니다. 그럼 소스 코드를 받아서 빌드해보는 것을 해보도록 하겠습니다. &lt;/p&gt;
+
+&lt;h5 id="buildenvironment"&gt;Build Environment&lt;/h5&gt;
+
+&lt;p&gt;참 소스코드를 가지고 빌드하기 전에 빌드 환경을 먼저 살펴보아야 겠군요. 음.. 이 강좌를 설명하면서 제가 생각하는 준비물은 단순히 컴퓨터입니다. 사실 Pixhawk도 필요없습니다. 앞으로 모든 준비는 Pixhawk에서 제공하는 SITL (Software In The Loop)를 활용하여 코드를 수정해보고 동작을 보는 방법으로 할 예정이어서 굳이 Pixhawk 하드웨어 까지는 필요없습니다. 하지만, 만약 Pixhawk를 직접 활용해보고 싶다는 분은 3DR Robotics사에서 구매하시면 됩니다. Pixhawk 하드웨어에 대한 설명은 px4fmu-v2 (pixhawk)를 가지고 할 예정입니다. 따라서 만약 구매하신다면 pixhawk를 선택하시길 바랍니다. 참고로 가격은 200달러 이네요. 사신다면 GPS 모듈도 꼭 구매하시길 바랍니다. 가격은 90 달러입니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/pixhawk_price.jpg" alt="Pixhawk"&gt;&lt;/p&gt;
+
+&lt;p&gt;다음은 컴퓨터 환경입니다. 안타깝게도 여러분들에게 친숙한 윈도우를 사용하지는 않을 것 같습니다!. (죄송합니다. 제가 친숙한 환경으로 해야할 것 같아서요...) 사실 Lorenz Meier가 사용하는 Pixhawk 개발 환경도 윈도우는 아닙니다. 아마 Mac 아니면 우분투일 것 같습니다. 여러분! 오픈소스를 가지고 뭔가 작업을 하실때는 꼭 그 개발자가 사용하는 환경에 최대한 맞도록 하심이 제일 좋습니다. 물론 Pixhawk가 윈도우를 배재하고 있는 것은 아닙니다. (&lt;a href="http://dev.px4.io/starting-installing-windows.html"&gt;Window Installation Instructions&lt;/a&gt; 참고하세요) 하지만, 오픈소스라는 특성상 정말 많이 변화되고, 초기에는 버그도 많을 수 밖에 없습니다. 그리고 특성상 초기에 메인 개발자는 적기 때문에 큰 그림만 개발자가 그려주고 나머지는 불특정 개발자에게 의존할 수 밖에 없는 구조인것이지요. 따라서 메인 개발자가 사용하고 있는 개발 환경에 우선적인 부분이 적용되고, 다른 개발 환경은 이것을 바탕으로 알아서 해보셈~~ 하는 거지요. 따라서 최대한 불필요한 삽질을 하고 싶지 않으시다면, 윈도우 보다는 Lorenz Meier가 추천하는 리눅스 특히 우분투를 사용하시길 바랍니다. 참고로 저는 현재까지는 우분투 14.04 LTS 버전을 기반으로 개발하고 있고, 이것을 기반으로 설명할 예정입니다. (추후 우분투 버전은 바뀔수도 있습니다. 중요하진 않습니다.)&lt;/p&gt;
+
+&lt;p&gt;"그럼 우분투는 어떻게 설치하는건가요?"&lt;/p&gt;
+
+&lt;p&gt;맞습니다. 이것부터 차근차근 설명해야 하지만, 이 부분은 구글님에게 문의해보시면 엄청난 조언을 해주실 겁니다. 방금 "우분투 설치"로 검색 해보니 &lt;a href="http://studyforus.tistory.com/222"&gt;블로그&lt;/a&gt; 하나를 추천해주네요. 요즘은 정말 친절하게 잘 설명해주시는 분들이 너무 많아서 좋답니다. 감사~&lt;/p&gt;
+
+&lt;p&gt;우분투를 처음 써보시는 분들은 이번기회에 꼭 이 운용체제를 사용해보시길 바랍니다. 한번 맛들이면 윈도우 보다 훨~씬 쉽다고 느끼실겁니다. 절 믿고 눈 딱 감고 설치해보시면 새로운 세상이 떡~ 하니 보입니다. 진짜입니다~. &lt;/p&gt;
+
+&lt;p&gt;자 그럼 설치를 다 하셨다면 이제 개발 환경을 설치해봅시다. (참고로 여기서 설명드리는 내용은 &lt;a href="http://dev.px4.io/starting-installing-linux.html"&gt;pixhawk 개발자 사이트&lt;/a&gt;에 나와있는 내용을 각색하여 올린것입니다. 혹시 제가 잘못 올린게 있을 수 있으니, 링크된 사이트를 참조하셔서 환경 구축하시길 권고 드립니다.)&lt;/p&gt;
+
+&lt;p&gt;개발 환경을 설치하기 위해서는 의외로 다양한 라이브러리와 다양한 환경을 셋팅해주어야 합니다. 하지만, 중요한 것은 저희는 가져다가 쓰기만 하면 된다는 겁니다. 이미 만들어 놓은 라이브러리를 그냥 사용하여, 내가 만들고자 하는 것에만 집중하자. 뭐.. 이런 식입니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt; sudo add-apt-repository ppa:george-edison55/cmake-3.x -y
+&amp;gt;&amp;gt; sudo apt-get update
+&amp;gt;&amp;gt; sudo apt-get install python-argparse git-core wget zip  python-empy qtcreator cmake build-essential genromfs -y
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;우분투를 잘 모르시는 분들을 위해 좀더 설명해보겠습니다. 잘 아시는 분들은 넘어가셔도 됩니다. 일단 여기에서 나오는 용어(명령어) 위주로 설명해보지요. sudo 라고 하는 것은 관리자 권한으로 수행한다는 의미입니다. 마치 윈도우에서 드라이버 설치할려면 관리자 권한으로 설치해야한다고 허락을 맡아야 하는 것처럼요. 물론 패스워드도 입력해야 합니다 add-apt-repository, apt-get 이라는 용어가 나오네요. 여기서 나오는 apt는 Advanced Packaging Tool의 약자로서 우분투에서 사용하는 패키지(프로그램,라이브러리 등으로 생각하시면 될 것 같습니다.)을 관리하는 도구라고 보시면 될 것 같습니다. 우분투는 오픈소스의 리눅스여서 대부분 무료로 프로그램 및 라이브러리 등을 배포합니다. 윈도우라면 각 사이트에 가서 다운로드 받고, 설치를 해야 하지요. 여기서는 우분투 서버에서 대부분의 패키지를 관리하여서 쉽게 설치가 가능합니다. 사용해 보시면 정말 많은 프로그램들이 있으니, 그냥 무료로 설치하여 사용하시면 됩니다. 참고로 터미널에서 명령 치는게 익숙하지 않으신 분들은 우분투 소프트웨어 센터라는 것도 있으니 여기서 검색하셔서 설치해보시는 것도 좋습니다. 무료이지만 정말 깜짝 놀랄만한 프로그램들이 많거든요.
+&lt;img src="http://localhost:2368/content/images/2016/04/ubuntusoftwarecenter.jpg" alt="ubuntu software center"&gt;
+또 약간 삼천포로 빠져들었군요. 죄송합니다. ... 암튼 우분투를 사용하시면 프로그램 설치가 이렇게 쉽다는 얘기이구요. add-apt-repository는 그런 패키지가 있는 서버를 추가한다는 의미로 이해하시면 되고, apt-get은 패키지를 얻는다는 의미입니다. 뒤에 나오는 옵션에 따라 설치, 서버 정보 갱신 등을 할수 있습니다.
+우선 서버 정보를 갱신하여 자신의 컴퓨터에 그 데이터베이스를 업데이트 하기 위해 다음과 같이 수행하는 것이지요&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;apt-get update  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;데이터 베이스가 갱신이 되었다면, 이제 설치를 해보겠습니다. 설치하는 방법은 아래와 같습니다. -y 옵션은 "이거 용량이 이정도인데 정말 설치할까요" 뭐 이런거 물어보는 것을 "됐고, 그냥 설치해" 라고 으름장 내는 정도로 생각하시면 될 것 같습니다. &lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;apt-get install [패키지 이름] (-y)  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;그렇다면 다시 앞으로 들어가서 설치해야 할 패키지들은 이정도 되는군요. 물론 다음에 시뮬레이션을 위해 또... 설치해야할 것들이 있지만요. &lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;python-argparse git-core wget zip python-empy qtcreator cmake build-essential genromfs  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;설치할 패키지들이 많죠? 만약 이런 패키지들 도움없이 만들었다면? 정말 끔찍하겠지요? 이게 소프트웨어 만드는 방법입니다. 다시 말씀드리지만, "애써서 만들어 놓은거 그냥 가져다 쓰자" 입니다. &lt;/p&gt;
+
+&lt;p&gt;또 각설하고, 내용을 보니 python이라는 용어가 있구요. git 라는 용어도있군요. 파이썬... 이건 정말 대단한 언어 중 하나입니다. 여기서는 특별히 설명안하겠지만, 정말 중요한 언어이고 아주 쉬운 언어입니다. 나중에라도 꼭 사용해보시길.. git 이건 전에 설명했으니깐 아실거구요. wget 이것은 ftp로 다운로드 받는 명령어입니다. 압축 프로그램인 zip도 나오는군요. 내부에서 압축을 사용한다는 의미겠지요. &lt;/p&gt;
+
+&lt;p&gt;qtcreator도 나오네요. 앞으로 저희가 사용한 개발 툴입니다. 노키아에서 만든 QT라는 라이브러리가 있는데 정말 굉~장히 대단한 라이브러리여서 C++ 언어임에도 불구하고 한번 코딩하면 리눅스, 윈도우, 맥, 안드로이드 등에 그대로 활용할 수 있습니다. 더 중요한 것은 전산쪽에서 말하면 정말 객체 지향적인 스타일로 만들었다는 거지요. 하지만 Pixhawk가 QT를 사용한다는 것은 아니고 단순히 qt 개발 툴인 qt creator를 여기서도 사용한다는 의미입니다. 이 개발툴도 visual studio처럼 정말 잘 만들어져있습니다. &lt;/p&gt;
+
+&lt;p&gt;다음은 cmake가 있네요. make의 진보된 버전 정도라고 보시면됩니다. 리눅스에서 컴파일할 때 도와주는 것이 make라고 보시면 됩니다. 예를 들어 프로그램 개발을 위해 10개의 cpp 파일과 .h로 만들었다고 하지요. 그러면 컴파일 하기위해서는 10번의 컴파일을 거쳐 링크를 하는 등의 불편한 상황에 있을 수 있겠네요. 거기다가 버전별로 컴파일을 다르게 해주라 등의 상부지시가 있으면 어떻게 할까요? 왠만하면 스크립트 파일을 만들어서 자동화 시켜놓아서 해결하는 것입니다 make는 그런 단순 작업을 쉽게 처리해 주는 좋은 툴이라고 보시면 됩니다. visual studio에서 프로젝트 만들면 visual studio가 관리해주는 것처럼요. cmake는 make의 이런 기능에 크로스 플랫폼을 더한 것이라고 보면 됩니다. 그래서 앞에 "c"가 더 붙은거지요. &lt;/p&gt;
+
+&lt;p&gt;다음은 build-essential이군요. 이것은 단순히 개발 환경 구축을 위해 필수적으로 필요한 것들(예를 들어 기본 C 라이브러리)을 설치해주는 것이라고 보시면 됩니다. genromfs는 ROM 파일시스템을 생성시켜주는 프로그램이라고 보시면 됩니다. Pixhawk는 내부에 자체 파일 시스템이 있습니다. 파일 시스템이라고 하는 것은 윈도우를 예를 들면, 디렉토리 및 파일들을 관리해주는 시스템이라고 보시면됩니다. 즉 파일을 만들기 위한 기반 시스템이지요. Pixhawk도 내부에 로그 파일이나 스크립트 파일등을 가지고 있기 때문에 필요합니다. 이정도로 이해하시고 명령을 실행시키면 됩니다. 다시 한번 말씀드리지만, 우리가 원하는 것은 Pixhawk 내부 구조 및 알고리즘이므로, 그것을 위해 필요한 것으 수단과 방법을 가리지 않고 가져다 쓴다는 주의로 오픈소스를 활용하시면 됩니다.&lt;/p&gt;
+
+&lt;p&gt;일단 여기까지 하시면 Pixhawk에 대한 펌웨어 빌드 환경은 끝입니다. 하지만 우리는 앞으로 시뮬레이션을 통해 Pixhawk를 분석할 예정이오니, 시뮬레이션을 위한 필요 라이브러리 및 프로그램 설치가 또 필요하겠군요. 우선 다음과 같습니다. &lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt; sudo apt-get install ant protobuf-compiler libeigen3-dev libopencv-dev openjdk-7-jdk openjdk-7-jre clang-3.5 lldb-3.5 -y
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;여러 라이브러리를 설치하겠다는 얘기이구요. 간단하게 각 라이브러리 및 프로그램에 대해 설명드리겠습니다.&lt;/p&gt;
+
+&lt;p&gt;우선,  각 라이브러리 설명에 앞서 Pixhawk의 시뮬레이션에 대해 설명드리겠습니다. Pixhawk는 크게 두가지의 시뮬레이션 환경을 제공합니다. 첫번째는 HILS로 jMAVSim이 제공되고, SITL로 gazebo 기반 시스템을 제공합니다. HILS는 Hardware In the Loop Simulation을 나타내고, SITL은 Software In The Loop를 의미합니다. HILS는 HITL (Hardware In The Loop)로도 쓰이기도 합니다. 어떤 분들은 이건 HILS가 아니고, PILS(Processor In the Loop Simulatio) 라고도 말씀해주시는 분들도 있지만, 여기서는 Pixhawk 개발자가 정의한 용어를 그대로 따르도록 하겠습니다. &lt;/p&gt;
+
+&lt;p&gt;암튼, HILS인 jMAVSim은 앞에 있는 "j"에서 아실수 있는 것 처럼 JAVA로 개발되었구요. MAVLink를 사용하기 때문에 "MAV"를 사용했고, "Sim"인 시뮬레이션이라나느 의미입니다. 따라서 JAVA를 컴파일을 위해 JAVA의 make와 같은 역할인 ant가 설치되어야 합니다. 그리고 JAVA 라이브러리 설치를 위해 openjdk-7-jdk와 openjdk-7-jre를 설치합니다. 리눅스에서는 JAVA 라이브러리로 openjdk와 oraclejdk를 제공하고 있지만 여기서는 openjdk를 사용했군요. "7"은 버전을 나타냅니다. &lt;/p&gt;
+
+&lt;p&gt;한편, gazebo기반 시뮬레이션을 위해서는 gazebo를 설치해야합니다. 여기서는 우선 설치하지 않을것이고 추후에 다시 gazebo 기반 시뮬레이션 부분을 다시 설명드리겠습니다. 그 외에  컴퓨터 비전 관련 부분이 필요해서 libopencv-dev 라이브러리를 설치합니다. eigen3는 vector와 matrix와 같은 수학 연산을 위해 사용되는 라이브러리입니다. 이를 위해 libeigen3-dev를 설치합니다. 여기서 보시는 둘다 "-dev"로 끝나는군요. 이것은 개발용이라는 의미이고, 그냥 라이브러리가 아닌 디버깅이 가능한 라이브러리 버전도 포함이라고 보시면 될 것 같습니다. 다음으로 protobuf-compiler라는것도 있군요. protobuf라는 것은 이것은 구글에서 개발한 라이브러리인데, 통신할때 사용하는 프로토콜을 쉽게 개발할 수 있도록 해주는 툴이라고 보시면 될것 같습니다. 프로토콜에 대한 정의를 XML을 통해서 하면 그걸 가지고 여러 언어로 프로토콜을 개발할 수 있게 되는 것이지요. 참 편하지요. 네트워크 프로토콜을 만들어 보신 분들은 이해하시겠지만, 이거 정말 귀찮은 노가다거든요. 그런데 이미 이런 오픈 소스를 사용하면 쉽게 할 수가 있게 된거죠. 요즘 들어 느끼는 것은 "아.. 정말 내가 생각해보고 있던 것은 다 개발이 되었구나" 이고, 또 "아 이미 내가 생각해 놓은 것이 개발되었다면, 잘 찾기만 하면 연구가 쉬워지겠구나"입니다. 결국 얼마나 내가 필요한 것을 잘 찾을 수 있을까가 관건인것 같습니다. 그 외에도 clang이라고 있는데, 이것은 우리가 일반적으로 사용하는 여러 언어인 C, C++, Object-C와 같은 프로그래밍 언어를 대체하고자하는 것을 목적으로 갖고있습니다. 저도 이것은 아직 써보지 못해 정확히는 잘 모르겠네요. lldb는 디버거의 한 종류라고 보시면 될 것 같습니다. &lt;/p&gt;
+
+&lt;p&gt;자 여기까지 하셨으면, 일단 시뮬레이션 기반으로 Pixhawk 동작시키기 위한 펌웨어 빌드 환경을 마무리한 것 같습니다.&lt;/p&gt;
+
+&lt;h5 id="pixhawk"&gt;Pixhawk 하드웨어 펌웨어 빌드 환경 (옵션)&lt;/h5&gt;
+
+&lt;p&gt;만약, 여러분에게 Pixhawk 하드웨어가 있으시다면, 이제 Pixhawk에 맞춰 컴파일 해야하는 몇가지 작업을 더 하셔야합니다. &lt;/p&gt;
+
+&lt;p&gt;우선, 시리얼 포트 연결 권한을 주도록 하기 위해 user mode를 변경합니다. 이제 매번 펌웨어 업로드 할때마다 관리자 권한을 추가 안해도 됩니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo usermod -a -G dialout $USER  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;다음으로 우분투에서 관리하는 시리얼 포트 관리를 제거하시고요. &lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo apt-get remove modemmanager  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;그 다음은 ARM계열의 Pixhawk에 맞춰 컴파일 할 수 있도록 크로스 컴파일 환경을 만들어주어야 합니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo add-apt-repository ppa:terry.guo/gcc-arm-embedded -y  
+sudo apt-get update  
+sudo apt-get install python-serial openocd \  
+    flex bison libncurses5-dev autoconf texinfo build-essential \
+    libftdi-dev libtool zlib1g-dev \
+    python-empy gcc-arm-none-eabi -y
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Pixhawk는 ARM 계열 CPU를 사용하기 때문에 크로스 컴파일이라는 것을 해야합니다. 컴파일이라고 하는 것은 인간이 알 수 있는 정도의 언어 (예를 들면, C언어 C++ 언어)를 컴퓨터가 알아들을수 있는 언어 (0,1로 된 바이너리, 기계어)로 변환을 해주는 것입니다. 그런데 각각 컴퓨터의 뇌와 같은 부품인 CPU가 제작 회사마다 틀리다는 것이지요. 우리가 주로 사용하는 컴퓨터는 인텔 같은 회사에서 개발한 x86 CPU를 사용하는데, Pixhawk 내부는 ARM 계열의 MCU (여기선 단순히 CPU)를 사용한다는 것이지요. 문제는 저희가 가지고 있는 컴퓨터와 Pixhawk 내부 컴퓨터의 CPU가 틀리다는 것입니다. 따라서 컴파일 시 자신의 컴퓨터가 아닌 상대방 컴퓨터에 맞게 변화시켜서 컴파일 해주어야 하는데, 그게 바로 크로스 컴파일입니다. 이 환경을 만들어 주어야 합니다. gcc-arm-none-eabi 설치가 그런 내용입니다. 그외에도 여러가지가 있지만 여기서 설명은 생략하겠습니다.&lt;/p&gt;
+
+&lt;h5 id="sourcecodedownload"&gt;Source Code Download&lt;/h5&gt;
+
+&lt;p&gt;휴~ 이제 여기까지 해서 Pixhawk 동작을 위한 개발 환경을 구축하였군요 이제 소스코드를 직접 받아 빌드를 해볼 시간입니다. 전 강좌에서 잠깐 말씀드렸다시피 Pixhawk의 코드 관리는 github를 사용하고 있습니다. 따라서 소스 코드를 받기 위해서는 github를 통해 아래와 같이 다운로드 받을 수 있습니다. (아직 다운로드 받지 마세요)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git clone https://github.com/PX4/Firmware.git  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;전에도 한번 말씀드린 것 같은데, Pixhawk 소스 코드 관리에서는 git에서 제공하는 기능 중 branch를 사용합니다. 쉽게 말씀드리면, 개발자용 버전과 일반 사용자 버전 처럼 비슷한 코드인데 관리를 다르게 두는 기능이라고 보시면 될것 같습니다. 암튼!, pixhawk는 master 버전과 stable 버전으로 크게 나누어져 배포되고 있습니다.&lt;/p&gt;
+
+&lt;p&gt;master 버전은 개발자용 버전이라고 보시면 됩니다. 따라서 하루에도 몇번씩 버전업이 된 싱싱한 소스코드를 받아볼 수 있지요. 하지만, 아무래도 여러 개발자가 직접 개발하여 올리다보니, 버그가 있을 수 있고, 실제 비행 시험을 해보지 않는 버전이라 안정적이지 못합니다. 물론 요즘은 여러가지 검사 기능을 추가하여 많이 안정적으로 바뀌고 있습니다. 실제로 어떤 기능을 추가하여 적용할려면 소스 코드 포맷 부터 여러 테스트를 거쳐 정상 동작되는 것에 한에서만, 관리자들이 확인하여 소스 코드에 적용하고 있습니다. 실제 pull requests를 보시면 여러 수정된 부분들이 코드에 적용되기 위해 기다리고 있는게 보입니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/pullrequest.jpg" alt="pull requests"&gt;&lt;/p&gt;
+
+&lt;p&gt;보시면 녹색으로 체크된 게 보이시나요? 이건 자동 검사를 무사히 마친거라고 보시면 됩니다. 제일 아래쪽에 보시면 제가 수정한 부분도 아직 대기중에 있는게 보입니다. 중간에 보시면 빨간색으로 X 표시된 것도 보이시나요? 이건 자동검사를 실패했다는 뜻입니다. 이런건 관리자들이 주석을 달아주기도 하지만, 대부분 보지 않습니다. 따라서 코드 공헌을 하고 싶으시면 꼭 체크해주시길 바랍니다.처음 하시는 분들은 코드 수정해놓곤, "아 이제 끝이다"라고 하지만, 이 자동 검사 결과를 잘 보셔야 합니다. 이게 정상 동작해야 다음 단계로 올라갈 수 있다는 것이니깐요.&lt;/p&gt;
+
+&lt;p&gt;stable 버전은 설명에 의하면 비행 시험까지 완료된 버전이라고 적혀있습니다. 하지만, 정확하지는 않구요. 물론 비행시험은 해보았겠지만, 모든 형태의 비행기에 탑재해보진 않았을테니깐요. 어찌되었든 안정된 버전은 맞습니다. 그래서 전 강좌에서 qgroundcontrol을 통해 받은 버전이 바로 이 stable 버전이라고 보시면 됩니다. stable 버전은 버전업이 될때 마다 tag로 꼬리표를 매겨줍니다. 현재 확인해 보니 가장 최신 stable 버전이 1.2.0이 군요. 물론 그전 tag를 보면 1.1.0, 1.0.0 등의 버전등이 있겠지요? 자. 그래서 우리는 매번 바뀌는 master 버전이 아니라 stable 버전을 가지고 앞으로 계속 설명을 할려고 합니다.&lt;/p&gt;
+
+&lt;p&gt;앞에서 잠깐 적어드린 것처럼 받으면 기본이 master 버전을 받도록 되어 있습니다. 따라서 stable 버전으로 받아야합니다. 특히, 우리는 1.2.0 버전입니다.&lt;/p&gt;
+
+&lt;p&gt;자 그럼 버전 1.2.0으로 다운로드 받아보겠습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git clone https://github.com/PX4/Firmware.git --branch v1.2.0  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;여기서, "--branch"는 특정 태그 혹은 branch를 받겠다는 의미라고 이해하시면 됩니다.&lt;/p&gt;
+
+&lt;p&gt;만약 잘 받으셨다면 이런 식의 내용을 보실 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; git clone https://github.com/PX4/Firmware.git --branch v1.2.0 
+Cloning into 'Firmware'...  
+remote: Counting objects: 195322, done.  
+remote: Compressing objects: 100% (294/294), done.  
+Rceiving objects:  59% (115240/195322), 48.94 MiB | 1.45 MiB/s  
+~  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;만약 태그 이름을 잘못 적으셨다면, 아래와 같은 에러를 보실 수 있겠네요&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; git clone https://github.com/PX4/Firmware.git --branch v1.2.011 
+Cloning into 'Firmware'...  
+fatal: Remote branch v1.2.011 not found in upstream origin  
+Unexpected end of command stream  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;자 여기까지 잘 따라오고 계시나요? 제가 혹 잘못 적을 수도 있고, 예기치못한 문제가 발생할 수 있으니, 말씀해주시면 수정하도록 하겠습니다.감솨합니다.~&lt;del&gt; &lt;/del&gt;&lt;/p&gt;
+
+&lt;p&gt;사실 이것을 하면서 git에 대한 설명을 따로 한번 설명해드려야 하는데, 일단 중간중간 설명을 해드리겠습니다. 필요하시면 git에 대해 미리 예습하시면 더욱 좋구요. 사실 오픈소스를 이용하실려면 아니, 프로그램 하실려면 코드관리는 필수입니다. 이거 모르시면 서울가실때 KTX타고 갈 것을 경운기 몰고 올라가실수 있습니다. 이거 아는것과 모르는 것은 정말 하늘과 땅 차이니깐 반드시 익숙해지시길 바랍니다. &lt;/p&gt;
+
+&lt;p&gt;자... 이제 다 받으셨으면 아래와 같은 비슷한 내용이 터미널 창에 나올 것 같군요. 이러게 나오셨나요? 음..&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; git clone https://github.com/PX4/Firmware.git --branch v1.2.0 
+Cloning into 'Firmware'...  
+remote: Counting objects: 195322, done.  
+remote: Compressing objects: 100% (294/294), done.  
+remote: Total 195322 (delta 192), reused 2 (delta 2), pack-reused 195026  
+Receiving objects: 100% (195322/195322), 78.31 MiB | 4.72 MiB/s, done.  
+Resolving deltas: 100% (145663/145663), done.  
+Checking connectivity... done.  
+Note: checking out 'f5efe0afb013e9e28ae305519824e0276aa33ff9'.
+
+You are in 'detached HEAD' state. You can look around, make experimental  
+changes and commit them, and you can discard any commits you make in this  
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may  
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b new_branch_name
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;아래쪽에 보시면 영어로 뭐라고 나오는데, 아래와 같은 문구가 나오네요. 이게 뭘까요? 참 어렵네요.. 이거 중요한 것이긴 한데 조금 있다가 설명하겠습니다. 넘아가시죠&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git checkout -b new_branch_name  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;일단 코드 받은 것 부터 볼까요? 기본적으로는 디렉토리가 Firmware라는 디렉토리가 생성되었을 것입니다. 이 안으로 들어가보지요.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; cd Firmware/
+&amp;gt;&amp;gt;&amp;gt; ls
+CMakeLists.txt            Makefile     integrationtests  posix-configs  
+CONTRIBUTING.md           NuttX        launch            src  
+Debug                     README.md    mavlink           template_.cproject  
+Documentation             ROMFS        misc              template_.project  
+Firmware.sublime-project  Tools        msg               unittests  
+Images                    Vagrantfile  nuttx-configs  
+LICENSE.md                cmake        package.xml  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;음. 뭔가 잔뜩 받아놓았군요. 앞으로 여러분은 이 코드들에 대해 하나하나 파헤쳐나갈 것 같군요.. 긴장하세요.. ㅋㅋ (사실 제가 더 긴장 중입니다. 저도 모르는 내용이 너무 많아서 ㅜㅜ)&lt;/p&gt;
+
+&lt;h5 id="build"&gt;Build&lt;/h5&gt;
+
+&lt;p&gt;이제 빌드를 해볼려고 합니다. 참 저도 중간 중간 컴파일과 빌드를 조금 혼용해서 쓰고 있는데, 용어를 간단히 말씀드리면, 컴파일은 소스 코드를 기계어로 번역하는 것을 의미하구요. 빌드는 번역된 것을 죄다 보아서 하나의 실행 파일로 만드는 것을 의미합니다. 요즘은 두개의 나누는게 크게 의미가 없어지고 있지만, 어찌되었든 그렇다는 겁니다. 이제 make를 통해 컴파일과 함께 빌드까지 할 것입니다. make는 두개를 동시에 해주기 때문이지요. 대부분의 IDE 툴도 컴파일과 빌드를 동시에 해줍니다.&lt;/p&gt;
+
+&lt;p&gt;네.. 약간 삼천포로 빠졌지만 각설하고, 빌드해보겠습니다. 빌드는 아래와 같이 make를 통해서 할 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;make [build target]  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;여기에서 "build target"이라고 하는 것은 Pixhawk에서 제공하는 다양한 빌드 타겟이 있어서 거기에 맞춰 빌드를 해야하기 때문입니다. 실제로 pixhawk는 날이 거듭되면서 이제 다양한 하드웨어가 나오고 있습니다. px4fmu라는 공식 명칭을 쓰고 그 다음은 버전을 씁니다. 예를 들어 빌드 타겟으로 px4fmu&lt;em&gt;v1, px4fmu&lt;/em&gt;v2, ... 이 사용됩니다. 현재 공식적인 px4fmu의 버전은 v1,v2, v4가 있습니다. 저희가 사용하기로 한 것은 v2이고 이것을 pixhawk라고 부릅니다. 참. 그리고 마지막으로 default라는것이 있는데, 이것은 내부에 들어가는 알고리즘에 따라 몇개의 타입을 만들어 놓앗습니다. 예를 들면 extension kalman filter를 사용할때는 ekf라고 쓰고, local position estimation을 사용할려면, lpe를 씁니다. 앗.. 갑자기 요상한 용어들을 나열했군요. 일단 그냥 그런게 있구나 하고 생각하시면 됩니다.
+암튼, pixhawk 하드웨어를 가지고 있는 분은 아래와 같이 빌드하시면 됩니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; make px4fmu-v2_default
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;그리고, 앞으로 저희가 사용할 하드웨어 없이 시뮬레이션 기반으로 하는 것은 posix 로 시작하는 것을 사용합니다.  이는 ARM 계열이 아닌 X86 계열에 주로 사용하는 것이라는 뜻이라고 보시면 될 것 같습니다. 엄밀하게 따지면, posix라는 표준을 따르는 운영체제에서 동작되도록 하는 것을 의미합니다. 그리고 다음으로 sitl이라고 있습니다. 이 용어는 익숙하시지요? 맞습니다. Software In The Loop라는 뜻으로 시뮬레이션을 위해 만든것입니다. 다음으로 default는 앞에서 말씀드린 것과 일맥상통합니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; make posix_sitl_default
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;휴~~ 이제 드디어 빌드 시작합시다. 엔터를 잽싸게 때려주세욧!&lt;/p&gt;
+
+&lt;p&gt;빌드하는 과정을 보니, 현재 몇 퍼센트 진행중인지 등등이 나오는 군요.  엄청 빨리 진행되니, 잘 보시길 바랍니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; make posix_sitl_default
+[  1%] Generating git_init_Tools_gencpp.stamp
+Generating git_init_Tools_genmsg.stamp  
+Generating git_init_src_lib_matrix.stamp  
+[  2%] Built target git_genmsg
+[  2%] Built target git_gencpp
+Built target git_matrix  
+[  2%] Scanning dependencies of target git_mavlink
+Scanning dependencies of target git_uavcan  
+~생략~
+ 98%] Building C object src/modules/systemlib/CMakeFiles/modules__systemlib.dir/param/param.c.o
+[100%] Building C object src/modules/systemlib/CMakeFiles/modules__systemlib.dir/print_load_posix.c.o
+[100%] Building C object src/modules/systemlib/CMakeFiles/modules__systemlib.dir/hx_stream.c.o
+Linking CXX static library libmodules__fw_pos_control_l1.a  
+[100%] Built target modules__fw_pos_control_l1
+Linking CXX static library libmodules__systemlib.a  
+[100%] Built target modules__systemlib
+Scanning dependencies of target mainapp  
+[100%] Building CXX object src/firmware/posix/CMakeFiles/mainapp.dir/__/__/platforms/posix/main.cpp.o
+Linking CXX executable mainapp  
+[100%] Built target mainapp
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;100 빠센트를 보신분 있으시나요? 그럼 정말 잘하신 것입니다. 짝짝짝.. 그런데 안타깝게도 몇몇 분들은 분명 에러가 발생하실 수 있습니다. 여기서부터가 조금 문제입니다. 제가 물론 빼먹었을 가능성도 높구요. 또 운영체제 구조가 틀려서 그럴수도 있습니다. 너무 많은 질문을 제가 다 처리할 수 없기 때문에 가능한 열심히 한번 삽질을 해보셔야 할 것같군요.. 삽질이 시간 소비라고 생각하시지 마시고, 능력을 키울 수 있으니, 꼭 한번 해보세요. &lt;br&gt;
+그래도 정 안된다. 그러면, 전에 말씀드린 &lt;a href="https://groups.google.com/forum/#!forum/px4users"&gt;구글 그룹&lt;/a&gt;
+에도 문의를 해보시고, 게시판에도 올려주시면 저도 최선을 다해 도와드리겠습니다. &lt;/p&gt;
+
+&lt;h5 id=""&gt;마치며..&lt;/h5&gt;
+
+&lt;p&gt;자 여기까지 되신 분들은 정말 대단하신 분들입니다. 자신에게 토닥토닥 해주시길... 사실 이번 강좌에 gazebo 연동해서 SITL까지 할려고 했는데, 시간이 많이 지체되는 것 같아, 빌드하는 것까지만 올리고, 다음 강좌에 gazebo 연동해서 동작하는 것을 올려야 할 것 같습니다. 제가 좀더 부진런히 올려야 하는데, 자꾸 늦어지네요. 빌드 환경 꾸미는 것이 사실 말처럼 쉽지 않습니다. 그래서 아마 제가 급히 작성을 해서 일부 틀린 내용이 있을 수 있으니, 댓글 적어주시면 계속 업데이트 하도록 하겠습니다. 지금까지 읽어주셔서 너~무 감사합니다.&lt;/p&gt;</content:encoded></item><item><title>Pixhawk 사용해서 드론 만들어 보기</title><description>&lt;p&gt;안녕하세요 여러분.. 그 동안 잘 지내셨는지요.
+Pixhawk에 대해 연재를 해본다고 했는데, 너무 느리게 업데이트를 하고 있어 면목이 없네요 ㅜㅜ 여러분들의 많은 양해 부탁드립니다. 어찌되었든 힘을 내어서 시작해 보겠습니다.&lt;/p&gt;
+
+&lt;h4 id="introduction"&gt;Introduction&lt;/h4&gt;
+
+&lt;p&gt;앞으로의 연재는 Top-Down방식으로 주로 설명하고자 합니다. 따라서 우선 픽스호크를 가지고 드론을 만들어보는 것 부터 하고자 합니다. 전에도 말씀드렸다시피 저는 컴퓨터 과학이&lt;/p&gt;</description><link>http://localhost:2368/pixhawk-sayonghaeseo-deuron-mandeuleo-bogi/</link><guid isPermaLink="false">05b7fbb0-510e-4c60-ad0f-0d67fd2c2126</guid><category>pixhawk</category><dc:creator>SungTae Moon</dc:creator><pubDate>Sun, 10 Apr 2016 12:12:10 GMT</pubDate><content:encoded>&lt;p&gt;안녕하세요 여러분.. 그 동안 잘 지내셨는지요.
+Pixhawk에 대해 연재를 해본다고 했는데, 너무 느리게 업데이트를 하고 있어 면목이 없네요 ㅜㅜ 여러분들의 많은 양해 부탁드립니다. 어찌되었든 힘을 내어서 시작해 보겠습니다.&lt;/p&gt;
+
+&lt;h4 id="introduction"&gt;Introduction&lt;/h4&gt;
+
+&lt;p&gt;앞으로의 연재는 Top-Down방식으로 주로 설명하고자 합니다. 따라서 우선 픽스호크를 가지고 드론을 만들어보는 것 부터 하고자 합니다. 전에도 말씀드렸다시피 저는 컴퓨터 과학이 전공이어서 드론을 잘은 모릅니다. 그래서 이 부분(하드웨어)은 정확하게 설명드리긴 어렵겠지만, 어찌되었든 제가 가지고 있는 경험을 바탕으로 설명드리겠습니다.&lt;/p&gt;
+
+&lt;p&gt;자 그럼 시작해보겠습니다. &lt;/p&gt;
+
+&lt;h4 id="pixhawkecosystem"&gt;Pixhawk Eco-System&lt;/h4&gt;
+
+&lt;p&gt;픽스호크를 사용해 드론을 만들어보기에 앞서, 간단하게나마 픽스호크의 운용 시스템을 알려드리겠습니다. 여기서 말한 운용 시스템이라고 하는 것은 픽스호크에서 제공하는 여러 종류의 사이트 및 프로그램 들이라고 보시면 될 것 같습니다. (구체적인 용어가 생각나지 않아서 운용 시스템이라고 제가 명한겁니다.)&lt;/p&gt;
+
+&lt;p&gt;픽스호크에서 제공하는 운용 시스템은 크게 아래와 같이 나누어 볼 수 있을 것 같습니다.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;문서 시스템  &lt;/li&gt;
+&lt;li&gt;코드 관리 시스템  &lt;/li&gt;
+&lt;li&gt;Q&amp;amp;A를 위한 그룹 시스템 &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;뭐.. 다들 아시겠지만, 조금 거창하게 말씀드리는 것 같네요. 문서 시스템은 처음에는 &lt;a href="https://pixhawk.ethz.ch/"&gt;pixhawk project&lt;/a&gt;
+ 라는 사이트에서 시작했습니다. 이 사이트에 가보시면 초기 버전들을 보실 수 있습니다. 여러분 초기 버전이라고 구식이라 생각하지 마시길 바랍니다. 사실 코드에서 초기 버전은 그 프로그램의 처음 철학이 그대로 담겨 있기 마련입니다. 우리도 무슨일을 시작할때 처음에는 어떤 식으로 일을 시작하겠다고 하면서 생각을 정리하고 기본 골격을 잡죠. 하지만 시간이 지나면서 많은 풍파를 만나 처음 생각과는 달리 갈 수도 있지만, 큰 틀에서는 변함이 없도록 하고자 노력합니다. 코드 또한 마찬가지입니다. 처음에는 아직 구체화가 안되어 있고 뼈대만 있다보니,많은 부분이 부족하지만, 쉽게 그 뼈대를 볼 수 있다는 장점이 있습니다. 그래서 저는 주로 처음에 오픈소스를 바라볼때 초기 버전을 살펴봅니다. 왜냐하면 그 버전에는 그 코드의 철학이 담겨 있거든요. 그리고 코드량이 비교적 적기 때문에 눈에도 쉽게 들어오죠. 이런 이유 때문에 초기 버전을 잘 눈여겨 보시길 바랍니다. 초기 버전 개발 사이트에서 픽스호크 코드가 공개되고, 3DR Robotics사에서 제품을 만들면서 2차 개발 사이트인 &lt;a href="https://pixhawk.org/"&gt;pixhawk&lt;/a&gt;가 탄생합니다. 이 사이트 부터는 뭔가 구체적으로 바뀌지요. 내용도 매우 방대해지구요. 저도 사실 여기서부터 시작을 했습니다. 
+&lt;img src="http://localhost:2368/content/images/2016/04/pixhawk---.jpg" alt="pixhawk사이트"&gt;
+그런데 이 사이트는 링크를 제대로 해 놓지 않는 경우가 있다는 점을 유의하세요. 그래서 메뉴만 보고 들어가보시면 뭐.. 별거 없네... 라고 생각하실 수 있습니다. 제대로된 사이트맵이 없다는 점이 단점입니다. 그래서 꼭 오른쪽 상단의 search를 사용하세요. 그리고 한가지 더 팁!!! 아래쪽에 보시면 recent change라는게 보입니다. 이거를 잘 사용하시면 변화되고 있는 것을 볼수 있습니다. 어느 정도 이 사이트에 자주 들어오다 보면, 그 다음부터는 변화된 부분만 보면 된다는 거지요... 마치 코드의 업데이트된 부분만 살펴보는 것처럼 말이지요.. 이 사이트 내용은 아직도 어느정도 유효합니다. 필요시 여기에서 많이 찾아보시길 바랍니다. 아. 그리고 여기서 부터는 각각 시스템마다 사이트가 달라집니다. 예를 들면 지상국 시스템인 qgroundcontrol 이라든지, 통신 프로토콜인 mavlink 등등이 따로 떨어져나갔습니다. 여기서는 비행조종컴퓨터인 픽스호크에 국한하여 설명드립니다.&lt;/p&gt;
+
+&lt;p&gt;이후 최근에는 &lt;a href="http://dev.px4.io/"&gt;devpx4&lt;/a&gt;라는 곳으로 바뀝니다. 바뀐지는 얼마 안된걸로 기억됩니다. 아마... 작년 하반기 정도? 이제 본격적으로 development guide라는 사이트로 운용되고, gitbook이라는 시스템으로 동작됩니다. 여기서부터는 사이트 맵이 확실해집니다.저는 그게 가장 좋더라구요. ^^ 어찌되었든 뭔가 체계적으로 변화했습니다. 하지만.. 아직 포팅이 완벽하게 되지 않은 느낌입니다. 참고로 이번 연재에서 설명드릴 드론만들기 정보는 두번째 사이트인 pixhawk에 있는 내용을 가지고 하고자 합니다. &lt;/p&gt;
+
+&lt;p&gt;자. 그럼 지금까지 픽스호크 대표 사이트에 대해 설명드렸습니다. 정리하면 세 개의 사이트가 있고, 각각 가지고 있는 정보 및 의미를 말씀드렸으니, 참고하여 잘 사용하시길 바랍니다. 다시 말씀드리지만, 우리는 오픈소스를 가지고 비행조종컴퓨터를 분석하려고 합니다. 따라서 가장 중요한 것은 코드의 철학을 잘 이해하는 것입니다. 왜냐하면 오픈소스이다 보니 소소한 부분은 정~말 많이 바뀝니다. 이거 따라가다 보면 정신없습니다. 중요한 것은 큰 골격, 즉 뼈대를 잘 바라보아야 하고, 그러기 위해서는 이런 사이트들을 잘 보시면서 그런 뼈대를 빨리 잡아가야하는 것입니다. 옛것도 중요하다는 거.. 잊지 말아주세용..&lt;/p&gt;
+
+&lt;p&gt;이제 두번째인 코드 관리 시스템입니다. 여러분들도 많이 아시겠지만, 최근 코드 관리, 특히 오픈소스는 github로 몰아가는 것 같습니다. 저도 처음에 오픈소스에 참여하지 않을때는 svn이나 mercury 같은걸 썼는데, github를 알고 나서는 여기에 올빵하고 있습니다. 매우 직관적이고, 잘 만들어져있거든요. 혹시 git 이나 github를 잘 모르시는 분들은 꼭.. 이들을 잘 숙지하시길 바랍니다. 아마 기회 될때 저도 설명하겠지만, 저보다 훨~~씬 잘 설명해주신 분들이 많아서 예습하시고 오시면 더욱 좋을 것 같네요. 어찌되었든... 코드 관리는 &lt;a href="https://github.com/PX4/"&gt;px4github&lt;/a&gt;에서 관리합니다. 그리고 이중 pixhawk firmware는 &lt;a href="https://github.com/PX4/Firmware"&gt;https://github.com/PX4/Firmware&lt;/a&gt; 사이트에서 관리하오니, 한번 들어가 보시길 간곡히 부탁드립니다. 
+&lt;img src="http://localhost:2368/content/images/2016/04/pixhawk----1.jpg" alt="pixhawk github"&gt;
+중요한 것은 픽스호크 코드 관리 시스템에 익숙해지셔야 한다는 것입니다. 이 시스템을 제대로 숙지하지 않으시면 분명 어제까지는 잘 날던 드론이 오늘은 잘 날지 못하는 이상한 현상이 나오게 됩니다. 거짓말 같아 보이시죠? 한번 이런 현상이 닥치면 아.. 그렇구나 하실 겁니다. 꼭 기억하실것은 오픈소스는 하루에도 몇번씩이나 코드가 바뀐다는 것입니다. 현재 내가 사용하는 코드가 언제 개발된 코드인지 확인할려면 꼭 확인해야겠지요? 그리고 이 코드에는 개발자용 버전, 안정된 버전 등등 많은 버전이 존재합니다. 따라서 꼭 확인하고 선택해야 합니다. 이 코드가 그 코드가 아닐 수 있다는 점 꼭 명심하시길 바랍니다.
+이 내용에 대해서는 앞으로도 자주 언급될 예정이니 오늘은 여기에서 마치겠습니다.&lt;/p&gt;
+
+&lt;p&gt;마지막으로 Q&amp;amp;A를 위한 사이트입니다. 픽스호크를 사용하시다보면 많은 질문들이 있겠지요. 이럴경우 사용하시는 사이트 입니다. 픽스호크에서는 구글 그룹스의 &lt;a href="https://groups.google.com/forum/#!forum/px4users"&gt;px4users&lt;/a&gt;을 사용합니다. 여기에 가보시면 정말 많은 질문들이 있고 개발자들이 정말 빨리 답변을 해줍니다. 물론 해주지 않은 경우도 많이 있지만, 그래도 일단 문제점이 발생하면 여기에 질문을 던져보고 확인해보는게 빠릅니다. &lt;/p&gt;
+
+&lt;h4 id="letsdevelopdronewithpixhawk"&gt;Let's develop drone with Pixhawk&lt;/h4&gt;
+
+&lt;p&gt;그럼 우선 모든것을 각설하고, 픽스호크를 사용해 드론을 한번 만들어보죠. 앞에서도 말씀드렸지만, 저는 컴퓨터 과학이 전공이어서 하드웨어는 정말 잘 모릅니다. 그래서 제 경험을 바탕으로 설명드릴거구요. 여기에서는 DJI-450을 기준으로 설명드리겠습니다. &lt;/p&gt;
+
+&lt;p&gt;자 우선 픽스호크를 다시 한번 보시죠.
+&lt;img src="http://localhost:2368/content/images/2016/04/pixhawk-view.jpg" alt="pixhawk"&gt;
+픽스호크는 앞면에 DF-13 타입 커넥터가 줄줄이 보이네요. 여기에 통신, GPS, safety button 등등을 꽂아야 합니다. 너무 작고 해서 처음에는 탈부착하기가 정말 힘듭니다. 그리고 여기에서 제공하는 케이블 외에 별도 케이블을 만들어 사용해보면 케이블에 스트레스가 가해지는 경우가 많아서 잘 끊어지기도 합니다. 저는 개인적으로 이런 형태가 픽스호크에서는 가장 맘에 들지 않더군요. 실제 비행시험을 해보면 이 부분 커넥터 연결이 잘 안되는 경우 때문에 시간 소비한 적이 한두번이 아니었습니다. 여러분은 저와 같은 실수를 범하지 않기 위해 왠만하면 정품 케이블을 이용하시고, 이 부분이 사람의 손에 잘 닿지 않는 곳에 놓아주시길 바랍니다. 
+그리고 왼쪽 옆면에 보면 12345,등 숫자가 적혀있는 부분이 보이실 겁니다. 이 부분은 PWM 신호를 주는 부분이라고 보시면 될 것 같습니다. 모터 신호도 이쪽에서 출력해주고요. RC도 이 부분에 연결합니다. 
+또 다른 옆면에는 micro USB 연결 부분이 보이네요. 이 부분은 펌웨어를 업데이트하거나, 디버깅할때 주로 사용합니다. 그리고 micro USB 옆에 보면 조그마한 구멍 보이시나요. 이 것은 리셋 버튼입니다. 사용하다가 문제 있으면 리셋하시면 됩니다. 
+참 그리고 DF13 커넥터 부분에 가운데 쯤에 동그라한 LED 점등 부분이 보이시나요. 이 부분은 상태 정보를 LED로 보여주는 부분인데 처음 보시면 정말 밝아 눈이 나빠질 정도입니다. 랩에서 단순히 시험하실 때에는 저는 여기에 테이프를 붙혀 밝기를 조절하면서 사용한답니다. 참고하시길... 그리고 이보다 더 자세한 것을 알고 싶으신 분은 &lt;a href="https://pixhawk.org/modules/pixhawk"&gt;이곳&lt;/a&gt;을 참고하세요. 핀 정보 부터 기타 정보까지 아주 상세하게 나와 있습니다. &lt;/p&gt;
+
+&lt;p&gt;그럼 이제 각종 커넥터에 무엇을 꽂아 사용할지 알아보시죠. 다행히도 Jetrho Hazelhurst라는 분이 그림으로 잘 설명해두었더군요.
+&lt;img src="http://localhost:2368/content/images/2016/04/PixhawkQuad.jpg" alt="pixhawkconnect"&gt;
+이제 어느정도 눈에 들어오시는지요. 이 그림에서 Buzzer라는 게 있는데 상당히 시끄럽습니다. 필요없으시면 굳이 사용하지 않으셔도 됩니다. 그 외 나머지는 꼭 있어야 할 것들만 있어보입니다. 참. 3DR Robotics사에서 통신용으로 별도의 모듈을 팔긴하는데 915 MHz와 433 MHz만 존재합니다. 불행히도 우리나라에서는 둘 다 사용하지 못하니 다른 것을 사용하시길 바랍니다. 기본적으로 시리얼 통신이니 2.4GHz의 지그비를 사용하시는게 좋을 것 같습니다.&lt;/p&gt;
+
+&lt;p&gt;연결 부위는 이렇게 하시면 되고, 실제 드론에 탑재하는 방법을 살펴보겠습니다. 이 부분 또한 Pixhawk에서 제공하는 &lt;a href="https://pixhawk.org/platforms/multicopters/dji_flamewheel_450?s[]=dji&amp;amp;s[]=450"&gt;DJI-450&lt;/a&gt;을 활용하였습니다. 이 사이트에 가보시면 자세히 설명되어 있으니 참고하셔서 개발하시면 됩니다. 물론 다른 형태의 드론으로도 사용 가능합니다. 참고로 이번 연재에서는 실제 드론을 날려서 하지는 않고, 주로 시뮬레이션에서 동작을 하면서 코드를 분석할려고 합니다. 따라서 준비물은 노트북 그리고 가능하면 pixhawk 하나 정도면 끝입니다.&lt;/p&gt;
+
+&lt;p&gt;자 여기까지 잘 따라오셨나요? 이제 비행조종컴퓨터에 펌웨어를 올릴 차례입니다. 펌웨어는 어떻게 올리냐구요? 이번에는 소스코드를 사용하지 않고 단순하게 &lt;a href="http://www.qgroundcontrol.org/"&gt;qgroundcontrol&lt;/a&gt;을 사용할려고 합니다. qgroundcontrol은 pixhawk 팀에서 개발한 지상국 시스템으로 QT로 개발되었습니다. 따라서 윈도우/리눅스/맥 OS 등등에서 모두 활용가능합니다. 심지어 안드로이드까지... 우선 저는 리눅스에서 개발을 하니 리눅스 환경을 가정하고 설명드립니다. &lt;a href="http://www.qgroundcontrol.org/downloads"&gt;다운로드&lt;/a&gt;사이트에 가보시면 
+최신 qgroundcontrol을 받을 수 있습니다. 다운로드된 파일의 압축을 푸시면 하나의 스크립트 파일이 있을 것입니다. 단순하게 이것을 실행하시면 됩니다. &lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language- "&gt;&amp;gt;&amp;gt; ls
+Qt  flightgear  qgroundcontrol  qgroundcontrol-start.sh  
+&amp;gt;&amp;gt; ./qgroundcontrol-start.sh  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;그럼 이런 화면이 나옵니다. 
+&lt;img src="http://localhost:2368/content/images/2016/04/qgroundcontrol.jpg" alt="qgroundcontrol"&gt;
+여기에서 설정 부분 (메뉴 아이콘에서 두번째)을 누르시면 펌웨어 다운로드 부분이 보입니다.
+&lt;img src="http://localhost:2368/content/images/2016/04/qgroundcontrol_setting.jpg" alt="qgroundcontrol_setting"&gt;
+그런 다음 픽스호크를 연결하면 자동으로 펌웨어를 설치합니다.
+&lt;img src="http://localhost:2368/content/images/2016/04/qgroundcontrol_install.jpg" alt="qgourndcontrol_install"&gt;&lt;/p&gt;
+
+&lt;p&gt;여기까지 따라오셨나요? 아마 쉬운 내용이어서 대부분 다들 아실 것 같지만, 처음에도 말씀드렸다시피 본 강좌는 생초보도도 따라올 수 있게 하기 위해서 만들어졌으니 아시는 내용이시면 스킵하셔도 됩니다.&lt;/p&gt;
+
+&lt;p&gt;자 여기까지 하셨으면 이제 아마 아래와 같이 여러 메뉴가 나와있을 것 같군요.
+&lt;img src="http://localhost:2368/content/images/2016/04/qgroundcontrol_step1.jpg" alt="qgroundcontrol_step1"&gt;
+아마 여러분들은 Sensors쪽도 빨간색일 것 같습니다. 여기가 빨간색인 것은 센서 보정작업이 안되어 있기 때문입니다. 나중에 보정작업을 해주셔야 합니다. 아마 여러분 눈을 자꾸 거슬리는 빨간불 LED가 깜빡거릴것입니다. 이것은 아직 비행 준비가 안되어 있다는 것을 의미합니다. &lt;/p&gt;
+
+&lt;p&gt;이제 비행 기체를 선택해보겠습니다.
+&lt;img src="http://localhost:2368/content/images/2016/04/qgc_step2.png" alt="qgroundcontrol_step2"&gt;
+저희는 DJI-F450 기체를 사용하니 DJI-F450을 선택하면 되겠지요? 사실 이것을 선택하는 이유는 각 기체마다 PID 게인값이라든지 등등의 특성이 서로 틀리기 때문입니다. 만약 직접 개발한 기체라면 그런 게인들을 직접 찾으셔야겠지요. 그래서 pixhawk에서는 이런 게인값들을 각 기체마다 스크립트 파일로 미리 만들어 놓고 Airframe에서 선택하도록 하는 것입니다. 결국 픽스호크는 파라미터 리스트를 만들어 놓고 이 값들을 조정하여 기체에 특성에 맞도록 하는 것이지요. 아래 그림이 바로 그런 파라미터 값을 직접 손보는 곳입니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/04/qgc_step3.png" alt="qgroundcontrol_step3"&gt;
+아래 보니 System이라는 노란색으로 된 부분에 SYS_AUTOSTART라는게 보이나요? 여기에 4011로 적혀있군요. 4011이 나타내는 게 바로 DJI-F450이라는 것입니다. 
+실제 4011 스크립트에 적혀있는 것을 보면 아래와 같습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#!nsh
+#
+# @name DJI Flame Wheel F450
+#
+# @type Quadrotor x
+#
+# @output AUX1 feed-through of RC AUX1 channel
+# @output AUX2 feed-through of RC AUX2 channel
+# @output AUX3 feed-through of RC AUX3 channel
+#
+# @maintainer Lorenz Meier &amp;lt;lorenz@px4.io&amp;gt;
+#
+
+sh /etc/init.d/4001_quad_x
+
+if [ $AUTOCNF == yes ]  
+then  
+    param set MC_ROLL_P 7.0
+    param set MC_ROLLRATE_P 0.15
+    param set MC_ROLLRATE_I 0.05
+    param set MC_ROLLRATE_D 0.003
+    param set MC_PITCH_P 7.0
+    param set MC_PITCHRATE_P 0.15
+    param set MC_PITCHRATE_I 0.05
+    param set MC_PITCHRATE_D 0.003
+    param set MC_YAW_P 2.8
+    param set MC_YAWRATE_P 0.3
+    param set MC_YAWRATE_I 0.1
+    param set MC_YAWRATE_D 0.0
+    # DJI ESCs do not support calibration and need a higher min
+    param set PWM_MIN 1230
+fi  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;결국은 스크립트이다~ 라는것입니다. &lt;/p&gt;
+
+&lt;p&gt;여기까지 하셨으면 앞에서 말씀드린 센서 보정을 하시고, RC 설정하시면 끝입니다. 물론 베터리 셀 갯수 등 설정하는것도 잘 맞추어야 하구요. &lt;/p&gt;
+
+&lt;p&gt;그런 다음 천천히 한번 날려보시면 될 것 같습니다. 처음에는 프로펠러 없이 RC로 roll/pitch/yaw를 체크해보시길 바랍니다. 프로펠러도 없이 어떻게 하냐구요? 전문가분들이 하시는 거 보니깐, 테이프를 모터에다가 붙이시고, 돌려봐서 RPM 변화량을 보시더군요. 한번 해보시길 권장합니다. &lt;/p&gt;
+
+&lt;p&gt;글을 쓰다보니 실제 드론 만드는 사진은 전혀없네요.ㅜㅜ 제목을 잘못 정한 듯.. 하지만, 제가 말씀드리고자 했던 부분은 어느정도 한것 같습니다. 많은 이해 부탁드립니다.&lt;/p&gt;
+
+&lt;h4 id="epilogue"&gt;Epilogue&lt;/h4&gt;
+
+&lt;p&gt;최근 많은 분들이 제가 쓴 글을 보시고 문의도 해주시고, 응원도 해주셔서 개인적으로 너무 감사드리고 있습니다. 한분한분 정성껏 답변을 다 못해드려 죄송하구요. 아무쪼록 조금이나마 도움이 되드리기 위해 열심히 작성해 보겠습니다.&lt;/p&gt;
+
+&lt;p&gt;업데이트 속도가 늦더라도 이해해 주시길 바랍니다. (생업이 바빠서.. ㅠㅠ)&lt;/p&gt;</content:encoded></item><item><title>Pixhawk란</title><description>&lt;h5 id="introduction"&gt;Introduction&lt;/h5&gt;
+
+&lt;p&gt;Pixhawk를 처음 접하게 된 것은 아마 2013년으로 기억합니다. 그때는 Parrot사의 AR.Drone이 핫~하게 뜨고 있었지요. AR.Drone의 경우 영상을 스마트폰으로 받을 수 있었고, 조종 또한 스마트폰으로 하는 획기적인 제품이었습니다. 사실 지금도 AR.Drone만큼 잘 개발된 드론을 찾아보기 어려울 정도지요. 그 이유는 처음으로 AT*Cmd 라는 프로토콜을 정의해서 오픈했고&lt;/p&gt;</description><link>http://localhost:2368/pixhawkran/</link><guid isPermaLink="false">cd166617-6afd-4e93-bd6f-7bc694dea574</guid><category>pixhawk</category><dc:creator>SungTae Moon</dc:creator><pubDate>Mon, 28 Mar 2016 21:47:20 GMT</pubDate><content:encoded>&lt;h5 id="introduction"&gt;Introduction&lt;/h5&gt;
+
+&lt;p&gt;Pixhawk를 처음 접하게 된 것은 아마 2013년으로 기억합니다. 그때는 Parrot사의 AR.Drone이 핫~하게 뜨고 있었지요. AR.Drone의 경우 영상을 스마트폰으로 받을 수 있었고, 조종 또한 스마트폰으로 하는 획기적인 제품이었습니다. 사실 지금도 AR.Drone만큼 잘 개발된 드론을 찾아보기 어려울 정도지요. 그 이유는 처음으로 AT*Cmd 라는 프로토콜을 정의해서 오픈했고 WiFi를 주 통신으로 사용하다보니, 쉽게 접근할 수 있었다라는 것이지요. 그 때 당시는 정말 획기적이어서 많은 연구실에서 AR.Drone을 활용했었습니다. 저도 그 당시 열심히 다수의 AR.Drone을 사용하여 위치 인식하고, 제어하는 것을 연구하고 있었구요. 앞에서 말씀드린 것 처럼 많은 부분이 되어 있어서 저는 필요한 부분만 개발하여 동작시킬수 있었습니다. 그런데 한가지 문제가 발생합니다. AR.Drone은 고도 정보를 알기 위해 SONAR 센서를 활용했는데, 저는 고도 정보를 위해 Motion Capture를 사용하고자 했던거지요. 그런데 그 정보는 AT*Cmd에 포함되어 있지 않아서 불가능하게 된 것입니다. 만약 소스코드만 접근할 수 있었으면 어떻게든 해볼건데 그 부분이 막혀 엄청난 시간이 소모하게 된 것입니다[1]. 이게 바로 제가 오픈소스인 Pixhawk에 눈을 돌리게 된 계기였던 것 같습니다.&lt;/p&gt;
+
+&lt;h4 id="spec"&gt;Spec&lt;/h4&gt;
+
+&lt;p&gt;제가 기억하기에 Pixhawk가 나오기 전에는 주로 ATmega 기반의 아두이노 기반의 비행제어컴퓨터가 유행이었습니다. 가볍고 코드도 쉬웠고, 어느정도 오픈되어 있었구요. 하지만, 가볍다보니 성능 문제로 인해 복잡한 기능 추가가 정말 힘들었습니다. 그러다가 짜잔하고 나온게 Pixhawk였지요. Pixhawk는 우선 다양한 인터페이스와 CortexM4F로 중무장한 비행제어컴퓨터였던거지요&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/03/pixhawk2.png" alt="Pixhawk"&gt;&lt;/p&gt;
+
+&lt;p&gt;Pixhawk는 현재 여러가지 종류가 있고, 많은 vender들이 이를 활용하여 새로운 제품을 개발하고 있지만, 표준은 px4fmu-v1과 px4fmu-v2(Pixhawk)입니다. 그림에서는 왼쪽이 v2이고 오른쪽이 v1이네요. 처음에 활용하실때는 px4fmu-v2를 추천합니다. 그 이유는 가장 접근하기 쉽기 때문이지요. 펌웨어 버전 업데이트 같은 것은 별도 장비 없이 micro usb를 통해서 이루어지고, 다양한 인터페이스를 쉽게 활용할 수 있도록 윗부분에 연결 부위가 노출되어 있습니다. 따라서 시리얼 통신이나, I2C와 같은 부분을 쉽게 사용하실 수 있습니다.&lt;/p&gt;
+
+&lt;p&gt;자 그럼 전체 스펙을 한번 보시죠. (스펙은 pixhawk 사이트에서 그대로 가져왔습니다.)&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Processor
+&lt;ul&gt;&lt;li&gt;32bit STM32F427 Cortex M4 core with FPU&lt;/li&gt;
+&lt;li&gt;168 MHz&lt;/li&gt;
+&lt;li&gt;256 KB RAM&lt;/li&gt;
+&lt;li&gt;2 MB Flash&lt;/li&gt;
+&lt;li&gt;32 bit STM32F103 failsafe co-processor&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Sensors
+&lt;ul&gt;&lt;li&gt;ST Micro L3GD20H 16 bit gyroscope&lt;/li&gt;
+&lt;li&gt;ST Micro LSM303D 14 bit accelerometer / magnetometer&lt;/li&gt;
+&lt;li&gt;Invensense MPU 6000 3-axis accelerometer/gyroscope&lt;/li&gt;
+&lt;li&gt;MEAS MS5611 barometer&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Interfaces
+&lt;ul&gt;&lt;li&gt;5x UART (serial ports), one high-power capable, 2x with HW flow control&lt;/li&gt;
+&lt;li&gt;2x CAN (one with internal 3.3V transceiver, one on expansion connector)&lt;/li&gt;
+&lt;li&gt;Spektrum DSM / DSM2 / DSM-X® Satellite compatible input&lt;/li&gt;
+&lt;li&gt;Futaba S.BUS® compatible input and output&lt;/li&gt;
+&lt;li&gt;PPM sum signal input&lt;/li&gt;
+&lt;li&gt;RSSI (PWM or voltage) input&lt;/li&gt;
+&lt;li&gt;I2C&lt;/li&gt;
+&lt;li&gt;SPI&lt;/li&gt;
+&lt;li&gt;3.3 and 6.6V ADC inputs&lt;/li&gt;
+&lt;li&gt;Internal microUSB port and external microUSB port extension&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;사실 전 전산이 베이스라 하드웨어를 그닥 많이 알지는 못합니다만.. 어찌되었든 그 동안 나왔던 비행제어컴퓨터와는 완전 구별되는 스펙들이었지요. &lt;/p&gt;
+
+&lt;p&gt;특히나, Pixhawk 사이트에서 정의한 내용을 보면 고성능 컴퓨터를 이용함과 함께 이를 활용하여 다양한 타입의 비행체에 적용할 수 있었다는 거지요. 뿐만 아니라 로봇 플랫폼도 함께요. Pixhawk를 활용하면 날개달린 비행기 (고정익 비행기), 우리가 주로 알고 있는 멀티콥터 드론, 헬리콥터와 함께 로봇, 자동차, 보트 등 general purpose 형태로 개발이 된 것입니다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;PIXHAWK is a high-performance autopilot-on-module suitable for fixed wing, multi rotors, helicopters, cars, boats and any other robotic platform that can move. It is targeted towards high-end research, amateur and industry needs and combines the functionality of the PX4FMU + PX4IO.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h4 id="history"&gt;History&lt;/h4&gt;
+
+&lt;p&gt;자.. 그럼 Pixhawk가 어떻게 만들어진걸 까요. 때는 2009년으로 거슬러 올라갑니다. 2009년 스위스 취리히 대학의 Lorenz Meier 학생은 학교 프로젝트로 드론 개발을 위해 비행제어 시스템을 개발하게 되었습니다. 처음에는 단순하게 시작된 프로젝트는 점점 많은 학생들이 참여하게 되었고, 결국 이 시스템은 컴퓨터 비전 분야에서 사용할 UAV 프렘임워크로 진행되게 되었지요 [2].
+&lt;img src="http://localhost:2368/content/images/2016/03/lorenzMeier.jpg" alt="LorenzMeier"&gt;&lt;/p&gt;
+
+&lt;p&gt;이후 Lorenz Meier는 스위스 ETH 취리히 공과대학 Marc Pollefeys 교수의 Computer Vision and Geometry Lab의 합류하면서 본격적인 UAV 프레임워크를 개발하게 됩니다. 놀라운 것은 개발자인 Lorenz Meier가 항공우주가 전공이 아니라는 것이지요. 컴퓨터 엔지니어링을 주로 하던 LorenzMeier가 비행제어컴퓨터를 만든다? 비행제어컴퓨터는 컴퓨터이니깐 컴퓨터 전공과에서 만든다고 하지만, 내부 알고리즘은 어떻게 할려고 하지? 그 당시 Lorenz Meier는 영상 인식하여 위치를 측정하는 연구를 주로 했었는데, 이런 사람이 내부 알고리즘을 만들 수 있었을까요? 물론, 연구실에서 그 부분을 맡아 하는 사람이 있었을 수도 있지만, 중요한 것은 그 연구실은 영상처리 연구실이었다는 거지요. 
+아마 이런 이유도 Pixhawk를 오픈소스로  접근하게 된 중요한 이유가 아니었을까 싶습니다. 어찌되었든 Pixhawk를 오픈하면서 3DR Robotics라는 드론에서는 꽤 유명한 회사가 Pixhawk를 제품으로 개발하게 되었고, 여러 다른 제품에도 Pixhawk가 들어가게 됩니다. 놀라운 것은 하드웨어 부터 소프트웨어까지 모두 오픈했다는 것입니다. 그것도 BSD 라이센스로요. 결국 아무나 사용하게 만들었고, 그 결과 드론 세계의 판도를 바꾸게 됩니다. 우선 연구자들이 관심을 갖게 되고, 업체에서 개발을 갖게 되고... 결국 전체 생태계(Eco-System)가 구성이 되기 시작한거죠.  &lt;/p&gt;
+
+&lt;h5 id="ecosystem"&gt;Eco-System&lt;/h5&gt;
+
+&lt;p&gt;소스를 오픈한다?.. 어찌보면 '왜 그런 짓(?)을 하지' 라고 생각들지 않나요? 힘들게 개발한 것을 그냥 공개해버리는 거지요. 근데, 요즘 나오는 소프트웨어를 보면 많은 부분이 오픈되고 있습니다. 요즘 어느정도 결과물이 나오면 오픈하는 경향이 있습니다. (물론 오래전도 그랬지만요) 제가 보기엔 이건 단순 기술 공유가 목적이 아닐 수 있습니다. 어찌보면 기술 종속이 목적일 수 있지요. 상용으로 소스를 공개하지 않은 제품의 경우 비용 문제 때문에 쉽게 접근하기 어렵습니다. 하지만 만약 이와 관련된 유사 기술이 공개 된다면, 어느 누구나 그 기술을 활용하여 새로운 제품을 만들고 싶겠지요. 뿐만 아니라, 이를 활용하는 다수의 개발자들과 소통을 통해 오픈소스의 품질을 높일 수 있어 결국 기존 상용 제품과의 기술격차를 해소할 수 있게 됩니다. 한편, 이렇게 개발된 오픈소스는 다수 개발자와 사용자에 힘입어 기술의 트렌드를 이끌어 갈수 있게 되고, 결국 기술 종속을 불러일으키게 되는게 아닐까 하는게 제 개인적인 견해입니다. (물론 아닐수도 있지만요 ㅋㅋ) 그렇다면 현재까지 개발된 오픈 소스 기술을 활용하여 같은 기능을 가진 기술을 독자적으로 만들면 되지 않을까? 물론 가능하겠지만, 현실적으로 매우 힘들어요. 왜냐.. 오픈소스의 특성상 한번 그 분야에 핵심 트렌드를 끌고 가면, 이미 많은 개발자와 사용자가 그 생태계를 꾸미고 있기 때문에 그 기술을 활용하여 새로운 제품을 만드는 것은 가능하겠지만, 그 기술 자체를 새롭게 이끌어 가기는 힘들게 된다는거지요[3]. 그게 바로 개발 생태계(Eco-System)의 중요성입니다. Pixhawk의 개발 생태계는 어느 정도일까요.
+Pixhawk는 처음 개발 시 드론 시스템을 개발하였기 때문에 단순히 비행조종컴퓨터만 있는게 아닙니다. 그림과 같이 지상국 시스템 (GCS, Ground Control System), Log Viewer, HILS (Hardware In The Loop), SITL(Software In The Loop), 그리고 마지막으로 지상국과의 통신 프로토콜인 MAVLink 등이 있습니다. 여러 개발자들이 또 다른 뭔가를 개발하고 있구요. 그러다보니 나름 이쪽 생태계도 활발히 이루어지고 있고, 특히나, Loren Meier가 상당히 활발히 활동하고 있습니다. 저 많은 것을 다 손보고 있죠. 체력 짱인듯...&lt;/p&gt;
+
+&lt;p&gt;그럼 말 나온김에 서브 시스템을 하나하나 씩 설명 드리겠습니다. 
+우선 지상국 시스템으로 QGroundControl라는 것을 Qt 기반으로 개발했습니다. Qt로 개발되다보니, 다양한 운영체제에서 활용이 가능하지요. Window, Linux, Mac, 심지어 Android에서도 ... 여기도 많은 개발자들이 참석하고 있고, 우리는 가져다 쓰면 되는 거지요. 경로를 정해주면, 알아서 찾아가는 기능, 현재 비행 상태 확인 기능, 지도와 연동되어 위치를 알려주는 기능 등 많은 기능들이 포함되어 있습니다. 
+&lt;img src="http://localhost:2368/content/images/2016/03/qgroundcontrol.jpg" alt="QGroundControl"&gt;&lt;/p&gt;
+
+&lt;p&gt;다음으로 Log Viewer로는 FlightPlot이라는 프로그램이 동작합니다. 자바로 개발되었고, 드론 개발 시 반드시 필요한 프로그램 중 하나입니다. 저도 매번 비행 시험할 때 이걸로 분석하고 결과를 냅니다. 상당히 잘 만들었고, 또한 개발해야 할 것도 많아 매력적인 프로그램입니다. 저도 이 프로그램 개발에 참여하고 있습니다. 관리자는 Anton Babushkin라는 친구인데, 내부 비행 알고리즘을 개발하고 있습니다. 요즘은 좀 뜸해서 기능 추가해서 업데이트 요청해도 잘 안해줍니다. 어디 좋은데로 간 모양입니다.
+&lt;img src="http://localhost:2368/content/images/2016/03/logviewer.jpg" alt="LogViewer"&gt;&lt;/p&gt;
+
+&lt;p&gt;다음은 HILS입니다. HILS는 Pixhawk만 연결하면 굳이 드론이 없어도 가상으로 드론을 날려볼 수 있는 시스템입니다. 드론이 동작하게 하는 모든 프로세서는 Pixhawk 내부에서 이루어지고 센서 정보와 비쥬얼만 HILS 시스템에서 하게 되는 거지요. 자바로 개발되었고, 정말 간단합니다!. 저도 드론을 띄우기 전에 항상 HILS에서 시스템 검증을 한 다음에 수행하지요. 왜 굳이 일을 두번이나 하나구요? 드론이 한번 날아가보면 "아.. 이거 반드시 필요하구나.. 할것입니다." 잘못하면 찾지도 못하지요.. 그럼 그걸로 끝! 여기에도 개발 참여를 하고 있는데, 관리자가 Lorenz Meier입니다. 나중에 개발 참여하는 방법 알려드릴테니 여러분도 한번 해보시길... 나름 재미있습니다.
+&lt;img src="http://localhost:2368/content/images/2016/03/hils.jpg" alt="HILS"&gt;&lt;/p&gt;
+
+&lt;p&gt;이와 함께 좀더 진보된 방법이 SITL입니다. 이건 Pixhawk도 필요없습니다. 그냥 컴퓨터 내에서 다 동작하도록 합니다. 모든 부분이 소프트웨어로 끝나는것이지요. 사실 HILS는 너무 간단하다 보니 할 수 없는게 많은데 이건 차원이 틀립니다. Gazebo라는 막강한 툴을 이용하여 보다 현실적인 시스템을 만들 수 있습니다. 예를 들어 장애물을 만든다든지 등등.
+&lt;img src="http://localhost:2368/content/images/2016/03/sitl.jpg" alt="SITL"&gt;&lt;/p&gt;
+
+&lt;p&gt;마지막으로 알려드린 건 MAVLink입니다. 이것도 신의 한수인듯... 이제 막 시작된 드론들은 마치 춘추전국시대처럼 각자의 개성을 갖는 방법으로 개발이 되고 있었지요. 그런데 시스템이 점점 복잡해지고 개발해야할 것이 많아지다 보니 기능 별로 서로 다른 것들이 개발되는데, 표준화된 프로토콜이 없으니 같은 기능을 갖는 프로그램들을 이중으로 개발하게 된거지요. 이때 두둥 나타난것이 MAVLink입니다. 
+우선 MAVLink 사이트에 나온 정의 및 설명을 살펴보면,아래와 같습니다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;MAVLink is a very lightweight, header-only message marshalling library for micro air vehicles.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;설명에서 보신 것처럼, 정말 가볍습니다. 헤더 오버헤드가 8 byte입니다. 그리고 C 언어인 경우 header만 있으면 됩니다. 마지막으로 마샬링은 음.. 그냥 직렬화라고 생각하시면 될 것 같습니다. Python으로 프로토콜을 생성할 수 있고, C, JAVA 등으로 생성가능합니다. 프로토콜 추가도 정말 쉽기 때문에 필요시 원하시면 언제든지 추가하여 생성하실 수 있습니다. 
+놀라운 것은 이 MAVLink를 DJI, Parrot 등 드론 업체들이 사용하고 있다는 것입니다. 이게 무엇을 의미하냐구요? 이제 지상국 시스템은 QgroundControl 을 이용해서 DJI에서 나오는 드론을 제어할 수 있다는 거지요. 약간 오버일 수 도 있지만...&lt;/p&gt;
+
+&lt;p&gt;그런데 더 중요한 게 있습니다. 그건 바로 ROS와의 연계입니다. 서두에도 말씀드렸다시피, Lorenz Meier는 컴퓨터 비전 전문가이고, 아마 그는 ROS에 익숙해있을 것입니다 (컴퓨터 비전 분야도 많이 ROS를 사용하거든요. 네비게이션 등등). 그래서 그런지 Pixhawk 내부를 살펴보면 ROS와 유사한 철학을 담고 있습니다. 그도 Pixhawk를 개발할때 소개했던 마일스톤에도 처음부터 ROS와의 연동을 미리 고려하고 있습니다. 두 시스템의 철학이 비슷하니 두 시스템의 생태계도 쉽게 결합이 가능하다는 얘기이지요. 어찌보면 신의 한수가 아니었나 싶습니다. 아마 앞으로도 두 시스템은 공존하면서 성장할 것으로 저는 생각합니다.&lt;/p&gt;
+
+&lt;h4 id=""&gt;앞으로의 방향&lt;/h4&gt;
+
+&lt;p&gt;그럼 Pixhawk는 앞으로 어떤 방향으로 나아갈까요. 음.. 제 생각에는 Pixhawk는 비행제어로는 정말 최고일 것입니다. 하지만, 임무를 수행할 만큼 파워풀하지는 않지요. 임무 수행이란, 영상 데이터를 보고 장애물을 회피한다는 것과 같은 고성능이 필요한 일이라고 볼 수 있죠. 이런 일들은 현재 Pixhawk가지고는 안될 것입니다. 적어도 영상 처리 할 수 있을 정도의 성능은 되어야 할 것입니다. 그리고 더 중요한 것은 바로 이식성일 것입니다. 사실 임무 수행은 지상에서 주로 이루어졌던 임무를 상공에서 할 것이니깐요. 그러다보니 자연스럽게 리눅스란 운영체제 위에서 동작하는 Pixhawk 같은게 있다면 좋겠다는 생각을 하게 되는 거지요. 왜냐하면 기존에 만들어 놓은 임무들.. 예를 들어 ROS를 통해 개발된 프로그램을 그대로 사용하자는 거지요. 
+이런 이유에서일까요. 작년 10월로 기억이 나는데, 아주 길이 남을 일이 발생했지요. 그건, Linux 재단에서 '드론코드'라는 것을 프로젝트를 수행한것입니다. &lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/03/dronecode.jpg" alt="dronecode"&gt;&lt;/p&gt;
+
+&lt;p&gt;드론코드는 리눅스를 기반으로 한 오픈소스 업체 간 협의체로 UAV OS와 SW 개발자 키트(SDK, Software Development Kit)를 만들자는 취지였습니다. 그런데 여기에 포함된 업체들이 대박입니다. 3DR 로보틱스를 포함해 인텔, 퀄컴, 패럿, 바이두 등이 참석한거지요. 이는 세계 거대기업들이 드론에 참여하겠다는 의미이고, 결국 판을 키우게 된 계기가 됩니다. 리눅스 재단도 드론이 오픈소스로 가는 걸 보면서 자기들의 품안으로 집어 넣고 싶었던거겠지요. 어찌되었든 이렇게 해서 엄청 크게 번창하게되었답니다. 이후 인텔과 퀄컴이 드론계(?)의 핵심 주자인 스위스 취리히 연방공과대학(Lorenz가 다니던 학교)와 펜실베니아 대학 (유명한 Kumar 교수님이 계시는 곳)과 각각 손을 잡는 형상이 되면서 거대한 움직임들이 포착되고 있습니다.
+지금은 드론코드가 점점 발전하면서 퀄컴 같은데에서 snapdragon flight과 같은 리눅스 기반의 pixhawk를 제공하는 것 같고, 인텔은 Asctec과 같은 유명한 업체들을 인수하면서 그 힘을 키워가고 있습니다.&lt;/p&gt;
+
+&lt;h4 id=""&gt;후기&lt;/h4&gt;
+
+&lt;p&gt;사실 처음에 마음을 정하고 시작을 할려고 하는 찰나에 개인적인 사정이 있어서 시작이 많이 미루어진것 같습니다. 시간 날때마다 조금씩 쓰고 있는데 생각외로 시간이 많이 걸리네요. 많은 분들이 응원도 해주시고 해서 열심히 적어보았는데,너무... 중구난방식으로 적은게 아닌가 싶기도 합니다. (이런 일은 제가 처음이라 읽기 힘드시더라도 많은 양해 부탁드립니다.) 다음 회 부터는 본격적으로 Pixhawk 소스코드를 설치하는 것 부터 소스 분석까지 들어가고자 합니다. 초보자들도 쉽게 따라올 수 있도록 해볼려고 하는데 잘 될지.. 쿨럭... 어찌되었든 대상은 이제 막 시작하는 초보자분들이니 쉽게 풀어 쓰도록 최대한 노력해보겠습니다. 
+이상입니다. &lt;/p&gt;
+
+&lt;p&gt;P.S. 오늘도 너무 일찍 잠자리에 들어 너무~~ 일찍 혼자 깨어나 이짓하고 있네요. 내일 어찌 일할지. 에휴....&lt;/p&gt;
+
+&lt;h4 id="reference"&gt;Reference&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;[1] SungTae MOON, DongHyun CHO, Sanghyuck HAN, DongYoung REW, Eun-Sup SIM, "Development of Multiple AR.Drone Control System for Indoor Aerial Choreography," Transactions of the Japan Society for Aeronautical and Space Sciences, 2014&lt;/li&gt;
+&lt;li&gt;[2] &lt;a href="https://pixhawk.ethz.ch/"&gt;https://pixhawk.ethz.ch/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;[3] 문성태, 공현철, 한상혁, "오픈소스 기반 무인 비행 제어 시스템," 항공우주매거진,2015, 제 9권 2호&lt;/li&gt;
+&lt;/ul&gt;</content:encoded></item><item><title>Pixhawk 분석</title><description>&lt;h5 id="introduction"&gt;Introduction&lt;/h5&gt;
+
+&lt;p&gt;안녕하세요 문성태입니다. 요전 포스팅한 글을 써보다가 문득 지금까지 Pixhawk를 분석한 내용을 적어보면 좋을 것 같아서, Pixhawk 분석 연재를 시작 해볼까 합니다. (뭐... 일이 바쁘면 중간에 그만둘 수도 있지만.. 쿨럭.) 한번 도전해 보도록 하겠습니다!&lt;/p&gt;
+
+&lt;h5 id=""&gt;목차&lt;/h5&gt;
+
+&lt;p&gt;일단, 대충 목차를 잡아보도록 하겠습니다. 초보자도 쉽게 따라올 수 있도록 하는게 제 목적이고, 나중에는 비행&lt;/p&gt;</description><link>http://localhost:2368/pixhawk-bunseog/</link><guid isPermaLink="false">3c7a7859-3287-40c4-8d41-04dc30ed6e22</guid><category>pixhawk</category><dc:creator>SungTae Moon</dc:creator><pubDate>Thu, 10 Mar 2016 21:53:10 GMT</pubDate><content:encoded>&lt;h5 id="introduction"&gt;Introduction&lt;/h5&gt;
+
+&lt;p&gt;안녕하세요 문성태입니다. 요전 포스팅한 글을 써보다가 문득 지금까지 Pixhawk를 분석한 내용을 적어보면 좋을 것 같아서, Pixhawk 분석 연재를 시작 해볼까 합니다. (뭐... 일이 바쁘면 중간에 그만둘 수도 있지만.. 쿨럭.) 한번 도전해 보도록 하겠습니다!&lt;/p&gt;
+
+&lt;h5 id=""&gt;목차&lt;/h5&gt;
+
+&lt;p&gt;일단, 대충 목차를 잡아보도록 하겠습니다. 초보자도 쉽게 따라올 수 있도록 하는게 제 목적이고, 나중에는 비행 제어 알고리즘 동작 원리까지 분석해볼까 합니다. 사실 저는 컴퓨터 공학이 전공이어서 아무래도 코드위주로 설명을 드릴 예정입니다. 연재 순서는 아무래도 뒤죽 박죽이 될 수 있을 수도 있지만, 최대한 순서데로 해볼려고 합니다.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;a href="http://stmoon.github.io/pixhawkran/"&gt;Pixhawk란 무엇인가.&lt;/a&gt;  &lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stmoon.github.io/pixhawk-sayonghaeseo-deuron-mandeuleo-bogi/"&gt;Pixhawk 사용해서 드론 만들어 보기&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stmoon.github.io/pixhawk-soseukodeuro-bildeuhaebogi/"&gt;Pixhawk 소스코드로 빌드해보기&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stmoon.github.io/pixhawk-soseu-kodeu-teuri-gujo-barabogi/"&gt;Pixhawk 소스 코드 트리 구조 바라보기&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Pixahwk에 모듈 추가해보기 (Hello world)&lt;/li&gt;
+&lt;li&gt;Pixhawk 내부 구조 파헤치기 (Overview)&lt;/li&gt;
+&lt;li&gt;설정값(gain value) 변경하기&lt;/li&gt;
+&lt;li&gt;모듈간 통신을 통해 데이터 주고 받기&lt;/li&gt;
+&lt;li&gt;나만의 디버깅 로그 추가하기&lt;/li&gt;
+&lt;li&gt;position estimator 분석하기 (for multi copter)&lt;/li&gt;
+&lt;li&gt;position controller 분석하기 (for multi copter)&lt;/li&gt;
+&lt;li&gt;attitude estimator 분석하기 (for multi copter)&lt;/li&gt;
+&lt;li&gt;attitude controller 분석하기 (for multi copter)&lt;/li&gt;
+&lt;li&gt;commander 분석하기&lt;/li&gt;
+&lt;li&gt;navigator 분석하기&lt;/li&gt;
+&lt;li&gt;HILS(Hardware In The Loop) 시스템 구축하기&lt;/li&gt;
+&lt;li&gt;SITL(Software In The Loop) 시스템 구축하기&lt;/li&gt;
+&lt;li&gt;Fake GPS 만들기 (ROS 연동)&lt;/li&gt;
+&lt;li&gt;깃허브를 통한 코드 공헌해보기&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h5 id=""&gt;후기&lt;/h5&gt;
+
+&lt;p&gt;막상 목차를 잡아보니 후덜덜 하네요... 과연 다 할 수 있을까 싶기도 하구요... 하지만, 최~~~~대한 노력해보도록 하겠습니다!&lt;/p&gt;
+
+&lt;p&gt;문서의 오리지날 버전은 &lt;a href="https://stmoon.github.io/"&gt;https://stmoon.github.io/&lt;/a&gt; 을 참고하세요. &lt;/p&gt;</content:encoded></item><item><title>Fake GPS</title><description>&lt;h4 id="introduction"&gt;Introduction&lt;/h4&gt;
+
+&lt;p&gt;안녕하세요. 오늘은 Fake GPS에 대해 알아보고자 합니다. &lt;/p&gt;
+
+&lt;p&gt;사실 Fake GPS는 Pixhawk에서 시험을 위해 미리 정해놓은 GPS 위치를 가르킵니다. 설정에서 GPS_FAKE를 yes로 설정하면 Fake GPS를 사용할 수 있죠. 하지만, 픽스호크 개발자 사이트에 가보시면 모션 캡쳐 시스템과 연동을 하여 GPS 상태를 모사하는 것을 가르키고 있네요. 아직 정의가 조금은 모호하지만, 어찌되었든&lt;/p&gt;</description><link>http://localhost:2368/fake-gps/</link><guid isPermaLink="false">63ccc23d-3d32-4d21-8888-658ae30f6b9b</guid><category>pixhawk</category><dc:creator>SungTae Moon</dc:creator><pubDate>Sun, 06 Mar 2016 13:35:25 GMT</pubDate><content:encoded>&lt;h4 id="introduction"&gt;Introduction&lt;/h4&gt;
+
+&lt;p&gt;안녕하세요. 오늘은 Fake GPS에 대해 알아보고자 합니다. &lt;/p&gt;
+
+&lt;p&gt;사실 Fake GPS는 Pixhawk에서 시험을 위해 미리 정해놓은 GPS 위치를 가르킵니다. 설정에서 GPS_FAKE를 yes로 설정하면 Fake GPS를 사용할 수 있죠. 하지만, 픽스호크 개발자 사이트에 가보시면 모션 캡쳐 시스템과 연동을 하여 GPS 상태를 모사하는 것을 가르키고 있네요. 아직 정의가 조금은 모호하지만, 어찌되었든 저희는 후자의 Fake GPS에 대해 알아보고자 합니다. &lt;/p&gt;
+
+&lt;p&gt;우선 개발 환경부터 알려드릴게요&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;ul&gt;
+  &lt;li&gt;Ubuntu 14.04&lt;/li&gt;
+  &lt;li&gt;Motion Capture (VICON)&lt;/li&gt;
+  &lt;li&gt;Indigo ROS&lt;/li&gt;
+  &lt;li&gt;MAVROS, vicon_bridge&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Fake GPS를 위해서는 가장 중요한 것은 모션 캡쳐가 있어야 한다는 거지요. 물론 모션 캡쳐가 매우 비싸기 때문에 일반인이 개인적으로 소유하기는 힘들겠지만, 연구실에서는 점차 많이 사용하고 있는것 같습니다. 따라서, 본 문서는 모션 캡쳐가 있다는 가정하에 말씀드리도록 하겠습니다. 참고로 이 문서에서는 모션 캡쳐로 VICON을 사용했지만, ROS에서 지원하는 다른 모션 캡쳐도 얼마든지 사용 가능합니다.&lt;/p&gt;
+
+&lt;h4 id="ros"&gt;ROS&lt;/h4&gt;
+
+&lt;p&gt;ROS가 뭐냐구요? ROS를 모르시는 분들이 계실 것 같아 간단하게 설명하겠습니다. ROS는 robot operating system의 약어입니다. 운영체제? 저도 처음에는 리눅스와 같은 운영체제인줄 알았지요. 하지만, ros.org에서 설명하는 글을 읽어보면 분명 운영체제가 아님을 알 수 있습니다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;The Robot Operating System (ROS) is a flexible framework for writing robot software. It is a collection of tools, libraries, and conventions that aim to simplify the task of creating complex and robust robot behavior across a wide variety of robotic platforms.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;제가 생각하는 ROS란, 쉽게 얘기하면 툴박스와 같은 개념이라고 보시면 될 것 같습니다. 그런데 거기에 많은 개발자들이 정보를 공유하다 보니, 왠만한 센서들의 드라이버 등등이 있고, 어느 정도 프로토콜이 확정되어 있다보니, 여러가지 툴들을 활용하여 내부 데이터 흐름이라든지, 시각화하는 것을 쉽게 할 수 있게 되는 거지요. 결국 중요한 것은 하나의 시스템을 만들기 위해 필요한 잡다한 것을 ROS가 제공한다는 것입니다. 이렇게 되면 무엇보다도 시스템을 만드는 시간이 절약되고, 그 시간에 내가 연구하는 부분에 집중할 수 있게 되지요.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/03/ROS.png" alt="ROS"&gt;&lt;/p&gt;
+
+&lt;p&gt;우리나라에서도 표윤석 박사님, 이지훈 연구원님과 같은 최고 전문가들이 있고, 오로카라는 네이버 카페에서 많은 활동들이 이루어지고 있으니, 참고하시길 바랍니다. 나중에 기회가 되면 좀더 자세히 설명하도록 하겠습니다.&lt;/p&gt;
+
+&lt;p&gt;사실 ROS는 로봇 분야에서 시작되었지만, 지금은 정말 다양한 분야에서 활용이 되는 것 같습니다. 제가 연구하고 있는 드론분야에서도 정말 많이 활용되지요. 특히, 제가 여러분들에게 자주 설명할 Pixhawk는 ROS와 정말 많이 닮아 있습니다. 그게 바로 publisher-subscriber design pattern인데, ROS와 Pixhawk의 내부 IPC(Inter-Process Communication)는 이 방법을 그대로 적용했답니다. 이렇게 닮은 꼴을 갖고 있는 이유는 뭘까요? 그것은 초기 Pixhawk가 개발되고 있을때 주 개발자였던 Lorenz Meier가 처음부터 ROS와 연동을 고려하고 있었기 때문이지요. 이런 이유로 ROS와 Pixhawk는 연동이 잘 됩니다.!!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/03/ROS_milestone.png" alt="ROS MileStone"&gt;&lt;/p&gt;
+
+&lt;h4 id="prerequisites"&gt;Prerequisites&lt;/h4&gt;
+
+&lt;p&gt;그러면 그럼 이제 각설하고, 본격적으로 어떻게 Fake GPS를 구동하는지 구체적으로 살펴보도록 하겠습니다. 우선 ROS가 설치된 컴퓨터가 필요합니다. 앞에서 말씀드린 것 처럼 ROS는 Indigo를 사용했습니다. 그리고 나서 MAVROS와 Vicon_bridge를 설치합니다. 설치하는 방법은 ros 홈페이지가보시면 상세히 잘 나와있습니다.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;MAVROS&lt;/li&gt;
+&lt;li&gt;Vicon_bridge&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id="step1"&gt;Step 1&lt;/h4&gt;
+
+&lt;p&gt;앞에서 설명했던 것 처럼 Fake GPS는 ROS 기반으로 동작합니다. 따라서 ROS가 동작할 만한 판을 만들어 주어야 합니다.이는 ROS를 처음 사용할 시에는 무조건 해주어야 하는건데, 이를 통해 ROS의 각 노드들이 통신할 수 있게 되지요.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ roscore
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/03/FakeGPS_step1.png" alt=""&gt;&lt;/p&gt;
+
+&lt;h4 id="step2"&gt;Step 2&lt;/h4&gt;
+
+&lt;p&gt;이제 ROS를 동작할 수 있는 기반이 만들어졌고, 본격적으로 FakeGPS 환경을 만들어봅시다. 먼저 모션캡쳐와 연동을 해야 합니다. 모션 캡쳐로부터 드론의 6 DOF를 받야아 하는데, ROS에서 이미 개발된 vicon_bridge를 사용하도록 하겠습니다. 이를 사용하면 vicon으로부터 특정 드론에 붙어 있는 마커를 통해 특정 패턴 정보를 받아 볼 수 있게 됩니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ sh launch_fake_gps.sh
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/03/FakeGPS_step2.png" alt=""&gt;&lt;/p&gt;
+
+&lt;h4 id="step3"&gt;Step 3&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;sh launch_fake_gps_distorted.sh  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이후, 실제 GPS 신호인 것 처럼 만들어 줍니다. 사실 모션 캡쳐는 최대 1000 Hz까지도 동작하지만, Pixhawk에서는 주로 GPS 신호를 5 Hz로 받고 있습니다. 따라서, 데이터 갱신 주기를 변경해 주어야 합니다. 그리고 모션 캡쳐는 1 mm 이하의 정확도로 측정이 가능한데, 실제 GPS는 오차가 매우 크기 때문에  white noise와 같은 노이즈 성분을 추가하여 GPS 상황과 유사하게 만들어 줍니다. 그리고 GPS는 지연 시간이 있기 때문에 지연 시간 또한 만들어줍니다. 이런 모든 것은 ROS에서 제공하는 ros_reconfigure 툴을 사용하여 수정이 가능하니, 외부에 나가 GPS신호에 대해 대략 분석해보고 좋을 때 나쁠 때의 상황을 재현할 수 있게 되는 거지요. 이게 결국 Fake GPS를 만들어주는 중요한 뽀인트 중 하나일 것 같군요.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ rosrun rqt_reconfigure rqt_reconfigure
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;
+  &lt;ul&gt;
+  &lt;li&gt;publish rate = 5.0Hz&lt;/li&gt;
+  &lt;li&gt;tf&lt;em&gt;frame&lt;/em&gt;in = vicon/yourModelName/yourModelName (e.g. &lt;/li&gt;
+  &lt;li&gt;vicon/DJI&lt;em&gt;450/DJI&lt;/em&gt;450)&lt;/li&gt;
+  &lt;li&gt;delay = 200ms&lt;/li&gt;
+  &lt;li&gt;sigma_xy = 0.05m&lt;/li&gt;
+  &lt;li&gt;sigma_z = 0.05m&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/03/FakeGPS_step3.png" alt=""&gt;&lt;/p&gt;
+
+&lt;h4 id="step4"&gt;Step 4&lt;/h4&gt;
+
+&lt;p&gt;이제 Pixhawk를 Fake GPS가 연동 될 수 있도록 만들어주어야 할 때가 왔군요. Pixhawk는 내부에 Param 형태로 설정값을 변경할 수 있도록 되어 있습니다. 이 또한 ROS와 비슷하네요. 아무리 봐도 Lorenz Meier는 분명 ROS 매니아 였거나 그동안 많이 사용해보았던 흔적들이 보입니다. 나중에 한번 역추적해보도록 하겠습니다. 
+자 어찌 되었든, 크게 세가지 부분을 변경해야 합니다. 첫째, MAV_USEHILGPS입니다. &lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;MAV_USEHILGPS to 1 (enable HIL GPS, go to PARAMETERS-&amp;gt;MAVLink)  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이 부분을 enable시켜주면 HILS에서 생성된 GPS를 사용하겠다는 의미입니다. 그런데 약간 문제가 있습니다. 모션캡쳐가 설치된 환경에서도 가끔씩 GPS 신호가 약하게 잡히는 경우가 있다는 점입니다. 아마 해보시면, 그런 문제가 생길 수 있을 것입니다.  결국 이렇게 되면 GPS 신호가 두군데에서 들어오게 되고, Pixhawk 내부에서는 엄청난 혼란에 빠지게 됩니다. 특히, 이를 사용하여 드론의 속도등을 계산하게 되는데, 실제 신호는 한국으로 되어 있고, FakeGPS 신호는 스위스를 기반으로 두고 있다면, 드론 입장에서는 워프가 발생하는 거지요. 이 문제에 대해서는 수정 사항을 코드에 업데이트 하고 있습니다. 아마 버전 1.3.0에 적용될 예정이니 참고하세요 &lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ATT_EXT_HDG_M to 2 (use heading from motion capture, go to PARAMETERS-&amp;gt;Attitude Q estimator)  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;두번째는 드론의 헤딩 정보를 모션캡쳐로 부터 오는 데이터로 변경하는 것입니다. 실내에서는 지자기 센서가 혼란을 일으킬 수 있는 많은 물질들이 있어 실제 실내에서 지자기 센서를 사용해보면 매우 불안정 합니다. 따라서 이 정보를 모션 캡쳐를 이용하여 보상해주어야 하는 거지요. Pixhawk 내부에서는 우선 북쪽을 지자기 센서를 통해 대충 알아내고, 모션캡쳐로 부터 헤딩 위치 보상을 해주어 동작하도록되어 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;INAV_DISAB_MOCAP to 1 (disable mocap estimation, go to PARAMETERS-&amp;gt;Position Estimator INAV).  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;다음은 모션 캡쳐 위치 예측 모드를 꺼줍니다. 어? 왜 모션 캡쳐를 사용하여 위치 인식하는 것이 목적인데 모션캡쳐 위치 예측 모드를 꺼야 하냐구요? 저희는 GPS 를 모사하는 것이지 모션캡쳐기반의 위치 인식을 하면 안됩니다. 그러면 모사하는 의미가 없는거지요. 아주 정밀한 위치를 측정해버리기 때문이지요.&lt;/p&gt;
+
+&lt;h4 id="step5"&gt;Step 5&lt;/h4&gt;
+
+&lt;p&gt;자 여기까지 되었으면 드디어 생성된 GPS 데이터를 보내면 됩니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-c++"&gt;mocap_tf_sub = mp_nh.subscribe("/vicon/DJI_450/DJI_450_drop", 1, &amp;amp;MocapFakeGPSPlugin::mocap_tf_cb, this);  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;fcu_url은 /dev/ttyUSB0 이라는 곳으로 연결된 Zigbee와 같은 통신 모듈을 통해 보내라는 것이고, baud rate은 57600으로 하라는 뜻입니다. 이 정보를 pixhawk로 보내는 것이 바로 MAVROS이지요.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/03/FakeGPS_step4.png" alt=""&gt;&lt;/p&gt;
+
+&lt;h4 id="nodegraph"&gt;Node Graph&lt;/h4&gt;
+
+&lt;p&gt;지금까지 설명한 것을 그림으로 그리면 다음과 같습니다.ROS는 이런 그림까지 지원해주니, 전체 시스템을 바라볼때 쉽게 확인할 수 있겠지요? 참 여기서 설명하지 않은 S2&lt;em&gt;drop&lt;/em&gt;XXX은 무시하셔도 됩니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/03/FakeGPS_step5.png" alt=""&gt;&lt;/p&gt;
+
+&lt;h4 id="testresult"&gt;Test Result&lt;/h4&gt;
+
+&lt;p&gt;모션 캡쳐를 통해 실외 환경을 모사하게 되면 사실 다양한 환경을 직접 만들 수 있다. 그 중 하나가 바로 position estimator이다. Pixhawk의 경우 GPS-INS 방법을 사용하는데, GPS의 EPH 및 EPV에 따라 어느 정도 정밀하게 측정할 수 있는가를 확인할 수 있다. 아래 그림은 이상적인 GPS환경 (EPH: 0.07, EPV: 0.05)인 경우에서의 동작 화면이다.  &lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/03/FakeGPS_Result.png" alt=""&gt;&lt;/p&gt;
+
+&lt;h4 id="reference"&gt;Reference&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;sup id="fnref:1"&gt;&lt;a href="http://localhost:2368/fake-gps/#fn:1" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt;: &lt;a href="http://"&gt;영문버전&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;sup id="fnref:2"&gt;&lt;a href="http://localhost:2368/fake-gps/#fn:2" rel="footnote"&gt;2&lt;/a&gt;&lt;/sup&gt;: &lt;a href="https://github.com/PX4/Firmware/pull/3768"&gt;Pixhawk Reqeust #3768&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=""&gt;후기&lt;/h4&gt;
+
+&lt;p&gt;처음 작성하다 보니, 많은 문제가 있는 것 같습니다. 그리고 Pixhawk에 대한 분석한 내용을 연재로 해볼까 생각이 들었습니다. 저도 잘은 모르지만, 작성하면서 저도 배울 수 있을 것 같네요.&lt;/p&gt;</content:encoded></item><item><title>Setting up a Ghost Blog with Github Pages</title><description>&lt;h3 id="install"&gt;Install&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;npm 설치&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id="howtosettingwithgithub"&gt;How to setting with github&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;# (in a new tab) get back to the blog folder
+$ cd ~/Dropbox/blog
+$ buster setup --gh-repo=\
+"https://github.com/&amp;lt;username&amp;gt;/&amp;lt;username&amp;gt;.github.io.git"
+$ buster generate
+$ buster deploy
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;나중에 다시 연결 시에는 로컬에서 서버 시작하고, generate와 deploy 하면&lt;/li&gt;&lt;/ul&gt;</description><link>http://localhost:2368/setting-up-a-ghost-blog-with-github-pages/</link><guid isPermaLink="false">a838ef44-e0db-4e0b-b500-c903765a26c4</guid><category>ghost</category><category>page</category><dc:creator>SungTae Moon</dc:creator><pubDate>Sun, 06 Mar 2016 13:00:50 GMT</pubDate><content:encoded>&lt;h3 id="install"&gt;Install&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;npm 설치&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id="howtosettingwithgithub"&gt;How to setting with github&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;# (in a new tab) get back to the blog folder
+$ cd ~/Dropbox/blog
+$ buster setup --gh-repo=\
+"https://github.com/&amp;lt;username&amp;gt;/&amp;lt;username&amp;gt;.github.io.git"
+$ buster generate
+$ buster deploy
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;나중에 다시 연결 시에는 로컬에서 서버 시작하고, generate와 deploy 하면 된다.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;$ npm start
+
+
+$ buster generate
+$ buster deploy
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="reference"&gt;Reference&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;a href="http://blog.sunnyg.io/2015/09/24/ghost-with-github/"&gt;영문버전설명&lt;/a&gt;  &lt;/li&gt;
+&lt;li&gt;&lt;a href="http://blog.mollywhite.net/how-to-display-mathematical-equations-in-ghost/"&gt;GHost에서 수식 사용하기&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;</content:encoded></item><item><title>Welcome to Ghost</title><description>&lt;p&gt;You're live! Nice. We've put together a little post to introduce you to the Ghost editor and get you started. You can manage your content by signing in to the admin area at &lt;code&gt;&amp;lt;your blog URL&amp;gt;/ghost/&lt;/code&gt;. When you arrive, you can select this post from a list&lt;/p&gt;</description><link>http://localhost:2368/welcome-to-ghost/</link><guid isPermaLink="false">16d0989b-fedc-419c-878b-4d7643231bf3</guid><category>Getting Started</category><dc:creator>SungTae Moon</dc:creator><pubDate>Sun, 06 Mar 2016 10:50:27 GMT</pubDate><content:encoded>&lt;p&gt;You're live! Nice. We've put together a little post to introduce you to the Ghost editor and get you started. You can manage your content by signing in to the admin area at &lt;code&gt;&amp;lt;your blog URL&amp;gt;/ghost/&lt;/code&gt;. When you arrive, you can select this post from a list on the left and see a preview of it on the right. Click the little pencil icon at the top of the preview to edit this post and read the next section!&lt;/p&gt;
+
+&lt;p&gt;TEST&lt;/p&gt;
+
+&lt;h2 id="gettingstarted"&gt;Getting Started&lt;/h2&gt;
+
+&lt;p&gt;Ghost uses something called Markdown for writing. Essentially, it's a shorthand way to manage your post formatting as you write!&lt;/p&gt;
+
+&lt;p&gt;Writing in Markdown is really easy. In the left hand panel of Ghost, you simply write as you normally would. Where appropriate, you can use &lt;em&gt;shortcuts&lt;/em&gt; to &lt;strong&gt;style&lt;/strong&gt; your content. For example, a list:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Item number one&lt;/li&gt;
+&lt;li&gt;Item number two
+&lt;ul&gt;&lt;li&gt;A nested item&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;A final item&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;or with numbers!&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Remember to buy some milk  &lt;/li&gt;
+&lt;li&gt;Drink the milk  &lt;/li&gt;
+&lt;li&gt;Tweet that I remembered to buy the milk, and drank it&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id="links"&gt;Links&lt;/h3&gt;
+
+&lt;p&gt;Want to link to a source? No problem. If you paste in a URL, like &lt;a href="http://ghost.org"&gt;http://ghost.org&lt;/a&gt; - it'll automatically be linked up. But if you want to customise your anchor text, you can do that too! Here's a link to &lt;a href="http://ghost.org"&gt;the Ghost website&lt;/a&gt;. Neat.&lt;/p&gt;
+
+&lt;h3 id="whataboutimages"&gt;What about Images?&lt;/h3&gt;
+
+&lt;p&gt;Images work too! Already know the URL of the image you want to include in your article? Simply paste it in like this to make it show up:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="https://ghost.org/images/ghost.png" alt="The Ghost Logo"&gt;&lt;/p&gt;
+
+&lt;p&gt;Not sure which image you want to use yet? That's ok too. Leave yourself a descriptive placeholder and keep writing. Come back later and drag and drop the image in to upload:&lt;/p&gt;
+
+&lt;h3 id="quoting"&gt;Quoting&lt;/h3&gt;
+
+&lt;p&gt;Sometimes a link isn't enough, you want to quote someone on what they've said. Perhaps you've started using a new blogging platform and feel the sudden urge to share their slogan? A quote might be just the way to do it!&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Ghost - Just a blogging platform&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id="workingwithcode"&gt;Working with Code&lt;/h3&gt;
+
+&lt;p&gt;Got a streak of geek? We've got you covered there, too. You can write inline &lt;code&gt;&amp;lt;code&amp;gt;&lt;/code&gt; blocks really easily with back ticks. Want to show off something more comprehensive? 4 spaces of indentation gets you there.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;.awesome-thing {
+    display: block;
+    width: 100%;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="readyforabreak"&gt;Ready for a Break?&lt;/h3&gt;
+
+&lt;p&gt;Throw 3 or more dashes down on any new line and you've got yourself a fancy new divider. Aw yeah.&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h3 id="advancedusage"&gt;Advanced Usage&lt;/h3&gt;
+
+&lt;p&gt;There's one fantastic secret about Markdown. If you want, you can write plain old HTML and it'll still work! Very flexible.&lt;/p&gt;
+
+&lt;p&gt;&lt;input type="text" placeholder="I'm an input field!"&gt;&lt;/p&gt;
+
+&lt;p&gt;That should be enough to get you started. Have fun - and let us know what you think :)&lt;/p&gt;</content:encoded></item></channel></rss>
