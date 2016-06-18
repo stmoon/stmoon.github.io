@@ -1,4 +1,250 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Program Lock</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.8</generator><lastBuildDate>Sat, 18 Jun 2016 08:00:15 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>SITL (Software In The Loop) 시스템 구축하기</title><description>&lt;h5 id="introduction"&gt;Introduction&lt;/h5&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Program Lock</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.8</generator><lastBuildDate>Sat, 18 Jun 2016 13:03:29 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Pixahwk에 모듈 추가해보기 (Hello world)</title><description>&lt;h5 id="introduction"&gt;Introduction&lt;/h5&gt;
+
+&lt;p&gt;안녕하세요 여러분~~~ 그동안 잘 지내셨는지요. 저는 요즘 여러 일로 인해 정말 바쁘게 지내고 있답니다. 그리고 많이 무더워지는 것 같아, 건강도 잘 관리하시길 바랍니다. 사실 최근에 병원 신세를 지게 되었는데, 그러고 보니 건강이 역시 최고구나 라고 생각이 다시 듭니다. 아무쪼록 공부도 열심히 하면서 건강도 챙기시길 바랍니다. ^^&lt;/p&gt;
+
+&lt;p&gt;자.. 그럼 이번에는 Pixhawk에&lt;/p&gt;</description><link>http://localhost:2368/pixahwke-modyul-cugahaebogi-hello-world/</link><guid isPermaLink="false">08c2f8cb-e529-4a8a-9896-46f05a4010f6</guid><dc:creator>SungTae Moon</dc:creator><pubDate>Sat, 18 Jun 2016 11:38:45 GMT</pubDate><content:encoded>&lt;h5 id="introduction"&gt;Introduction&lt;/h5&gt;
+
+&lt;p&gt;안녕하세요 여러분~~~ 그동안 잘 지내셨는지요. 저는 요즘 여러 일로 인해 정말 바쁘게 지내고 있답니다. 그리고 많이 무더워지는 것 같아, 건강도 잘 관리하시길 바랍니다. 사실 최근에 병원 신세를 지게 되었는데, 그러고 보니 건강이 역시 최고구나 라고 생각이 다시 듭니다. 아무쪼록 공부도 열심히 하면서 건강도 챙기시길 바랍니다. ^^&lt;/p&gt;
+
+&lt;p&gt;자.. 그럼 이번에는 Pixhawk에 모듈을 추가해보는 일에 대해 알아보고자 합니다. 이제부터는 코드 작업이 많이 들어가니, 정신 바짝 차리고 들으시길 바랍니다. 그리고 여기서부터는 이제 내용이 조금은 복잡해질 수도 있을 것 같습니다. 물론 여기에 작성되는 글은 초보자분들도 이해할 수 있도록 하는게 목적이다보니, 최대한 쉽게 작성해보고자 합니다. 그럼 시작해 보도록 하겠습니다.&lt;/p&gt;
+
+&lt;h5 id="module"&gt;Module&lt;/h5&gt;
+
+&lt;p&gt;Pixhawk는 내부에 대부분 모듈로 구성이 되어 있습니다. 한번 내부가 어떻게 되어 있는지 알아볼까요? 저희는 쿼드콥터를 기반으로 내부에서 어떤 모듈들이 동작하는지 알아보겠습니다. &lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nsh&amp;gt; ps  
+PID   PRI SCHD TYPE   NP STATE    NAME  
+    0   0 FIFO TASK      READY    Idle Task()
+    1 192 FIFO KTHREAD   WAITSIG  hpwork()
+    2  50 FIFO KTHREAD   WAITSIG  lpwork()
+    3 100 FIFO TASK      WAITSEM  init()
+  132 100 FIFO TASK      WAITSIG  mavlink_if0(20009040, 10007e10, 10003d70, 10004110, 1)
+  133 175 FIFO PTHREAD   WAITSEM  mavlink_rcv_if0(2000fec0)
+  199 105 FIFO TASK      WAITSEM  navigator()
+  139 100 FIFO TASK      WAITSIG  mavlink_if1(20008e80, 20008e90, 20013690, 200136a0, 2)
+  140 175 FIFO PTHREAD   WAITSEM  mavlink_rcv_if1(20013720)
+  112 250 FIFO TASK      WAITSEM  sensors()
+  209  70 FIFO TASK      RUNNING  nshterm(2000eaf0)
+  114 220 FIFO TASK      WAITSEM  gps()
+  179 250 FIFO TASK      WAITSEM  attitude_estimator_q()
+  116 140 FIFO TASK      WAITSIG  commander(100040a0, 10003aa0)
+  117  50 FIFO PTHREAD   WAITSEM  commander_low_prio(0)
+  184 250 FIFO TASK      WAITSEM  position_estimator_inav()
+  122 240 FIFO TASK      WAITSEM  px4io()
+  188 250 FIFO TASK      WAITSEM  mc_att_control()
+  190 250 FIFO TASK      WAITSEM  mc_pos_control()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;nuttx shell에서 "ps"라는 명령어를 통해 확인해보면, 이런 태스크들이 동작되고 잇는 것을 보실 수 있습니다. 이게 모듈이라고 보시면 됩니다. 그럼 모듈들이 하는 것은 무엇일까요? 생각하신 것처럼 비행제어를 위한 기능들을 수행합니다. 예전에 arduino나 일반적인 DSP 방식으로 개발된 보드의 경우는 대부분 이런것을 하나로 묶어놓거나, 아니면 대충 몇개로 동작을 수행했습니다. 그런데, Pixhawk는 마치 리눅스의 태스크들 처럼 짜임새가 매우 좋습니다. 짜임새가 좋으면 무엇이 좋을까요? 맞습니다! 바로 쉽게 내가 원하는 부분을 찾아 수정하기 쉽고 바꿔 넣을 수 있다는 의미입니다. 전에도 말씀드렸지만, Pixhawk를 개발한 Lorenz Meier라는 사람은 컴퓨터쪽을 전공했기 때문에 비행 제어 등은 잘 모르겠지만, 시스템을 볼 줄 아는 사람이었던 거죠. 예전에는 항공 쪽에서 연구하던 사람이 비행제어 로직을 만들다보니, 아무래도 컴퓨터 시스템을 아는 사람이 전체 구조를 설계하는 거랑은 차원이 틀릴거라고 생각듭니다. 어찌되었든 자기의 분야가 있으니, 드론이 IT 기술과 융합이 되면서 아주 좋은 작품이 나온거지요. &lt;br&gt;
+그래서 이렇게 모듈화를 시킴으로써 내가 원하는 부분을 조절할 수 있게 된것입니다. 그럼 멀티 콥터 형식의 내부 구조는 어떤 모듈로 구성되었는지 알아보겠습니다. &lt;/p&gt;
+
+&lt;h5 id="multicoptersystem"&gt;MultiCopter System&lt;/h5&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/06/diagram.jpg" alt="multicopter"&gt;&lt;/p&gt;
+
+&lt;p&gt;기본적인 multicopter의 내부 모듈들은 다음과 같습니다. 앞으로 우리는 여기에 나와있는 모든 모듈들에 대해 심각하게 다루어 볼 예정입니다. 사실 저도 항공 분야를 잘 모르지만 쿨럭~ 처음에는 이 부분을 여기서 좀더 상세히 다루려다가 우선 참아봅니다. 한번 예기하면 이 부분은 너무 말이 길어질 것 같네요. 
+어찌되었든 중요한 것은 이런 모듈들이 서로 유기적으로 잘 동작한다는 것입니다. 어떻게? 그게 바로 중요합니다. &lt;/p&gt;
+
+&lt;h5 id="publishsubscribemodel"&gt;Publish-Subscribe  Model&lt;/h5&gt;
+
+&lt;p&gt;자 그럼 각 모듈들은 어떻게 구성되어 있을까요? Pixhawk에서는 각 모듈들의 구성을 매우 간결하게 표현하였습니다. 정확한 입력 값과 출력값이 명시되어 있죠. 다른 부분도 그렇지 않냐구요? 음... 이 부분을 잘 이해하셔야 하는데, 예를 들어 우리가 하나의 큰 프로그램을 만들어 본다고 하죠. 한 10만 라인 정도 되는 프로그램을 말합니다. 처음 프로그램을 배울때는 대부분 하나의 파일에 모든 기능을 몽땅 넣을 수 있습니다. 왜냐? 매우 간단하니깐요. 하지만, 프로그램이 점점 커질 수록 하나의 파일에 모두 넣을 수가 없습니다. 그러면서 파일의 개수가 많아지죠. 파일을 구분함으로써 한편으로는 모듈화를 하였다고 생각할 수 있습니다. 하지만 이건 엄밀한 의미에서는 모듈화라고 할 수 없을 것 같군요. &lt;/p&gt;
+
+&lt;p&gt;몇가지 예를 들어볼까요? 첫번째 만약 하나의 큰 덩치 프로그램에는 여러 라이브러리가 사용될 수 있거나 아니면 구분된 모듈이라고 생각하는 부분들이 서로 데이터를 주고 받아야 하는 경우가 발생합니다. 이런 경우 여러분은 어떻게 처리 하실 까요? 음 처음에는 그냥 함수 하나 만들어서 데이터 왔다갔다 할 수 있겠지요. 전역 변수 하나 만들어서 데이터를 계속 유지하고 그 전역 변수를 사용하기 위해서는 함수를 만들어 사용한다. 음.. 조금 더 잘 아시는 분은 객체를 생각하실 수도 있구요. 그런데 문제는 한 10명 정도가 하나의 프로젝트로 10만 라인 정도 되는 프로그램을 개발한다고 합시다. 이런 경우는 매우 복잡한 일들이 벌어집니다. 예를 들어 하나의 데이터를 가지고 업데이트 하는 부분이 A라는 사람이 수행하고 B라는 사람이 또 수행한다면? 분명 그 데이터는 생각하지 못한 방향으로 흘러갈 수 있게 됩니다. 즉, 아무리 회의를 잘하고 "이 데이터는 내가 책임지고 사용하고, 내가 말한데로 사용해야돼"라고 결정을 했음에도 불구하고, 술코딩이나 잠깐 졸았다면 이건 정말 어마어마한 일로 번지게 됩니다. 만약 여러분이 디버깅을 해보셨다면, 이런 말을 이해하실 겁니다. 정말 어이없는 부분에서 에러가 발생했는데, 이것을 찾기 위해 하루를 밤새는 일이지요.&lt;/p&gt;
+
+&lt;p&gt;두번째, 가정은 똑같습니다. (10명이서 10만 라인 프로젝트) 프로그램이 어느정도 동작하고 이 프로그램을 가지고 통합하여 시험을 한다고 하지요. 그런데 수행하다보니, 자꾸 프로그램이 죽을 수가 있습니다. 메모리 번지를 잘못 사용했거나, 아니면 어떤 값을 0으로 나누었거나요. 이런 경우 어디에서 문제가 발생했는지를 찾기가 정말 어렵습니다. 매우 큰 프로그램에서 말이지요.  &lt;/p&gt;
+
+&lt;p&gt;바로 이런 문제 때문에 모듈화를 시킨다는 것입니다. 참고로, 제가 여기까지 해서 말씀드리는 모듈화는 태스크를 의미합니다. 태스크란 하나의 프로그램이라고 생각하시면 될 것 같습니다. 윈도우에서 메모장과 계산기는 각각 프로그램이자나요. 메모장이 갑자기 말을 안들어서 죽었다고 계산기에 영향이 없는 것 같은 부분을 말씀드리는 겁니다. &lt;/p&gt;
+
+&lt;p&gt;그럼 지금까지 여러분은 왜 모듈화를 시키고 태스크로 동작하는지 알아보았습니다. 저도 지금 글을 쓰다보니 모듈화와 태스크를 같은 개념으로 표현하고 있는데 엄밀하게 따지면 둘은 조금 틀립니다. 하지만 여러분은 같은 방법이라고 생각하시고 이해하시면 됩니다. 중요한 것은 왜 모듈화를 하였는가를 이해하는 겁니다. 아무튼, 이렇게 해서 각 태스크로 동작을 시키게 되었는데, 중요한 것은 비행제어에서는 각 태스크가 서로 데이터를 주고 받으면서 무엇인가 일을 해야한다는 것입니다. 이걸 어떻게 할까요? Pixhawk는 아주 간결하게 이 문제를 해결했습니다. 바로 "Publish-Subscribe" 모델을 이용했습니다. 이것은 사실 디자인 패턴 중 하나입니다. 디자인 패턴이 무엇이냐구요? 정말 많은 프로그램을 개발하다보면 어떤 패턴이 보입니다. 특히 설계 할때 말이지요. 그래서 이걸 아주 유명한 프로그래머 4명이 스키장 갔다가 저녁에 술먹으면서 서로 예기 하다가 동일한 패턴이 있는 것을 발견하고 이것을 책으로 출간을 했는데 이게 바로 그 유명한 "GOF의 디자인 패턴"이지요. GOF는 Gang Of Four? 라는 의미입니다(그들은 갱단으로 알고 있나 봅니다.) 참고로 알아두시길 바랍니다. &lt;br&gt;
+&lt;img src="http://localhost:2368/content/images/2016/06/GOFDesingPattern.png" alt="GOF"&gt;&lt;/p&gt;
+
+&lt;p&gt;그럼 Publish-Subscribe가 무엇인지 이제부터 알아보겠습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/06/pub_sub.png" alt="PubSub"&gt;&lt;/p&gt;
+
+&lt;p&gt;사전적 의미처럼 Publisher는 데이터를 공급하는 역할을 하는 녀석이고, Subscriber는 그 데이터를 구독하는 녀석이라고 쉽게 생각하시면 됩니다. 따라서 한 모듈에서 하나의 데이터를 공급하는 역할을 수행하면 다른 모듈에서는 그 데이터를 구독할 수 있는거지요. 따라서, Publisher는 한명이고 Subscriber는 여러명이 될 수 있습니다. 이렇게 되면 서로 데이터를 주고 받을 때는 내가 Publisher라고 반드시 advertise를 해주어야 합니다. 그렇지 않으면 Publisher가 두명이 될 수 있으니깐요. 이 구조가 Pixhawk 내에서 가장 중요한 개념이니 반드시 숙지하시고 계셔야 합니다. 만약 여러분이 어떤 모듈을 분석하실려고 한다면 가장 먼저 보셔야 할것인 main함수가 아니라 바로 이 publish/subscribe를 보셔야 하는 거지요. 이 모듈은 어떤 데이터를 생성하고 어떤 데이터를 받고 있는지.. 즉, 입력 값이 무엇이고 출력값이 무엇인지를 우선 아셔야 한다는 것입니다. 그외 나머지는 로직인거지요.  &lt;/p&gt;
+
+&lt;p&gt;아 .. 그런데 publish와 subscribe는 누가 담당하는 걸까요? Pixhawk에서는 이것을 ORB에서 관장을 합니다. ORB는 미들웨어로써 Object Request Broker의 약자입니다. 정확하게 말하면 uORB라고 합니다. u는 micro를 의미합니다. 이건 마치 ROS의 roscore와 같은 거라고 보시면 될 것 같습니다. 각 모듈들이 어떻게 데이터를 주고 받게 만들어주는지에 대한 실질적인 부분은 여기서 하는 것이지요. 우리는? ORB까지 알 필요는 없는거지요. 그냥 가져다 쓰면 만사 OK입니다. 
+그러고 보니 만약 ROS를 조금 아시는 분이면 publish-subscribe나 ORB가 ROS와 많이 유사하다는 것을 발견하실 겁니다. 맞습니다. 아마 처음에도 잠깐 언급했지만, Pixhawk가 개발될때 ROS의 영향이 매우 컸던 것 같습니다. 그래서 ROS의 철학을 그대로 받아들인것 같군요. 그럼 ROS와 연동이 쉽지 않을까요? 바로 맞추었습니다. 맞습니다. 철학이 비슷하니 ROS와 연동이 쉽게 될 수 있지요. &lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://localhost:2368/content/images/2016/06/px4_companion_architecture.png" alt="ROS와의연동"&gt;&lt;/p&gt;
+
+&lt;p&gt;보시는 것 처럼 모듈로 구성된 Pixhawk의 내부 로직들은 필요 시 성능이 좋은 다른 컴퓨터 (Companion Computer)로 이동할 수 있습니다. 맞습니다. 분산 시스템이 가능하게 된거지요. 이런 경우가 필요한 것은 정말 많습니다. 예를 들어 볼까요? 위치 예측 같은 경우 간단하게는 GPS만 가지고도 위치를 예측할 수 있지만, 보다 정밀하게 하기 위해서는 다른 센서들을 융합하게 됩니다. 센서 융합을 통해 우리는 보다 정밀한 위치를 예측할 수 있지요. 최근에는 IMU, 카메라, UWB, SONAR, LiDAR 등의 많은 센서들을 통합하고, 내부 알고리즘도 복잡한 연산이 요구되는 칼만 필터나 확장 칼만 필터 등이 사용됩니다. 이런 경우는 아무래도 현재 Pixhawk 보다는 고성능 컴퓨터에서 수행하면 좋겠지요. 이런 경우에 Pixhawk는 쉽게 처리가 가능하다는 것입니다. &lt;/p&gt;
+
+&lt;p&gt;정리하면 다음과 같습니다.
+Pixhawk는 각 모듈은 독립적으로 수행이 가능하도록 설계되어있습니다. 따라서 각 모듈이 수행하는 기능은 명확하게 제시되어 있어서 우리가 관심있는 모듈들을 찾아 수행할 수 있게 되는 것입니다. 모듈간의 메세지(데이터) 전달은 uORB라는 미들웨어를 통해 Publish-Subscribe 방식으로 동작이 되어 입력과 출력이 정확하게 정의 되어 있어서 모듈에 대한 분석이 필요한 경우 우선 Publish와 Subscribe를 파악해야 합니다.&lt;/p&gt;
+
+&lt;h5 id="helloworldmodule"&gt;Hello World Module&lt;/h5&gt;
+
+&lt;p&gt;자 그럼 지금까지 우리는 Pixhawk에 모듈들이 어떻게 동작되는지 알았습니다. 그럼 지금부터는 간단한 예제를 돌려보도록 하겠습니다.
+본 예제는 Pixhawk 사이트의 예제를 그대로 참조하였으니 &lt;a href="http://localhost:2368/pixahwke-modyul-cugahaebogi-hello-world/!http://dev.px4.io/tutorial-hello-sky.html"&gt;여기&lt;/a&gt;를 참고하세요 이 예제는 src/examples/px4&lt;em&gt;simple&lt;/em&gt;app에 있으니 참고하세요.&lt;/p&gt;
+
+&lt;p&gt;우선 모듈을 만드는 방법을 배워 보겠습니다. 일반 C에서 main함수가 있듯이 여기에서도 main 함수와 같은 entry function이 필요합니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;__EXPORT int px4_simple_app_main(int argc, char *argv[]);
+
+int px4_simple_app_main(int argc, char *argv[])  
+{
+    PX4_INFO("Hello Sky!");
+    return OK;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이 모듈에서는 px4&lt;em&gt;simple&lt;/em&gt;app&lt;em&gt;main이 entry function이군요. 이를 설정하기 위해서 _&lt;/em&gt;EXPORT라는 명령을 써서 entry function로 지정하기 위해 전역 함수로 지정합니다.&lt;/p&gt;
+
+&lt;p&gt;다음은 이 모듈이 빌드되기 위해 빌드 설정을 해주어야 합니다. 전에도 말씀드렸듯이 Pixhawk는 현재 cmake를 사용하고 있습니다. 따라서 CMakeLists.txt를 만들어야 합니다. CMakeList.txt는 아래와 같이 되어 있습니다. 잘 보세요.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;px4_add_module(  
+    MODULE examples__px4_simple_app
+    MAIN px4_simple_app
+    STACK 2000
+    SRCS
+        px4_simple_app.c
+    DEPENDS
+        platforms__common
+)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;px4&lt;em&gt;add&lt;/em&gt;module이라는 함수같은게 있구요. 그안에 MODULE이라는 게 있군요. 이 부분은 저도 정확하게 분석해보지는 않았지만, examples/px4&lt;em&gt;simple&lt;/em&gt;app이라는 의미일 겁니다.  entry point를 위해 MAIN으로 px4&lt;em&gt;simple&lt;/em&gt;app이라고 썼구요. STACK 사이즈를 2000으로 지정했습니다. 각 모듈이 사용하는 메모리 할당을 해야 하는데 그중 스택을 2000으로 지정한다는 말입니다. 이게 적으면 에러가 나니 잘 지정하셔야 합니다. &lt;br&gt;
+SRC는 여기에 사용되는 소스 파일입니다. 만약 새로운 소스 파일이 사용되면 여기에 추가하시면 됩니다. DEPENDS는 관련된 라이브러리 혹은 소스 코드등이 여기에 포함됩니다.&lt;/p&gt;
+
+&lt;p&gt;이렇게 하나의 폴더에 소스 파일, 헤더파일, 그리고 CMakeLists.txt를 만들고, 이 파일이 컴파일 되게 하기 위해서 cmake에 등록합니다. 전에도 말씀드렸지만, Pixhawk는 이미 여러 버전이 존재합니다. 따라서 각 버전별로 컴파일되는 것이 서로 다를 수 있습니다. 우리는 px4fmu-v2를 사용할 것이니, 이 시스템에 적용하기 위해서 cmake/configs/nuttx&lt;em&gt;px4fmu-v2&lt;/em&gt;default.cmake 파일을 수정합니다.
+이 파일을 열어 보면 &lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;set(config_module_list  
+    ~
+    [추가할 모듈 이름]
+
+    ~
+)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이 있습니다. 여기에 우리가 만든 모듈을 추가하면 됩니다. 우리가 만든 모듈, 사실은 이미 만들어진 모듈이지만, 이 모듈은 src 아래에 examples/px4&lt;em&gt;simple&lt;/em&gt;app의 이름으로 되어 있으니 이를 추가하면 됩니다. 실제 이 파일에 들어가보면 이미 추가는 되어 있는데 "#"으로 주석 처리가 되어 있을 겁니다. 이 주석을 풀고 다시 컴파일하면 됩니다.
+빌드 이후, 업로드를 하면 처음에 봤던 nuttx 쉘이 나옴을 알 수 있습니다. 여기에 help라고 명령어를 수행하면, 우리가 추가한 모듈이 나옴을 알 수 있습니다. 짜잔.. 수고 하셨습니다. ^^ 드디어 모듈을 만드는 방법을 마스터 하셨군요&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nsh&amp;gt; help  
+    help usage:  help [-v] [&amp;lt;cmd&amp;gt;]
+
+    [           df          kill        mkfifo      ps          sleep       
+    ?           echo        losetup     mkrd        pwd         test        
+    cat         exec        ls          mh          rm          umount      
+    cd          exit        mb          mount       rmdir       unset       
+    cp          free        mkdir       mv          set         usleep      
+    dd          help        mkfatfs     mw          sh          xd          
+
+  Builtin Apps:
+    reboot
+    perf
+    top
+    ..
+    px4_simple_app
+    ..
+    sercon
+    serdis
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;그리고 이것을 실행하기 위해서는 다음과 같이 추가한 모듈 이름을 실행하면 됩니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nsh&amp;gt; px4_simple_app  
+Hello Sky!  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;자 여기 까지 하셨으면 일단 한숨 고르시고, publish-subscribe 를 사용해 보겠습니다.
+우선 subscribe부터 해볼게요. 말그대로 구독하는 것이니, 무엇을 구독해야할지를 알아야겠지요? 구독하는 것은 모두 메세지 방식으로 데이터가 흘러들어갑니다. 누군가가 publish한 메세지를 어떻게 알까요? 사실 이 부분이 어렵지요. 그리고 이 부분은 메뉴얼도 없어서 처음에 이부분을 찾기 어렵습니다. 그래서 저는 grep이라는 명령어를 사용해서 이 부분을 찾아냅니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;grep -RIn "orb_publish" src/*  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;grep이라고 하는 것은 특정 문자열을 파일들에서 찾을때 사용하는 명령어인데 우리는 publish하는 명령어인 orb&lt;em&gt;publish 함수를 찾아나가는 것이지요. 위치는 src폴더 에서 말이지요. 옵션으로 사용하는 R/I/n은 각각 하위 폴더까지 찾아라는 옵션(R), Binary 파일을 무시하고 오로지 Ascii파일들, 즉 소스코드들만 검색하라는 옵션(I), 마지막으로 라인 넘버를 추가하라는 옵션(n)을 의미합니다. &lt;br&gt;
+자 이걸 통해 우리는 어떤 모듈이 어떤 메세지를 publish하는지를 확인할 수 있었습니다. 그럼 여기 예제에서는 가속도계의 센서 정보를 획득하는 것을 찾아보겠습니다. 
+가속도계는 sensor&lt;/em&gt;combined라는 메세지를 통해 획득할 수 있습니다. 자 그럼 sensor_combined을 누가 publish 하는지 찾아보겠습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;grep -RIn "orb_publish" src/* | grep sensor_combined  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;찾는 방법은 앞에서 설명드린 grep을 다시 이용하면 됩니다. 앞에서 설명한 부분에서 "| grep"을 하고 찾고자 하는 것을 다시 적으면 됩니다. "|"는 파이프라는 명령어인데 파이프 명령 왼쪽에서 나온 결과를 오른쪽 명령어에 사용한다는 의미입니다. 즉 한번 찾은 것에서 재검색할 때 유용합니다. &lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;grep -RIn "orb_publish" src/* | grep sensor_combined  
+src/modules/mavlink/mavlink_receiver.cpp:1523:            orb_publish(ORB_ID(sensor_combined), _sensors_pub, &amp;amp;hil_sensors);  
+src/modules/mavlink/mavlink_receiver.cpp.orig:1556:            orb_publish(ORB_ID(sensor_combined), _sensors_pub, &amp;amp;hil_sensors);  
+src/modules/sensors/sensors.cpp:2263:            orb_publish(ORB_ID(sensor_combined), _sensor_pub, &amp;amp;raw);  
+src/platforms/qurt/tests/muorb/muorb_test_example.cpp:97:        orb_publish(ORB_ID(sensor_combined), pub_sc, &amp;amp;sc);  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;이렇게 해보니, mavlink, sensors, muorb라는 세가지 모듈이 후보군에 올랐군요. 여러분은 우선 이름만 보면 어떤게 적절한 모듈일 것 같습니까? 네.. 맞습니다. 당연히 sensors입니다. 그럼 이 메세지를 publish하는 것은 sensors이다는 겁니다. &lt;/p&gt;
+
+&lt;p&gt;말 나온김에 하나더 알려드릴게요. 그렇다면 전체 메세지는 얼마나 될까요? 그리고 그 메세지안에는 무엇이 들어있나요? 궁금하시죠? 그것을 확인해 보실려면, msg라는 폴더를 들어가보시길 바랍니다. 여기에 들어가보면 사용되고 있는 모든 메세지들이 .msg라는 파일 이름으로 정의되어 있습니다. 그리고 그 안에 들어가보면 메세지 내용부터 정의까지 모두 나와 있습니다. 그런데 또 한가지 궁금하지 않으세요? .msg라는 파일을 어떻게 C 언어가 알아듣지? 당연히 msg라는 것은 C 언어는 알수가 없습니다. 따라서 msg를 헤더파일로 바꾸어주어야 겠지요. 이 부분은 파이썬으로 이루어져있고, 바뀐 헤더파일은 /[build위치]/src/modules/uORB/topics/폴더 아래에 헤더파일로 들어있게 됩니다.&lt;/p&gt;
+
+&lt;p&gt;자 그럼 이제 subscribe를 해보도록 하겠습니다. 앞에서 작성한 파일에 subscribe하는 함수를 추가하면 됩니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;uORB/topics/sensor_combined.h&amp;gt;
+..
+int sensor_sub_fd = orb_subscribe(ORB_ID(sensor_combined));  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;간단하게 설명드리면, 우선 include가 필요하고, 다음으로 subscribe하는 orb&lt;em&gt;subscribe함수를 사용합니다. ORB&lt;/em&gt;ID는 앞에서 설명드린 msg 폴더에 포함된 이름을 그래도 적으시면 됩니다.
+orb_subscribe 함수를 통해 획득한 결과값은 바로 메세지 topic handle이 됩니다. 이 핸들을 마치 open함수를 통해 나오는 file descriptor와 같은 역할을 하게 됩니다. 이 핸들을 이용하여 우리는 데이터를 획득할 수 있게 되지요. 일반적으로 데이터를 획득하는 루틴은 다음과 같습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;poll.h&amp;gt;
+#include &amp;lt;uORB/topics/sensor_combined.h&amp;gt;
+..
+int sensor_sub_fd = orb_subscribe(ORB_ID(sensor_combined));
+
+/* one could wait for multiple topics with this technique, just using one here */
+px4_pollfd_struct_t fds[] = {  
+    { .fd = sensor_sub_fd,   .events = POLLIN },
+};
+
+while (true) {  
+    /* wait for sensor update of 1 file descriptor for 1000 ms (1 second) */
+    int poll_ret = px4_poll(fds, 1, 1000);
+..
+    if (fds[0].revents &amp;amp; POLLIN) {
+        /* obtained data for the first file descriptor */
+        struct sensor_combined_s raw;
+        /* copy sensors raw data into local buffer */
+        orb_copy(ORB_ID(sensor_combined), sensor_sub_fd, &amp;amp;raw);
+        printf("[px4_simple_app] Accelerometer:\t%8.4f\t%8.4f\t%8.4f\n",
+                    (double)raw.accelerometer_m_s2[0],
+                    (double)raw.accelerometer_m_s2[1],
+                    (double)raw.accelerometer_m_s2[2]);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;메세지는 poll함수를 이용하여 갱신된 데이터가 있으면 POLLIN 이벤트가 발생하게 되고, 이 이벤트가 발생하면 orb_copy라는 함수를 통해 실제 데이터를 받을 수 있게 됩니다. 그렇게 해서 마찬가지로 빌드하고 실행하면 아래와 같은 결과를 보실 수 있습니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[px4_simple_app] Accelerometer:   0.0483          0.0821          0.0332
+  [px4_simple_app] Accelerometer:   0.0486          0.0820          0.0336
+  [px4_simple_app] Accelerometer:   0.0487          0.0819          0.0327
+  [px4_simple_app] Accelerometer:   0.0482          0.0818          0.0323
+  [px4_simple_app] Accelerometer:   0.0482          0.0827          0.0331
+  [px4_simple_app] Accelerometer:   0.0489          0.0804          0.0328
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;자 여러분은 이제 subscribe까지 하실 수 있게 된겁니다. 축하드립니다. 짝짝 ~&lt;/p&gt;
+
+&lt;p&gt;마지막으로 publish도 내친김에 한번 해볼까요? publish를 하기 전에 서두에 말씀드린 것처럼 advertise를 먼저 해주어야 합니다. uORB에 신고하는 것이지요. &lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;uORB/topics/vehicle_attitude.h&amp;gt;
+..
+/* advertise attitude topic */
+struct vehicle_attitude_s att;  
+memset(&amp;amp;att, 0, sizeof(att));  
+orb_advert_t att_pub_fd = orb_advertise(ORB_ID(vehicle_attitude), &amp;amp;att);  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;메인 루프에서는 publish를 다음과 같이 하면됩니다.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;orb_publish(ORB_ID(vehicle_attitude), att_pub_fd, &amp;amp;att);  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;매우 간단하지요? 단순하게 orb&lt;em&gt;publish함수를 사용해서 다음 메세지(ORB&lt;/em&gt;ID(vehicle&lt;em&gt;attitude)) 타입으로 topic handler인 att&lt;/em&gt;pub_fd를 통해 att라는 데이터를 publish하라라는 의미입니다.
+att_pub_fd는 advertise할때 나온 topic handler이구요. &lt;/p&gt;
+
+&lt;h5 id="conclusion"&gt;Conclusion&lt;/h5&gt;
+
+&lt;p&gt;이번 연재 강좌에서는 Hello World 모듈을 한번 만들어 보았습니다. 여기에서 반드시 알아두셔야 하는 것은 바로 publish-subscribe입니다. 이 방법을 잘 알고 계셔야 소스 코드 분석하는게 쉬워지고, 이해할 수 있게 됩니다. 내부에서는 ORB라는 미들웨어를 통해 메세지를 주고 받을 수 있게 되는 것이지요. 그럼 Pixhawk 하드웨어 밖에서는 어떻게 통신하지요? 맞습니다. Mavlink이지요. 결국 Mavlink와 ORB를 통해 모든 모듈들은 밖에서나 안에서나 통신이 가능하게 되고, 결국 분산 시스템을 구축할 수 있게 되는 것입니다!&lt;/p&gt;</content:encoded></item><item><title>SITL (Software In The Loop) 시스템 구축하기</title><description>&lt;h5 id="introduction"&gt;Introduction&lt;/h5&gt;
 
 &lt;p&gt;여러분 안녕하세요 그 동안 잘 지내셨는지요. 이전 연재 "Pixhawk 소스 코드로 빌드하기"의 마지막에서 SITL에 대한 설명을 드린다고 해놓곤 깜빡하고, 원래 순서데로 연재를 하고 있었네요. 이점 양해 말씀드리면서 SITL에 대한 시스템 구축을 먼저 하고 넘어가도록 하겠습니다. 전에도 말씀드렸다시피 본 연재글은 Pixhawk의 SITL 기반으로 코드 분석을 진행될 것이기 때문에 제가&lt;/p&gt;</description><link>http://localhost:2368/hils-hardware-in-the-loop-siseutem-gucughagi/</link><guid isPermaLink="false">33d0dc29-c2b1-4285-9ee3-cc48d0f53247</guid><category>pixhawk</category><dc:creator>SungTae Moon</dc:creator><pubDate>Sun, 29 May 2016 11:46:19 GMT</pubDate><content:encoded>&lt;h5 id="introduction"&gt;Introduction&lt;/h5&gt;
 
