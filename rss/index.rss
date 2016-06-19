@@ -1,4 +1,4 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Program Lock</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.8</generator><lastBuildDate>Sun, 19 Jun 2016 06:47:16 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Pixahwk에 모듈 추가해보기 (Hello world)</title><description>&lt;h5 id="introduction"&gt;Introduction&lt;/h5&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Program Lock</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.8</generator><lastBuildDate>Sun, 19 Jun 2016 06:58:08 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Pixahwk에 모듈 추가해보기 (Hello world)</title><description>&lt;h5 id="introduction"&gt;Introduction&lt;/h5&gt;
 
 &lt;p&gt;안녕하세요 여러분~~~ 그동안 잘 지내셨는지요. 저는 요즘 여러 일로 인해 정말 바쁘게 지내고 있답니다. 그리고 많이 무더워지는 것 같아, 건강도 잘 관리하시길 바랍니다. 사실 최근에 병원 신세를 지게 되었는데, 그러고 보니 건강이 역시 최고구나 라고 생각이 다시 듭니다. 아무쪼록 공부도 열심히 하면서 건강도 챙기시길 바랍니다. ^^&lt;/p&gt;
 
@@ -1085,7 +1085,7 @@ Pixhawk는 처음 개발 시 드론 시스템을 개발하였기 때문에 단�
 &lt;li&gt;&lt;a href="http://stmoon.github.io/pixhawk-sayonghaeseo-deuron-mandeuleo-bogi/"&gt;Pixhawk 사용해서 드론 만들어 보기&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://stmoon.github.io/pixhawk-soseukodeuro-bildeuhaebogi/"&gt;Pixhawk 소스코드로 빌드해보기&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://stmoon.github.io/pixhawk-soseu-kodeu-teuri-gujo-barabogi/"&gt;Pixhawk 소스 코드 트리 구조 바라보기&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Pixahwk에 모듈 추가해보기 (Hello world)&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stmoon.github.io/pixahwke-modyul-cugahaebogi-hello-world/"&gt;Pixahwk에 모듈 추가해보기 (Hello world)&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Pixhawk 내부 구조 파헤치기 (Overview)&lt;/li&gt;
 &lt;li&gt;설정값(gain value) 변경하기&lt;/li&gt;
 &lt;li&gt;모듈간 통신을 통해 데이터 주고 받기&lt;/li&gt;
@@ -1097,8 +1097,8 @@ Pixhawk는 처음 개발 시 드론 시스템을 개발하였기 때문에 단�
 &lt;li&gt;commander 분석하기&lt;/li&gt;
 &lt;li&gt;navigator 분석하기&lt;/li&gt;
 &lt;li&gt;HILS(Hardware In The Loop) 시스템 구축하기&lt;/li&gt;
-&lt;li&gt;SITL(Software In The Loop) 시스템 구축하기&lt;/li&gt;
-&lt;li&gt;Fake GPS 만들기 (ROS 연동)&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stmoon.github.io/hils-hardware-in-the-loop-siseutem-gucughagi/"&gt;SITL(Software In The Loop) 시스템 구축하기&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stmoon.github.io/fake-gps/"&gt;Fake GPS 만들기 (ROS 연동)&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;깃허브를 통한 코드 공헌해보기&lt;/li&gt;
 &lt;/ol&gt;
 
