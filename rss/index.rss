@@ -1,10 +1,10 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Program Lock</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.8</generator><lastBuildDate>Sat, 06 Aug 2016 02:34:04 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Parameter  변경하기</title><description>&lt;h5 id="introduction"&gt;Introduction&lt;/h5&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Program Lock</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.8</generator><lastBuildDate>Sat, 06 Aug 2016 02:36:41 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Parameter  변경하기</title><description>&lt;h5 id="introduction"&gt;Introduction&lt;/h5&gt;
 
 &lt;p&gt;안녕하세요 여러분. 정말 오랫만에 포스팅하는 것 같습니다. 최근 제가 하고 있는 과제와 관련하여 일들이 많아 포스팅을 하지 못했습니다 ㅜㅜ. 많은 양해 부탁드립니다. 오늘은 조금 간단한 부분에 대해 다루어보고자 합니다. 오늘 말씀 드릴 것은 바로 설정값 변경 부분입니다. 자 그럼 본격적으로 시작해 보겠습니다.&lt;/p&gt;
 
 &lt;h5 id="whatisparameter"&gt;What is Parameter&lt;/h5&gt;
 
-&lt;p&gt;Pixhawk의 가장 큰 특징&lt;/p&gt;</description><link>http://localhost:2368/parameter-byeongyeonghagi/</link><guid isPermaLink="false">99ed7d15-666c-4cc2-9f47-5c99a3ddfa09</guid><dc:creator>SungTae Moon</dc:creator><pubDate>Fri, 05 Aug 2016 22:13:49 GMT</pubDate><content:encoded>&lt;h5 id="introduction"&gt;Introduction&lt;/h5&gt;
+&lt;p&gt;Pixhawk의 가장 큰 특징&lt;/p&gt;</description><link>http://localhost:2368/parameter-byeongyeonghagi/</link><guid isPermaLink="false">99ed7d15-666c-4cc2-9f47-5c99a3ddfa09</guid><category>pixhawk</category><dc:creator>SungTae Moon</dc:creator><pubDate>Fri, 05 Aug 2016 22:13:49 GMT</pubDate><content:encoded>&lt;h5 id="introduction"&gt;Introduction&lt;/h5&gt;
 
 &lt;p&gt;안녕하세요 여러분. 정말 오랫만에 포스팅하는 것 같습니다. 최근 제가 하고 있는 과제와 관련하여 일들이 많아 포스팅을 하지 못했습니다 ㅜㅜ. 많은 양해 부탁드립니다. 오늘은 조금 간단한 부분에 대해 다루어보고자 합니다. 오늘 말씀 드릴 것은 바로 설정값 변경 부분입니다. 자 그럼 본격적으로 시작해 보겠습니다.&lt;/p&gt;
 
