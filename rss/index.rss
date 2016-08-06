@@ -1,4 +1,4 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Program Lock</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.8</generator><lastBuildDate>Sat, 06 Aug 2016 02:36:41 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Parameter  변경하기</title><description>&lt;h5 id="introduction"&gt;Introduction&lt;/h5&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Program Lock</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.8</generator><lastBuildDate>Sat, 06 Aug 2016 07:47:06 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Parameter  변경하기</title><description>&lt;h5 id="introduction"&gt;Introduction&lt;/h5&gt;
 
 &lt;p&gt;안녕하세요 여러분. 정말 오랫만에 포스팅하는 것 같습니다. 최근 제가 하고 있는 과제와 관련하여 일들이 많아 포스팅을 하지 못했습니다 ㅜㅜ. 많은 양해 부탁드립니다. 오늘은 조금 간단한 부분에 대해 다루어보고자 합니다. 오늘 말씀 드릴 것은 바로 설정값 변경 부분입니다. 자 그럼 본격적으로 시작해 보겠습니다.&lt;/p&gt;
 
@@ -1261,7 +1261,7 @@ Pixhawk는 처음 개발 시 드론 시스템을 개발하였기 때문에 단�
 &lt;li&gt;&lt;a href="http://stmoon.github.io/pixhawk-soseu-kodeu-teuri-gujo-barabogi/"&gt;Pixhawk 소스 코드 트리 구조 바라보기&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://stmoon.github.io/pixahwke-modyul-cugahaebogi-hello-world/"&gt;Pixahwk에 모듈 추가해보기 (Hello world)&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Pixhawk 내부 구조 파헤치기 (Overview)&lt;/li&gt;
-&lt;li&gt;설정값(gain value) 변경하기&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://stmoon.github.io/parameter-byeongyeonghagi/"&gt;Parameter 변경하기&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;모듈간 통신을 통해 데이터 주고 받기&lt;/li&gt;
 &lt;li&gt;나만의 디버깅 로그 추가하기&lt;/li&gt;
 &lt;li&gt;position estimator 분석하기 (for multi copter)&lt;/li&gt;
