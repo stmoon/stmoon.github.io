@@ -1,3 +1,4 @@
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,19 +11,20 @@
 
     <link rel="shortcut icon" href="../favicon.ico">
 
-    <link rel="stylesheet" type="text/css" href="../assets/css/screen.css?v=bd325a5265">
+    <link rel="stylesheet" type="text/css" href="../assets/css/screen.css?v=d1acd4112c">
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic%7COpen+Sans:700,400">
 
     <link rel="canonical" href="index.html">
-    <meta name="referrer" content="origin">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <link rel="amphtml" href="amp/index.html">
     
     <meta property="og:site_name" content="Program Lock">
     <meta property="og:type" content="article">
     <meta property="og:title" content="Pixhawk 사용해서 드론 만들어 보기">
     <meta property="og:description" content="안녕하세요 여러분.. 그 동안 잘 지내셨는지요. Pixhawk에 대해 연재를 해본다고 했는데, 너무 느리게 업데이트를 하고 있어 면목이 없네요 ㅜㅜ 여러분들의 많은 양해 부탁드립니다. 어찌되었든 힘을 내어서 시작해 보겠습니다. Introduction 앞으로의 연재는 Top-Down방식으로 주로 설명하고자 합니다. 따라서 우선 픽스호크를 가지고 드론을 만들어보는 것 부터 하고자 합니다. 전에도 말씀드렸다시피 저는 컴퓨터 과학이">
     <meta property="og:url" content="http://localhost:2368/pixhawk-sayonghaeseo-deuron-mandeuleo-bogi/">
-    <meta property="article:published_time" content="2016-04-10T12:12:10.209Z">
-    <meta property="article:modified_time" content="2016-04-10T12:31:12.315Z">
+    <meta property="article:published_time" content="2016-04-10T12:12:10.000Z">
+    <meta property="article:modified_time" content="2016-04-10T12:31:12.000Z">
     <meta property="article:tag" content="pixhawk">
     
     <meta name="twitter:card" content="summary">
@@ -46,20 +48,29 @@
     "author": {
         "@type": "Person",
         "name": "SungTae Moon",
-        "image": "http://localhost:2368/content/images/2016/03/140901_drone_writer_hei-100x113-1.jpg",
+        "image": {
+            "@type": "ImageObject",
+            "url": "http://localhost:2368/content/images/2016/03/140901_drone_writer_hei-100x113-1.jpg",
+            "width": 100,
+            "height": 113
+        },
         "url": "http://localhost:2368/author/sungtae/",
         "sameAs": []
     },
     "headline": "Pixhawk 사용해서 드론 만들어 보기",
     "url": "http://localhost:2368/pixhawk-sayonghaeseo-deuron-mandeuleo-bogi/",
-    "datePublished": "2016-04-10T12:12:10.209Z",
-    "dateModified": "2016-04-10T12:31:12.315Z",
+    "datePublished": "2016-04-10T12:12:10.000Z",
+    "dateModified": "2016-04-10T12:31:12.000Z",
     "keywords": "pixhawk",
-    "description": "안녕하세요 여러분.. 그 동안 잘 지내셨는지요. Pixhawk에 대해 연재를 해본다고 했는데, 너무 느리게 업데이트를 하고 있어 면목이 없네요 ㅜㅜ 여러분들의 많은 양해 부탁드립니다. 어찌되었든 힘을 내어서 시작해 보겠습니다. Introduction 앞으로의 연재는 Top-Down방식으로 주로 설명하고자 합니다. 따라서 우선 픽스호크를 가지고 드론을 만들어보는 것 부터 하고자 합니다. 전에도 말씀드렸다시피 저는 컴퓨터 과학이"
+    "description": "안녕하세요 여러분.. 그 동안 잘 지내셨는지요. Pixhawk에 대해 연재를 해본다고 했는데, 너무 느리게 업데이트를 하고 있어 면목이 없네요 ㅜㅜ 여러분들의 많은 양해 부탁드립니다. 어찌되었든 힘을 내어서 시작해 보겠습니다. Introduction 앞으로의 연재는 Top-Down방식으로 주로 설명하고자 합니다. 따라서 우선 픽스호크를 가지고 드론을 만들어보는 것 부터 하고자 합니다. 전에도 말씀드렸다시피 저는 컴퓨터 과학이",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "http://localhost:2368"
+    }
 }
     </script>
 
-    <meta name="generator" content="Ghost 0.8">
+    <meta name="generator" content="Ghost 0.11">
     <link rel="alternate" type="application/rss+xml" title="Program Lock" href="../rss/index.html">
 </head>
 <body class="post-template tag-pixhawk nav-closed">
@@ -306,7 +317,7 @@ fi
 
 
         <footer class="site-footer clearfix">
-            <section class="copyright"><a href="../">Program Lock</a> © 2016</section>
+            <section class="copyright"><a href="../">Program Lock</a> © 2017</section>
             <section class="poweredby">Proudly published with <a href="https://ghost.org">Ghost</a></section>
         </footer>
 
@@ -315,8 +326,8 @@ fi
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
     
 
-    <script type="text/javascript" src="../assets/js/jquery.fitvids.js?v=bd325a5265"></script>
-    <script type="text/javascript" src="../assets/js/index.js?v=bd325a5265"></script>
+    <script type="text/javascript" src="../assets/js/jquery.fitvids.js?v=d1acd4112c"></script>
+    <script type="text/javascript" src="../assets/js/index.js?v=d1acd4112c"></script>
 
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>  
 

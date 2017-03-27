@@ -1,0 +1,1000 @@
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Pixhawk 사용해서 드론 만들어 보기</title>
+    <meta name="description" content="">
+
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+
+    <link rel="shortcut icon" href="../../favicon.ico">
+
+    <link rel="canonical" href="../index.html">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta property="og:site_name" content="Program Lock">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Pixhawk 사용해서 드론 만들어 보기">
+    <meta property="og:description" content="안녕하세요 여러분.. 그 동안 잘 지내셨는지요. Pixhawk에 대해 연재를 해본다고 했는데, 너무 느리게 업데이트를 하고 있어 면목이 없네요 ㅜㅜ 여러분들의 많은 양해 부탁드립니다. 어찌되었든 힘을 내어서 시작해 보겠습니다. Introduction 앞으로의 연재는 Top-Down방식으로 주로 설명하고자 합니다. 따라서 우선 픽스호크를 가지고 드론을 만들어보는 것 부터 하고자 합니다. 전에도 말씀드렸다시피 저는 컴퓨터 과학이">
+    <meta property="og:url" content="http://localhost:2368/pixhawk-sayonghaeseo-deuron-mandeuleo-bogi/">
+    <meta property="article:published_time" content="2016-04-10T12:12:10.000Z">
+    <meta property="article:modified_time" content="2016-04-10T12:31:12.000Z">
+    <meta property="article:tag" content="pixhawk">
+    
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Pixhawk 사용해서 드론 만들어 보기">
+    <meta name="twitter:description" content="안녕하세요 여러분.. 그 동안 잘 지내셨는지요. Pixhawk에 대해 연재를 해본다고 했는데, 너무 느리게 업데이트를 하고 있어 면목이 없네요 ㅜㅜ 여러분들의 많은 양해 부탁드립니다. 어찌되었든 힘을 내어서 시작해 보겠습니다. Introduction 앞으로의 연재는 Top-Down방식으로 주로 설명하고자 합니다. 따라서 우선 픽스호크를 가지고 드론을 만들어보는 것 부터 하고자 합니다. 전에도 말씀드렸다시피 저는 컴퓨터 과학이">
+    <meta name="twitter:url" content="http://localhost:2368/pixhawk-sayonghaeseo-deuron-mandeuleo-bogi/">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="SungTae Moon">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="pixhawk">
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Program Lock",
+        "logo": "http://localhost:2368/ghost/img/ghosticon.jpg"
+    },
+    "author": {
+        "@type": "Person",
+        "name": "SungTae Moon",
+        "image": {
+            "@type": "ImageObject",
+            "url": "http://localhost:2368/content/images/2016/03/140901_drone_writer_hei-100x113-1.jpg",
+            "width": 100,
+            "height": 113
+        },
+        "url": "http://localhost:2368/author/sungtae/",
+        "sameAs": []
+    },
+    "headline": "Pixhawk 사용해서 드론 만들어 보기",
+    "url": "http://localhost:2368/pixhawk-sayonghaeseo-deuron-mandeuleo-bogi/",
+    "datePublished": "2016-04-10T12:12:10.000Z",
+    "dateModified": "2016-04-10T12:31:12.000Z",
+    "keywords": "pixhawk",
+    "description": "안녕하세요 여러분.. 그 동안 잘 지내셨는지요. Pixhawk에 대해 연재를 해본다고 했는데, 너무 느리게 업데이트를 하고 있어 면목이 없네요 ㅜㅜ 여러분들의 많은 양해 부탁드립니다. 어찌되었든 힘을 내어서 시작해 보겠습니다. Introduction 앞으로의 연재는 Top-Down방식으로 주로 설명하고자 합니다. 따라서 우선 픽스호크를 가지고 드론을 만들어보는 것 부터 하고자 합니다. 전에도 말씀드렸다시피 저는 컴퓨터 과학이",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "http://localhost:2368"
+    }
+}
+    </script>
+
+    <meta name="generator" content="Ghost 0.11">
+    <link rel="alternate" type="application/rss+xml" title="Program Lock" href="../../rss/index.html">
+
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic%7COpen+Sans:700,600,400">
+    <style amp-custom>
+        /* ==========================================================================
+           Table of Contents
+           ========================================================================== */
+
+        /*
+
+            0. Normalize
+            1. General
+            2. Utilities
+            3. AMP Post
+            4. Footer
+
+        */
+
+        /* ==========================================================================
+           0. normalize.css v3.0.3 | MIT License | git.io/normalize | (minified)
+           ========================================================================== */
+
+        html {
+            font-family: sans-serif;
+
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+        }
+        body {
+            margin: 0;
+        }
+        article,
+        aside,
+        details,
+        figcaption,
+        figure,
+        footer,
+        header,
+        main,
+        menu,
+        nav,
+        section,
+        summary {
+            display: block;
+        }
+        audio,
+        canvas,
+        progress,
+        video {
+            display: inline-block;
+            vertical-align: baseline;
+        }
+        audio:not([controls]) {
+            display: none;
+            height: 0;
+        }
+        [hidden],
+        template {
+            display: none;
+        }
+        a {
+            background-color: transparent;
+        }
+        a:active,
+        a:hover {
+            outline: 0;
+        }
+        abbr[title] {
+            border-bottom: 1px dotted;
+        }
+        b,
+        strong {
+            font-weight: bold;
+        }
+        dfn {
+            font-style: italic;
+        }
+        h1 {
+            margin: 0.67em 0;
+            font-size: 2em;
+        }
+        mark {
+            background: #ff0;
+            color: #000;
+        }
+        small {
+            font-size: 80%;
+        }
+        sub,
+        sup {
+            position: relative;
+            vertical-align: baseline;
+            font-size: 75%;
+            line-height: 0;
+        }
+        sup {
+            top: -0.5em;
+        }
+        sub {
+            bottom: -0.25em;
+        }
+        img {
+            border: 0;
+        }
+        amp-img {
+            border: 0;
+        }
+        svg:not(:root) {
+            overflow: hidden;
+        }
+        figure {
+            margin: 1em 40px;
+        }
+        hr {
+            box-sizing: content-box;
+            height: 0;
+        }
+        pre {
+            overflow: auto;
+        }
+        code,
+        kbd,
+        pre,
+        samp {
+            font-family: monospace, monospace;
+            font-size: 1em;
+        }
+        button,
+        input,
+        optgroup,
+        select,
+        textarea {
+            margin: 0;
+            color: inherit;
+            font: inherit;
+        }
+        button {
+            overflow: visible;
+        }
+        button,
+        select {
+            text-transform: none;
+        }
+        button,
+        html input[type="button"],
+        input[type="reset"],
+        input[type="submit"] {
+            cursor: pointer;
+
+            -webkit-appearance: button;
+        }
+        button[disabled],
+        html input[disabled] {
+            cursor: default;
+        }
+        button::-moz-focus-inner,
+        input::-moz-focus-inner {
+            padding: 0;
+            border: 0;
+        }
+        input {
+            line-height: normal;
+        }
+        input[type="checkbox"],
+        input[type="radio"] {
+            box-sizing: border-box;
+            padding: 0;
+        }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            height: auto;
+        }
+        input[type="search"] {
+            -webkit-appearance: textfield;
+        }
+        input[type="search"]::-webkit-search-cancel-button,
+        input[type="search"]::-webkit-search-decoration {
+            -webkit-appearance: none;
+        }
+        fieldset {
+            margin: 0 2px;
+            padding: 0.35em 0.625em 0.75em;
+            border: 1px solid #c0c0c0;
+        }
+        legend {
+            padding: 0;
+            border: 0;
+        }
+        textarea {
+            overflow: auto;
+        }
+        optgroup {
+            font-weight: bold;
+        }
+        table {
+            border-spacing: 0;
+            border-collapse: collapse;
+        }
+        td,
+        th {
+            padding: 0;
+        }
+
+
+        /* ==========================================================================
+           1. General - Setting up some base styles
+           ========================================================================== */
+
+        html {
+            max-height: 100%;
+            height: 100%;
+            font-size: 62.5%;
+
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        }
+
+        body {
+            max-height: 100%;
+            height: 100%;
+            color: #3a4145;
+            background: #f4f8fb;
+            letter-spacing: 0.01rem;
+            font-family: "Merriweather", serif;
+            font-size: 1.8rem;
+            line-height: 1.75em;
+            text-rendering: geometricPrecision;
+
+            -webkit-font-feature-settings: "kern" 1;
+            -moz-font-feature-settings: "kern" 1;
+            -o-font-feature-settings: "kern" 1;
+        }
+
+        ::-moz-selection {
+            background: #d6edff;
+        }
+
+        ::selection {
+            background: #d6edff;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            margin: 0 0 0.3em 0;
+            color: #2e2e2e;
+            font-family: "Open Sans", sans-serif;
+            line-height: 1.15em;
+            text-rendering: geometricPrecision;
+
+            -webkit-font-feature-settings: "dlig" 1, "liga" 1, "lnum" 1, "kern" 1;
+            -moz-font-feature-settings: "dlig" 1, "liga" 1, "lnum" 1, "kern" 1;
+            -o-font-feature-settings: "dlig" 1, "liga" 1, "lnum" 1, "kern" 1;
+        }
+
+        h1 {
+            text-indent: -2px;
+            letter-spacing: -1px;
+            font-size: 2.6rem;
+        }
+
+        h2 {
+            letter-spacing: 0;
+            font-size: 2.4rem;
+        }
+
+        h3 {
+            letter-spacing: -0.6px;
+            font-size: 2.1rem;
+        }
+
+        h4 {
+            font-size: 1.9rem;
+        }
+
+        h5 {
+            font-size: 1.8rem;
+        }
+
+        h6 {
+            font-size: 1.8rem;
+        }
+
+        a {
+            color: #4a4a4a;
+        }
+
+        a:hover {
+            color: #111;
+        }
+
+        p,
+        ul,
+        ol,
+        dl {
+            margin: 0 0 2.5rem 0;
+            font-size: 1.5rem;
+            text-rendering: geometricPrecision;
+
+            -webkit-font-feature-settings: "liga" 1, "onum" 1, "kern" 1;
+            -moz-font-feature-settings: "liga" 1, "onum" 1, "kern" 1;
+            -o-font-feature-settings: "liga" 1, "onum" 1, "kern" 1;
+        }
+
+        ol,
+        ul {
+            padding-left: 2em;
+        }
+
+        ol ol,
+        ul ul,
+        ul ol,
+        ol ul {
+            margin: 0 0 0.4em 0;
+            padding-left: 2em;
+        }
+
+        dl dt {
+            float: left;
+            clear: left;
+            overflow: hidden;
+            margin-bottom: 1em;
+            width: 180px;
+            text-align: right;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-weight: 700;
+        }
+
+        dl dd {
+            margin-bottom: 1em;
+            margin-left: 200px;
+        }
+
+        li {
+            margin: 0.4em 0;
+        }
+
+        li li {
+            margin: 0;
+        }
+
+        hr {
+            display: block;
+            margin: 1.75em 0;
+            padding: 0;
+            height: 1px;
+            border: 0;
+            border-top: #efefef 1px solid;
+        }
+
+        blockquote {
+            box-sizing: border-box;
+            margin: 1.75em 0 1.75em 0;
+            padding: 0 0 0 1.75em;
+            border-left: #4a4a4a 0.4em solid;
+
+            -moz-box-sizing: border-box;
+        }
+
+        blockquote p {
+            margin: 0.8em 0;
+            font-style: italic;
+        }
+
+        blockquote small {
+            display: inline-block;
+            margin: 0.8em 0 0.8em 1.5em;
+            color: #ccc;
+            font-size: 0.9em;
+        }
+
+        blockquote small:before {
+            content: "\2014 \00A0";
+        }
+
+        blockquote cite {
+            font-weight: 700;
+        }
+
+        blockquote cite a {
+            font-weight: normal;
+        }
+
+        mark {
+            background-color: #fdffb6;
+        }
+
+        code,
+        tt {
+            padding: 1px 3px;
+            border: #e3edf3 1px solid;
+            background: #f7fafb;
+            border-radius: 2px;
+            white-space: pre-wrap;
+            font-family: Inconsolata, monospace, sans-serif;
+            font-size: 0.85em;
+            font-feature-settings: "liga" 0;
+
+            -webkit-font-feature-settings: "liga" 0;
+            -moz-font-feature-settings: "liga" 0;
+        }
+
+        pre {
+            overflow: auto;
+            box-sizing: border-box;
+            margin: 0 0 1.75em 0;
+            padding: 10px;
+            width: 100%;
+            border: #e3edf3 1px solid;
+            background: #f7fafb;
+            border-radius: 3px;
+            white-space: pre;
+            font-family: Inconsolata, monospace, sans-serif;
+            font-size: 0.9em;
+
+            -moz-box-sizing: border-box;
+        }
+
+        pre code,
+        pre tt {
+            padding: 0;
+            border: none;
+            background: transparent;
+            white-space: pre-wrap;
+            font-size: inherit;
+        }
+
+        kbd {
+            display: inline-block;
+            margin-bottom: 0.4em;
+            padding: 1px 8px;
+            border: #ccc 1px solid;
+            background: #f4f4f4;
+            border-radius: 4px;
+            box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2),
+            0 1px 0 0 #fff inset;
+            color: #666;
+            text-shadow: #fff 0 1px 0;
+            font-size: 0.9em;
+            font-weight: 700;
+        }
+
+        table {
+            box-sizing: border-box;
+            margin: 1.75em 0;
+            max-width: 100%;
+            width: 100%;
+            background-color: transparent;
+
+            -moz-box-sizing: border-box;
+        }
+
+        table th,
+        table td {
+            padding: 8px;
+            border-top: #efefef 1px solid;
+            vertical-align: top;
+            text-align: left;
+            line-height: 20px;
+        }
+
+        table th {
+            color: #000;
+        }
+
+        table caption + thead tr:first-child th,
+        table caption + thead tr:first-child td,
+        table colgroup + thead tr:first-child th,
+        table colgroup + thead tr:first-child td,
+        table thead:first-child tr:first-child th,
+        table thead:first-child tr:first-child td {
+            border-top: 0;
+        }
+
+        table tbody + tbody {
+            border-top: #efefef 2px solid;
+        }
+
+        table table table {
+            background-color: #fff;
+        }
+
+        table tbody > tr:nth-child(odd) > td,
+        table tbody > tr:nth-child(odd) > th {
+            background-color: #f6f6f6;
+        }
+
+        table.plain tbody > tr:nth-child(odd) > td,
+        table.plain tbody > tr:nth-child(odd) > th {
+            background: transparent;
+        }
+
+        iframe,
+        amp-iframe,
+        .fluid-width-video-wrapper {
+            display: block;
+            margin: 1.75em 0;
+        }
+
+        /* When a video is inside the fitvids wrapper, drop the
+        margin on the iframe, cause it breaks stuff. */
+        .fluid-width-video-wrapper iframe,
+        .fluid-width-video-wrapper amp-iframe {
+            margin: 0;
+        }
+
+        textarea,
+        select,
+        input {
+            margin: 0 0 5px 0;
+            padding: 6px 9px;
+            width: 260px;
+            outline: 0;
+            border: #e7eef2 1px solid;
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: none;
+            font-family: "Open Sans", sans-serif;
+            font-size: 1.6rem;
+            line-height: 1.4em;
+            font-weight: 100;
+
+            -webkit-appearance: none;
+        }
+
+        textarea {
+            min-width: 250px;
+            min-height: 80px;
+            max-width: 340px;
+            width: 100%;
+            height: auto;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="search"]:focus,
+        input[type="tel"]:focus,
+        input[type="url"]:focus,
+        input[type="password"]:focus,
+        input[type="number"]:focus,
+        input[type="date"]:focus,
+        input[type="month"]:focus,
+        input[type="week"]:focus,
+        input[type="time"]:focus,
+        input[type="datetime"]:focus,
+        input[type="datetime-local"]:focus,
+        textarea:focus {
+            outline: none;
+            outline-width: 0;
+            border: #bbc7cc 1px solid;
+            background: #fff;
+        }
+
+        select {
+            width: 270px;
+            height: 30px;
+            line-height: 30px;
+        }
+
+        /* ==========================================================================
+           2. Utilities
+           ========================================================================== */
+
+        /* Clears shit */
+        .clearfix:before,
+        .clearfix:after {
+            content: " ";
+            display: table;
+        }
+        .clearfix:after {
+            clear: both;
+        }
+        .clearfix {
+            zoom: 1;
+        }
+
+        /* ==========================================================================
+           3. AMP Post
+           ========================================================================== */
+
+
+
+        .main-header {
+            position: relative;
+            display: table;
+            overflow: hidden;
+            box-sizing: border-box;
+            width: 100%;
+            height: 50px;
+            background: #5ba4e5 no-repeat center center;
+            background-size: cover;
+            text-align: left;
+
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+        }
+
+        .content {
+            background: #fff;
+            padding-top: 15px;
+        }
+        .blog-title,
+        .content {
+            margin: auto;
+            max-width: 600px;
+        }
+
+        .blog-title a {
+            display: block;
+            padding-right: 16px;
+            padding-left: 16px;
+            height: 50px;
+            color: #fff;
+            text-decoration: none;
+            font-family: "Open Sans", sans-serif;
+            font-size: 16px;
+            line-height: 50px;
+            font-weight: 600;
+        }
+
+        .post {
+            position: relative;
+            margin-top: 0;
+            margin-right: 16px;
+            margin-left: 16px;
+            padding-bottom: 0;
+            max-width: 100%;
+            border-bottom: #ebf2f6 1px solid;
+            word-wrap: break-word;
+            font-size: 0.95em;
+            line-height: 1.65em;
+        }
+
+        .post-header {
+            margin-bottom: 1rem;
+        }
+
+        .post-title {
+            margin-bottom: 0;
+        }
+
+        .post-title a {
+            text-decoration: none;
+        }
+
+        .post-meta {
+            display: block;
+            margin: 3px 0 0 0;
+            color: #9eabb3;
+            font-family: "Open Sans", sans-serif;
+            font-size: 1.3rem;
+            line-height: 2.2rem;
+        }
+
+        .post-meta a {
+            color: #9eabb3;
+            text-decoration: none;
+        }
+
+        .post-meta a:hover {
+            text-decoration: underline;
+        }
+
+        .post-meta .author {
+            margin: 0;
+            font-size: 1.3rem;
+            line-height: 1.3em;
+        }
+
+        .post-date {
+            display: inline-block;
+            text-transform: uppercase;
+            white-space: nowrap;
+            font-size: 1.2rem;
+            line-height: 1.2em;
+        }
+
+        .post-image {
+            margin: 0;
+            padding-top: 3rem;
+            padding-bottom: 30px;
+            border-top: 1px #E8E8E8 solid;
+        }
+
+        /* Keep images centered, and allow images wider than the main
+           text column to break out. */
+        .post-content amp-img,
+        .post-content amp-anim {
+            /* Centers an image by (1) pushing its left edge to the
+               center of its container and (2) shifting the entire image
+               in the opposite direction by half its own width.
+               Works for images that are larger than their containers. */
+            position: relative;
+            left: 50%;
+            display: block;
+            padding: 0;
+            min-width: 0;
+            max-width: 112%; /* fallback when calc doesn't work */
+            width: calc(100% + 32px); /* expand with to image + margins */
+            height: auto;
+            transform: translateX(-50%);
+
+            -webkit-transform: translateX(-50%); /* for Safari and iOS */
+            -ms-transform: translateX(-50%); /* for IE9 */
+        }
+
+        .footnotes {
+            font-size: 1.3rem;
+            line-height: 1.6em;
+            font-style: italic;
+        }
+
+        .footnotes li {
+            margin: 0.6rem 0;
+        }
+
+        .footnotes p {
+            margin: 0;
+        }
+
+        .footnotes p a:last-child {
+            text-decoration: none;
+        }
+
+        /* ==========================================================================
+           4. Footer - The bottom the AMP Post
+           ========================================================================== */
+
+        .site-footer {
+            position: relative;
+            margin: 0 auto 20px auto;
+            padding: 1rem 15px;
+            max-width: 600px;
+            color: rgba(0,0,0,0.5);
+            font-family: "Open Sans", sans-serif;
+            font-size: 1.1rem;
+            line-height: 1.75em;
+        }
+
+        .site-footer a {
+            color: rgba(0,0,0,0.5);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .site-footer a:hover {
+            border-bottom: #bbc7cc 1px solid;
+        }
+
+        .poweredby {
+            display: block;
+            float: right;
+            width: 45%;
+            text-align: right;
+        }
+
+        .copyright {
+            display: block;
+            float: left;
+            width: 45%;
+        }
+    </style>
+
+    <style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
+    <script async src="https://cdn.ampproject.org/v0.js"></script>
+
+    
+
+</head>
+
+<body class="amp-template">
+    <header class="main-header">
+        <nav class="blog-title">
+            <a href="../../">Program Lock</a>
+        </nav>
+    </header>
+
+    <main class="content" role="main">
+        <article class="post">
+
+            <header class="post-header">
+                <h1 class="post-title">Pixhawk 사용해서 드론 만들어 보기</h1>
+                <section class="post-meta">
+                    <p class="author">by <a href="../../author/sungtae/">SungTae Moon</a></p>
+                    <time class="post-date" datetime="2016-04-10">2016-04-10</time>
+                </section>
+            </header>
+            <section class="post-content">
+
+                <p>안녕하세요 여러분.. 그 동안 잘 지내셨는지요.
+Pixhawk에 대해 연재를 해본다고 했는데, 너무 느리게 업데이트를 하고 있어 면목이 없네요 ㅜㅜ 여러분들의 많은 양해 부탁드립니다. 어찌되었든 힘을 내어서 시작해 보겠습니다.</p>
+
+<h4 id="introduction">Introduction</h4>
+
+<p>앞으로의 연재는 Top-Down방식으로 주로 설명하고자 합니다. 따라서 우선 픽스호크를 가지고 드론을 만들어보는 것 부터 하고자 합니다. 전에도 말씀드렸다시피 저는 컴퓨터 과학이 전공이어서 드론을 잘은 모릅니다. 그래서 이 부분(하드웨어)은 정확하게 설명드리긴 어렵겠지만, 어찌되었든 제가 가지고 있는 경험을 바탕으로 설명드리겠습니다.</p>
+
+<p>자 그럼 시작해보겠습니다. </p>
+
+<h4 id="pixhawkecosystem">Pixhawk Eco-System</h4>
+
+<p>픽스호크를 사용해 드론을 만들어보기에 앞서, 간단하게나마 픽스호크의 운용 시스템을 알려드리겠습니다. 여기서 말한 운용 시스템이라고 하는 것은 픽스호크에서 제공하는 여러 종류의 사이트 및 프로그램 들이라고 보시면 될 것 같습니다. (구체적인 용어가 생각나지 않아서 운용 시스템이라고 제가 명한겁니다.)</p>
+
+<p>픽스호크에서 제공하는 운용 시스템은 크게 아래와 같이 나누어 볼 수 있을 것 같습니다.</p>
+
+<ol>
+<li>문서 시스템  </li>
+<li>코드 관리 시스템  </li>
+<li>Q&amp;A를 위한 그룹 시스템 </li>
+</ol>
+
+<p>뭐.. 다들 아시겠지만, 조금 거창하게 말씀드리는 것 같네요. 문서 시스템은 처음에는 <a href="https://pixhawk.ethz.ch/">pixhawk project</a>
+ 라는 사이트에서 시작했습니다. 이 사이트에 가보시면 초기 버전들을 보실 수 있습니다. 여러분 초기 버전이라고 구식이라 생각하지 마시길 바랍니다. 사실 코드에서 초기 버전은 그 프로그램의 처음 철학이 그대로 담겨 있기 마련입니다. 우리도 무슨일을 시작할때 처음에는 어떤 식으로 일을 시작하겠다고 하면서 생각을 정리하고 기본 골격을 잡죠. 하지만 시간이 지나면서 많은 풍파를 만나 처음 생각과는 달리 갈 수도 있지만, 큰 틀에서는 변함이 없도록 하고자 노력합니다. 코드 또한 마찬가지입니다. 처음에는 아직 구체화가 안되어 있고 뼈대만 있다보니,많은 부분이 부족하지만, 쉽게 그 뼈대를 볼 수 있다는 장점이 있습니다. 그래서 저는 주로 처음에 오픈소스를 바라볼때 초기 버전을 살펴봅니다. 왜냐하면 그 버전에는 그 코드의 철학이 담겨 있거든요. 그리고 코드량이 비교적 적기 때문에 눈에도 쉽게 들어오죠. 이런 이유 때문에 초기 버전을 잘 눈여겨 보시길 바랍니다. 초기 버전 개발 사이트에서 픽스호크 코드가 공개되고, 3DR Robotics사에서 제품을 만들면서 2차 개발 사이트인 <a href="https://pixhawk.org/">pixhawk</a>가 탄생합니다. 이 사이트 부터는 뭔가 구체적으로 바뀌지요. 내용도 매우 방대해지구요. 저도 사실 여기서부터 시작을 했습니다. 
+<amp-img src="http://localhost:2368/content/images/2016/04/pixhawk---.jpg" alt="pixhawk사이트" width="1781" height="965" layout="responsive"></amp-img>
+그런데 이 사이트는 링크를 제대로 해 놓지 않는 경우가 있다는 점을 유의하세요. 그래서 메뉴만 보고 들어가보시면 뭐.. 별거 없네... 라고 생각하실 수 있습니다. 제대로된 사이트맵이 없다는 점이 단점입니다. 그래서 꼭 오른쪽 상단의 search를 사용하세요. 그리고 한가지 더 팁!!! 아래쪽에 보시면 recent change라는게 보입니다. 이거를 잘 사용하시면 변화되고 있는 것을 볼수 있습니다. 어느 정도 이 사이트에 자주 들어오다 보면, 그 다음부터는 변화된 부분만 보면 된다는 거지요... 마치 코드의 업데이트된 부분만 살펴보는 것처럼 말이지요.. 이 사이트 내용은 아직도 어느정도 유효합니다. 필요시 여기에서 많이 찾아보시길 바랍니다. 아. 그리고 여기서 부터는 각각 시스템마다 사이트가 달라집니다. 예를 들면 지상국 시스템인 qgroundcontrol 이라든지, 통신 프로토콜인 mavlink 등등이 따로 떨어져나갔습니다. 여기서는 비행조종컴퓨터인 픽스호크에 국한하여 설명드립니다.</p>
+
+<p>이후 최근에는 <a href="http://dev.px4.io/">devpx4</a>라는 곳으로 바뀝니다. 바뀐지는 얼마 안된걸로 기억됩니다. 아마... 작년 하반기 정도? 이제 본격적으로 development guide라는 사이트로 운용되고, gitbook이라는 시스템으로 동작됩니다. 여기서부터는 사이트 맵이 확실해집니다.저는 그게 가장 좋더라구요. ^^ 어찌되었든 뭔가 체계적으로 변화했습니다. 하지만.. 아직 포팅이 완벽하게 되지 않은 느낌입니다. 참고로 이번 연재에서 설명드릴 드론만들기 정보는 두번째 사이트인 pixhawk에 있는 내용을 가지고 하고자 합니다. </p>
+
+<p>자. 그럼 지금까지 픽스호크 대표 사이트에 대해 설명드렸습니다. 정리하면 세 개의 사이트가 있고, 각각 가지고 있는 정보 및 의미를 말씀드렸으니, 참고하여 잘 사용하시길 바랍니다. 다시 말씀드리지만, 우리는 오픈소스를 가지고 비행조종컴퓨터를 분석하려고 합니다. 따라서 가장 중요한 것은 코드의 철학을 잘 이해하는 것입니다. 왜냐하면 오픈소스이다 보니 소소한 부분은 정~말 많이 바뀝니다. 이거 따라가다 보면 정신없습니다. 중요한 것은 큰 골격, 즉 뼈대를 잘 바라보아야 하고, 그러기 위해서는 이런 사이트들을 잘 보시면서 그런 뼈대를 빨리 잡아가야하는 것입니다. 옛것도 중요하다는 거.. 잊지 말아주세용..</p>
+
+<p>이제 두번째인 코드 관리 시스템입니다. 여러분들도 많이 아시겠지만, 최근 코드 관리, 특히 오픈소스는 github로 몰아가는 것 같습니다. 저도 처음에 오픈소스에 참여하지 않을때는 svn이나 mercury 같은걸 썼는데, github를 알고 나서는 여기에 올빵하고 있습니다. 매우 직관적이고, 잘 만들어져있거든요. 혹시 git 이나 github를 잘 모르시는 분들은 꼭.. 이들을 잘 숙지하시길 바랍니다. 아마 기회 될때 저도 설명하겠지만, 저보다 훨~~씬 잘 설명해주신 분들이 많아서 예습하시고 오시면 더욱 좋을 것 같네요. 어찌되었든... 코드 관리는 <a href="https://github.com/PX4/">px4github</a>에서 관리합니다. 그리고 이중 pixhawk firmware는 <a href="https://github.com/PX4/Firmware">https://github.com/PX4/Firmware</a> 사이트에서 관리하오니, 한번 들어가 보시길 간곡히 부탁드립니다. 
+<amp-img src="http://localhost:2368/content/images/2016/04/pixhawk----1.jpg" alt="pixhawk github" width="1526" height="884" layout="responsive"></amp-img>
+중요한 것은 픽스호크 코드 관리 시스템에 익숙해지셔야 한다는 것입니다. 이 시스템을 제대로 숙지하지 않으시면 분명 어제까지는 잘 날던 드론이 오늘은 잘 날지 못하는 이상한 현상이 나오게 됩니다. 거짓말 같아 보이시죠? 한번 이런 현상이 닥치면 아.. 그렇구나 하실 겁니다. 꼭 기억하실것은 오픈소스는 하루에도 몇번씩이나 코드가 바뀐다는 것입니다. 현재 내가 사용하는 코드가 언제 개발된 코드인지 확인할려면 꼭 확인해야겠지요? 그리고 이 코드에는 개발자용 버전, 안정된 버전 등등 많은 버전이 존재합니다. 따라서 꼭 확인하고 선택해야 합니다. 이 코드가 그 코드가 아닐 수 있다는 점 꼭 명심하시길 바랍니다.
+이 내용에 대해서는 앞으로도 자주 언급될 예정이니 오늘은 여기에서 마치겠습니다.</p>
+
+<p>마지막으로 Q&amp;A를 위한 사이트입니다. 픽스호크를 사용하시다보면 많은 질문들이 있겠지요. 이럴경우 사용하시는 사이트 입니다. 픽스호크에서는 구글 그룹스의 <a href="https://groups.google.com/forum/#!forum/px4users">px4users</a>을 사용합니다. 여기에 가보시면 정말 많은 질문들이 있고 개발자들이 정말 빨리 답변을 해줍니다. 물론 해주지 않은 경우도 많이 있지만, 그래도 일단 문제점이 발생하면 여기에 질문을 던져보고 확인해보는게 빠릅니다. </p>
+
+<h4 id="letsdevelopdronewithpixhawk">Let's develop drone with Pixhawk</h4>
+
+<p>그럼 우선 모든것을 각설하고, 픽스호크를 사용해 드론을 한번 만들어보죠. 앞에서도 말씀드렸지만, 저는 컴퓨터 과학이 전공이어서 하드웨어는 정말 잘 모릅니다. 그래서 제 경험을 바탕으로 설명드릴거구요. 여기에서는 DJI-450을 기준으로 설명드리겠습니다. </p>
+
+<p>자 우선 픽스호크를 다시 한번 보시죠.
+<amp-img src="http://localhost:2368/content/images/2016/04/pixhawk-view.jpg" alt="pixhawk" width="450" height="450" layout="responsive"></amp-img>
+픽스호크는 앞면에 DF-13 타입 커넥터가 줄줄이 보이네요. 여기에 통신, GPS, safety button 등등을 꽂아야 합니다. 너무 작고 해서 처음에는 탈부착하기가 정말 힘듭니다. 그리고 여기에서 제공하는 케이블 외에 별도 케이블을 만들어 사용해보면 케이블에 스트레스가 가해지는 경우가 많아서 잘 끊어지기도 합니다. 저는 개인적으로 이런 형태가 픽스호크에서는 가장 맘에 들지 않더군요. 실제 비행시험을 해보면 이 부분 커넥터 연결이 잘 안되는 경우 때문에 시간 소비한 적이 한두번이 아니었습니다. 여러분은 저와 같은 실수를 범하지 않기 위해 왠만하면 정품 케이블을 이용하시고, 이 부분이 사람의 손에 잘 닿지 않는 곳에 놓아주시길 바랍니다. 
+그리고 왼쪽 옆면에 보면 12345,등 숫자가 적혀있는 부분이 보이실 겁니다. 이 부분은 PWM 신호를 주는 부분이라고 보시면 될 것 같습니다. 모터 신호도 이쪽에서 출력해주고요. RC도 이 부분에 연결합니다. 
+또 다른 옆면에는 micro USB 연결 부분이 보이네요. 이 부분은 펌웨어를 업데이트하거나, 디버깅할때 주로 사용합니다. 그리고 micro USB 옆에 보면 조그마한 구멍 보이시나요. 이 것은 리셋 버튼입니다. 사용하다가 문제 있으면 리셋하시면 됩니다. 
+참 그리고 DF13 커넥터 부분에 가운데 쯤에 동그라한 LED 점등 부분이 보이시나요. 이 부분은 상태 정보를 LED로 보여주는 부분인데 처음 보시면 정말 밝아 눈이 나빠질 정도입니다. 랩에서 단순히 시험하실 때에는 저는 여기에 테이프를 붙혀 밝기를 조절하면서 사용한답니다. 참고하시길... 그리고 이보다 더 자세한 것을 알고 싶으신 분은 <a href="https://pixhawk.org/modules/pixhawk">이곳</a>을 참고하세요. 핀 정보 부터 기타 정보까지 아주 상세하게 나와 있습니다. </p>
+
+<p>그럼 이제 각종 커넥터에 무엇을 꽂아 사용할지 알아보시죠. 다행히도 Jetrho Hazelhurst라는 분이 그림으로 잘 설명해두었더군요.
+<amp-img src="http://localhost:2368/content/images/2016/04/PixhawkQuad.jpg" alt="pixhawkconnect" width="1377" height="1837" layout="responsive"></amp-img>
+이제 어느정도 눈에 들어오시는지요. 이 그림에서 Buzzer라는 게 있는데 상당히 시끄럽습니다. 필요없으시면 굳이 사용하지 않으셔도 됩니다. 그 외 나머지는 꼭 있어야 할 것들만 있어보입니다. 참. 3DR Robotics사에서 통신용으로 별도의 모듈을 팔긴하는데 915 MHz와 433 MHz만 존재합니다. 불행히도 우리나라에서는 둘 다 사용하지 못하니 다른 것을 사용하시길 바랍니다. 기본적으로 시리얼 통신이니 2.4GHz의 지그비를 사용하시는게 좋을 것 같습니다.</p>
+
+<p>연결 부위는 이렇게 하시면 되고, 실제 드론에 탑재하는 방법을 살펴보겠습니다. 이 부분 또한 Pixhawk에서 제공하는 <a href="https://pixhawk.org/platforms/multicopters/dji_flamewheel_450?s%5B%5D=dji&amp;s%5B%5D=450">DJI-450</a>을 활용하였습니다. 이 사이트에 가보시면 자세히 설명되어 있으니 참고하셔서 개발하시면 됩니다. 물론 다른 형태의 드론으로도 사용 가능합니다. 참고로 이번 연재에서는 실제 드론을 날려서 하지는 않고, 주로 시뮬레이션에서 동작을 하면서 코드를 분석할려고 합니다. 따라서 준비물은 노트북 그리고 가능하면 pixhawk 하나 정도면 끝입니다.</p>
+
+<p>자 여기까지 잘 따라오셨나요? 이제 비행조종컴퓨터에 펌웨어를 올릴 차례입니다. 펌웨어는 어떻게 올리냐구요? 이번에는 소스코드를 사용하지 않고 단순하게 <a href="http://www.qgroundcontrol.org/">qgroundcontrol</a>을 사용할려고 합니다. qgroundcontrol은 pixhawk 팀에서 개발한 지상국 시스템으로 QT로 개발되었습니다. 따라서 윈도우/리눅스/맥 OS 등등에서 모두 활용가능합니다. 심지어 안드로이드까지... 우선 저는 리눅스에서 개발을 하니 리눅스 환경을 가정하고 설명드립니다. <a href="http://www.qgroundcontrol.org/downloads">다운로드</a>사이트에 가보시면 
+최신 qgroundcontrol을 받을 수 있습니다. 다운로드된 파일의 압축을 푸시면 하나의 스크립트 파일이 있을 것입니다. 단순하게 이것을 실행하시면 됩니다. </p>
+
+<pre><code class="language- ">&gt;&gt; ls
+Qt  flightgear  qgroundcontrol  qgroundcontrol-start.sh  
+&gt;&gt; ./qgroundcontrol-start.sh  
+</code></pre>
+
+<p>그럼 이런 화면이 나옵니다. 
+<amp-img src="http://localhost:2368/content/images/2016/04/qgroundcontrol.jpg" alt="qgroundcontrol" width="1849" height="1053" layout="responsive"></amp-img>
+여기에서 설정 부분 (메뉴 아이콘에서 두번째)을 누르시면 펌웨어 다운로드 부분이 보입니다.
+<amp-img src="http://localhost:2368/content/images/2016/04/qgroundcontrol_setting.jpg" alt="qgroundcontrol_setting" width="1852" height="1058" layout="responsive"></amp-img>
+그런 다음 픽스호크를 연결하면 자동으로 펌웨어를 설치합니다.
+<amp-img src="http://localhost:2368/content/images/2016/04/qgroundcontrol_install.jpg" alt="qgourndcontrol_install" width="1851" height="1018" layout="responsive"></amp-img></p>
+
+<p>여기까지 따라오셨나요? 아마 쉬운 내용이어서 대부분 다들 아실 것 같지만, 처음에도 말씀드렸다시피 본 강좌는 생초보도도 따라올 수 있게 하기 위해서 만들어졌으니 아시는 내용이시면 스킵하셔도 됩니다.</p>
+
+<p>자 여기까지 하셨으면 이제 아마 아래와 같이 여러 메뉴가 나와있을 것 같군요.
+<amp-img src="http://localhost:2368/content/images/2016/04/qgroundcontrol_step1.jpg" alt="qgroundcontrol_step1" width="1847" height="1017" layout="responsive"></amp-img>
+아마 여러분들은 Sensors쪽도 빨간색일 것 같습니다. 여기가 빨간색인 것은 센서 보정작업이 안되어 있기 때문입니다. 나중에 보정작업을 해주셔야 합니다. 아마 여러분 눈을 자꾸 거슬리는 빨간불 LED가 깜빡거릴것입니다. 이것은 아직 비행 준비가 안되어 있다는 것을 의미합니다. </p>
+
+<p>이제 비행 기체를 선택해보겠습니다.
+<amp-img src="http://localhost:2368/content/images/2016/04/qgc_step2.png" alt="qgroundcontrol_step2" width="1849" height="1017" layout="responsive"></amp-img>
+저희는 DJI-F450 기체를 사용하니 DJI-F450을 선택하면 되겠지요? 사실 이것을 선택하는 이유는 각 기체마다 PID 게인값이라든지 등등의 특성이 서로 틀리기 때문입니다. 만약 직접 개발한 기체라면 그런 게인들을 직접 찾으셔야겠지요. 그래서 pixhawk에서는 이런 게인값들을 각 기체마다 스크립트 파일로 미리 만들어 놓고 Airframe에서 선택하도록 하는 것입니다. 결국 픽스호크는 파라미터 리스트를 만들어 놓고 이 값들을 조정하여 기체에 특성에 맞도록 하는 것이지요. 아래 그림이 바로 그런 파라미터 값을 직접 손보는 곳입니다.</p>
+
+<p><amp-img src="http://localhost:2368/content/images/2016/04/qgc_step3.png" alt="qgroundcontrol_step3" width="1849" height="1052" layout="responsive"></amp-img>
+아래 보니 System이라는 노란색으로 된 부분에 SYS_AUTOSTART라는게 보이나요? 여기에 4011로 적혀있군요. 4011이 나타내는 게 바로 DJI-F450이라는 것입니다. 
+실제 4011 스크립트에 적혀있는 것을 보면 아래와 같습니다.</p>
+
+<pre><code>#!nsh
+#
+# @name DJI Flame Wheel F450
+#
+# @type Quadrotor x
+#
+# @output AUX1 feed-through of RC AUX1 channel
+# @output AUX2 feed-through of RC AUX2 channel
+# @output AUX3 feed-through of RC AUX3 channel
+#
+# @maintainer Lorenz Meier &lt;lorenz@px4.io&gt;
+#
+
+sh /etc/init.d/4001_quad_x
+
+if [ $AUTOCNF == yes ]  
+then  
+    param set MC_ROLL_P 7.0
+    param set MC_ROLLRATE_P 0.15
+    param set MC_ROLLRATE_I 0.05
+    param set MC_ROLLRATE_D 0.003
+    param set MC_PITCH_P 7.0
+    param set MC_PITCHRATE_P 0.15
+    param set MC_PITCHRATE_I 0.05
+    param set MC_PITCHRATE_D 0.003
+    param set MC_YAW_P 2.8
+    param set MC_YAWRATE_P 0.3
+    param set MC_YAWRATE_I 0.1
+    param set MC_YAWRATE_D 0.0
+    # DJI ESCs do not support calibration and need a higher min
+    param set PWM_MIN 1230
+fi  
+</code></pre>
+
+<p>결국은 스크립트이다~ 라는것입니다. </p>
+
+<p>여기까지 하셨으면 앞에서 말씀드린 센서 보정을 하시고, RC 설정하시면 끝입니다. 물론 베터리 셀 갯수 등 설정하는것도 잘 맞추어야 하구요. </p>
+
+<p>그런 다음 천천히 한번 날려보시면 될 것 같습니다. 처음에는 프로펠러 없이 RC로 roll/pitch/yaw를 체크해보시길 바랍니다. 프로펠러도 없이 어떻게 하냐구요? 전문가분들이 하시는 거 보니깐, 테이프를 모터에다가 붙이시고, 돌려봐서 RPM 변화량을 보시더군요. 한번 해보시길 권장합니다. </p>
+
+<p>글을 쓰다보니 실제 드론 만드는 사진은 전혀없네요.ㅜㅜ 제목을 잘못 정한 듯.. 하지만, 제가 말씀드리고자 했던 부분은 어느정도 한것 같습니다. 많은 이해 부탁드립니다.</p>
+
+<h4 id="epilogue">Epilogue</h4>
+
+<p>최근 많은 분들이 제가 쓴 글을 보시고 문의도 해주시고, 응원도 해주셔서 개인적으로 너무 감사드리고 있습니다. 한분한분 정성껏 답변을 다 못해드려 죄송하구요. 아무쪼록 조금이나마 도움이 되드리기 위해 열심히 작성해 보겠습니다.</p>
+
+<p>업데이트 속도가 늦더라도 이해해 주시길 바랍니다. (생업이 바빠서.. ㅠㅠ)</p>
+
+            </section>
+
+        </article>
+    </main>
+    <footer class="site-footer clearfix">
+        <section class="copyright"><a href="../../">Program Lock</a> © 2017</section>
+        <section class="poweredby">Proudly published with <a href="https://ghost.org">Ghost</a></section>
+    </footer>
+</body>

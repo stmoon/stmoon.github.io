@@ -1,0 +1,1039 @@
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Parameter  변경하기</title>
+    <meta name="description" content="">
+
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+
+    <link rel="shortcut icon" href="../../favicon.ico">
+
+    <link rel="canonical" href="../index.html">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta property="og:site_name" content="Program Lock">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Parameter  변경하기">
+    <meta property="og:description" content="Introduction 안녕하세요 여러분. 정말 오랫만에 포스팅하는 것 같습니다. 최근 제가 하고 있는 과제와 관련하여 일들이 많아 포스팅을 하지 못했습니다 ㅜㅜ. 많은 양해 부탁드립니다. 오늘은 조금 간단한 부분에 대해 다루어보고자 합니다. 오늘 말씀 드릴 것은 바로 설정값 변경 부분입니다. 자 그럼 본격적으로 시작해 보겠습니다. What is Parameter Pixhawk의 가장 큰 특징">
+    <meta property="og:url" content="http://localhost:2368/parameter-byeongyeonghagi/">
+    <meta property="article:published_time" content="2016-08-05T22:13:49.000Z">
+    <meta property="article:modified_time" content="2016-08-06T02:36:35.000Z">
+    <meta property="article:tag" content="pixhawk">
+    
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Parameter  변경하기">
+    <meta name="twitter:description" content="Introduction 안녕하세요 여러분. 정말 오랫만에 포스팅하는 것 같습니다. 최근 제가 하고 있는 과제와 관련하여 일들이 많아 포스팅을 하지 못했습니다 ㅜㅜ. 많은 양해 부탁드립니다. 오늘은 조금 간단한 부분에 대해 다루어보고자 합니다. 오늘 말씀 드릴 것은 바로 설정값 변경 부분입니다. 자 그럼 본격적으로 시작해 보겠습니다. What is Parameter Pixhawk의 가장 큰 특징">
+    <meta name="twitter:url" content="http://localhost:2368/parameter-byeongyeonghagi/">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="SungTae Moon">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="pixhawk">
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Program Lock",
+        "logo": "http://localhost:2368/ghost/img/ghosticon.jpg"
+    },
+    "author": {
+        "@type": "Person",
+        "name": "SungTae Moon",
+        "image": {
+            "@type": "ImageObject",
+            "url": "http://localhost:2368/content/images/2016/03/140901_drone_writer_hei-100x113-1.jpg",
+            "width": 100,
+            "height": 113
+        },
+        "url": "http://localhost:2368/author/sungtae/",
+        "sameAs": []
+    },
+    "headline": "Parameter  변경하기",
+    "url": "http://localhost:2368/parameter-byeongyeonghagi/",
+    "datePublished": "2016-08-05T22:13:49.000Z",
+    "dateModified": "2016-08-06T02:36:35.000Z",
+    "keywords": "pixhawk",
+    "description": "Introduction 안녕하세요 여러분. 정말 오랫만에 포스팅하는 것 같습니다. 최근 제가 하고 있는 과제와 관련하여 일들이 많아 포스팅을 하지 못했습니다 ㅜㅜ. 많은 양해 부탁드립니다. 오늘은 조금 간단한 부분에 대해 다루어보고자 합니다. 오늘 말씀 드릴 것은 바로 설정값 변경 부분입니다. 자 그럼 본격적으로 시작해 보겠습니다. What is Parameter Pixhawk의 가장 큰 특징",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "http://localhost:2368"
+    }
+}
+    </script>
+
+    <meta name="generator" content="Ghost 0.11">
+    <link rel="alternate" type="application/rss+xml" title="Program Lock" href="../../rss/index.html">
+
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic%7COpen+Sans:700,600,400">
+    <style amp-custom>
+        /* ==========================================================================
+           Table of Contents
+           ========================================================================== */
+
+        /*
+
+            0. Normalize
+            1. General
+            2. Utilities
+            3. AMP Post
+            4. Footer
+
+        */
+
+        /* ==========================================================================
+           0. normalize.css v3.0.3 | MIT License | git.io/normalize | (minified)
+           ========================================================================== */
+
+        html {
+            font-family: sans-serif;
+
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+        }
+        body {
+            margin: 0;
+        }
+        article,
+        aside,
+        details,
+        figcaption,
+        figure,
+        footer,
+        header,
+        main,
+        menu,
+        nav,
+        section,
+        summary {
+            display: block;
+        }
+        audio,
+        canvas,
+        progress,
+        video {
+            display: inline-block;
+            vertical-align: baseline;
+        }
+        audio:not([controls]) {
+            display: none;
+            height: 0;
+        }
+        [hidden],
+        template {
+            display: none;
+        }
+        a {
+            background-color: transparent;
+        }
+        a:active,
+        a:hover {
+            outline: 0;
+        }
+        abbr[title] {
+            border-bottom: 1px dotted;
+        }
+        b,
+        strong {
+            font-weight: bold;
+        }
+        dfn {
+            font-style: italic;
+        }
+        h1 {
+            margin: 0.67em 0;
+            font-size: 2em;
+        }
+        mark {
+            background: #ff0;
+            color: #000;
+        }
+        small {
+            font-size: 80%;
+        }
+        sub,
+        sup {
+            position: relative;
+            vertical-align: baseline;
+            font-size: 75%;
+            line-height: 0;
+        }
+        sup {
+            top: -0.5em;
+        }
+        sub {
+            bottom: -0.25em;
+        }
+        img {
+            border: 0;
+        }
+        amp-img {
+            border: 0;
+        }
+        svg:not(:root) {
+            overflow: hidden;
+        }
+        figure {
+            margin: 1em 40px;
+        }
+        hr {
+            box-sizing: content-box;
+            height: 0;
+        }
+        pre {
+            overflow: auto;
+        }
+        code,
+        kbd,
+        pre,
+        samp {
+            font-family: monospace, monospace;
+            font-size: 1em;
+        }
+        button,
+        input,
+        optgroup,
+        select,
+        textarea {
+            margin: 0;
+            color: inherit;
+            font: inherit;
+        }
+        button {
+            overflow: visible;
+        }
+        button,
+        select {
+            text-transform: none;
+        }
+        button,
+        html input[type="button"],
+        input[type="reset"],
+        input[type="submit"] {
+            cursor: pointer;
+
+            -webkit-appearance: button;
+        }
+        button[disabled],
+        html input[disabled] {
+            cursor: default;
+        }
+        button::-moz-focus-inner,
+        input::-moz-focus-inner {
+            padding: 0;
+            border: 0;
+        }
+        input {
+            line-height: normal;
+        }
+        input[type="checkbox"],
+        input[type="radio"] {
+            box-sizing: border-box;
+            padding: 0;
+        }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            height: auto;
+        }
+        input[type="search"] {
+            -webkit-appearance: textfield;
+        }
+        input[type="search"]::-webkit-search-cancel-button,
+        input[type="search"]::-webkit-search-decoration {
+            -webkit-appearance: none;
+        }
+        fieldset {
+            margin: 0 2px;
+            padding: 0.35em 0.625em 0.75em;
+            border: 1px solid #c0c0c0;
+        }
+        legend {
+            padding: 0;
+            border: 0;
+        }
+        textarea {
+            overflow: auto;
+        }
+        optgroup {
+            font-weight: bold;
+        }
+        table {
+            border-spacing: 0;
+            border-collapse: collapse;
+        }
+        td,
+        th {
+            padding: 0;
+        }
+
+
+        /* ==========================================================================
+           1. General - Setting up some base styles
+           ========================================================================== */
+
+        html {
+            max-height: 100%;
+            height: 100%;
+            font-size: 62.5%;
+
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        }
+
+        body {
+            max-height: 100%;
+            height: 100%;
+            color: #3a4145;
+            background: #f4f8fb;
+            letter-spacing: 0.01rem;
+            font-family: "Merriweather", serif;
+            font-size: 1.8rem;
+            line-height: 1.75em;
+            text-rendering: geometricPrecision;
+
+            -webkit-font-feature-settings: "kern" 1;
+            -moz-font-feature-settings: "kern" 1;
+            -o-font-feature-settings: "kern" 1;
+        }
+
+        ::-moz-selection {
+            background: #d6edff;
+        }
+
+        ::selection {
+            background: #d6edff;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            margin: 0 0 0.3em 0;
+            color: #2e2e2e;
+            font-family: "Open Sans", sans-serif;
+            line-height: 1.15em;
+            text-rendering: geometricPrecision;
+
+            -webkit-font-feature-settings: "dlig" 1, "liga" 1, "lnum" 1, "kern" 1;
+            -moz-font-feature-settings: "dlig" 1, "liga" 1, "lnum" 1, "kern" 1;
+            -o-font-feature-settings: "dlig" 1, "liga" 1, "lnum" 1, "kern" 1;
+        }
+
+        h1 {
+            text-indent: -2px;
+            letter-spacing: -1px;
+            font-size: 2.6rem;
+        }
+
+        h2 {
+            letter-spacing: 0;
+            font-size: 2.4rem;
+        }
+
+        h3 {
+            letter-spacing: -0.6px;
+            font-size: 2.1rem;
+        }
+
+        h4 {
+            font-size: 1.9rem;
+        }
+
+        h5 {
+            font-size: 1.8rem;
+        }
+
+        h6 {
+            font-size: 1.8rem;
+        }
+
+        a {
+            color: #4a4a4a;
+        }
+
+        a:hover {
+            color: #111;
+        }
+
+        p,
+        ul,
+        ol,
+        dl {
+            margin: 0 0 2.5rem 0;
+            font-size: 1.5rem;
+            text-rendering: geometricPrecision;
+
+            -webkit-font-feature-settings: "liga" 1, "onum" 1, "kern" 1;
+            -moz-font-feature-settings: "liga" 1, "onum" 1, "kern" 1;
+            -o-font-feature-settings: "liga" 1, "onum" 1, "kern" 1;
+        }
+
+        ol,
+        ul {
+            padding-left: 2em;
+        }
+
+        ol ol,
+        ul ul,
+        ul ol,
+        ol ul {
+            margin: 0 0 0.4em 0;
+            padding-left: 2em;
+        }
+
+        dl dt {
+            float: left;
+            clear: left;
+            overflow: hidden;
+            margin-bottom: 1em;
+            width: 180px;
+            text-align: right;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-weight: 700;
+        }
+
+        dl dd {
+            margin-bottom: 1em;
+            margin-left: 200px;
+        }
+
+        li {
+            margin: 0.4em 0;
+        }
+
+        li li {
+            margin: 0;
+        }
+
+        hr {
+            display: block;
+            margin: 1.75em 0;
+            padding: 0;
+            height: 1px;
+            border: 0;
+            border-top: #efefef 1px solid;
+        }
+
+        blockquote {
+            box-sizing: border-box;
+            margin: 1.75em 0 1.75em 0;
+            padding: 0 0 0 1.75em;
+            border-left: #4a4a4a 0.4em solid;
+
+            -moz-box-sizing: border-box;
+        }
+
+        blockquote p {
+            margin: 0.8em 0;
+            font-style: italic;
+        }
+
+        blockquote small {
+            display: inline-block;
+            margin: 0.8em 0 0.8em 1.5em;
+            color: #ccc;
+            font-size: 0.9em;
+        }
+
+        blockquote small:before {
+            content: "\2014 \00A0";
+        }
+
+        blockquote cite {
+            font-weight: 700;
+        }
+
+        blockquote cite a {
+            font-weight: normal;
+        }
+
+        mark {
+            background-color: #fdffb6;
+        }
+
+        code,
+        tt {
+            padding: 1px 3px;
+            border: #e3edf3 1px solid;
+            background: #f7fafb;
+            border-radius: 2px;
+            white-space: pre-wrap;
+            font-family: Inconsolata, monospace, sans-serif;
+            font-size: 0.85em;
+            font-feature-settings: "liga" 0;
+
+            -webkit-font-feature-settings: "liga" 0;
+            -moz-font-feature-settings: "liga" 0;
+        }
+
+        pre {
+            overflow: auto;
+            box-sizing: border-box;
+            margin: 0 0 1.75em 0;
+            padding: 10px;
+            width: 100%;
+            border: #e3edf3 1px solid;
+            background: #f7fafb;
+            border-radius: 3px;
+            white-space: pre;
+            font-family: Inconsolata, monospace, sans-serif;
+            font-size: 0.9em;
+
+            -moz-box-sizing: border-box;
+        }
+
+        pre code,
+        pre tt {
+            padding: 0;
+            border: none;
+            background: transparent;
+            white-space: pre-wrap;
+            font-size: inherit;
+        }
+
+        kbd {
+            display: inline-block;
+            margin-bottom: 0.4em;
+            padding: 1px 8px;
+            border: #ccc 1px solid;
+            background: #f4f4f4;
+            border-radius: 4px;
+            box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2),
+            0 1px 0 0 #fff inset;
+            color: #666;
+            text-shadow: #fff 0 1px 0;
+            font-size: 0.9em;
+            font-weight: 700;
+        }
+
+        table {
+            box-sizing: border-box;
+            margin: 1.75em 0;
+            max-width: 100%;
+            width: 100%;
+            background-color: transparent;
+
+            -moz-box-sizing: border-box;
+        }
+
+        table th,
+        table td {
+            padding: 8px;
+            border-top: #efefef 1px solid;
+            vertical-align: top;
+            text-align: left;
+            line-height: 20px;
+        }
+
+        table th {
+            color: #000;
+        }
+
+        table caption + thead tr:first-child th,
+        table caption + thead tr:first-child td,
+        table colgroup + thead tr:first-child th,
+        table colgroup + thead tr:first-child td,
+        table thead:first-child tr:first-child th,
+        table thead:first-child tr:first-child td {
+            border-top: 0;
+        }
+
+        table tbody + tbody {
+            border-top: #efefef 2px solid;
+        }
+
+        table table table {
+            background-color: #fff;
+        }
+
+        table tbody > tr:nth-child(odd) > td,
+        table tbody > tr:nth-child(odd) > th {
+            background-color: #f6f6f6;
+        }
+
+        table.plain tbody > tr:nth-child(odd) > td,
+        table.plain tbody > tr:nth-child(odd) > th {
+            background: transparent;
+        }
+
+        iframe,
+        amp-iframe,
+        .fluid-width-video-wrapper {
+            display: block;
+            margin: 1.75em 0;
+        }
+
+        /* When a video is inside the fitvids wrapper, drop the
+        margin on the iframe, cause it breaks stuff. */
+        .fluid-width-video-wrapper iframe,
+        .fluid-width-video-wrapper amp-iframe {
+            margin: 0;
+        }
+
+        textarea,
+        select,
+        input {
+            margin: 0 0 5px 0;
+            padding: 6px 9px;
+            width: 260px;
+            outline: 0;
+            border: #e7eef2 1px solid;
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: none;
+            font-family: "Open Sans", sans-serif;
+            font-size: 1.6rem;
+            line-height: 1.4em;
+            font-weight: 100;
+
+            -webkit-appearance: none;
+        }
+
+        textarea {
+            min-width: 250px;
+            min-height: 80px;
+            max-width: 340px;
+            width: 100%;
+            height: auto;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="search"]:focus,
+        input[type="tel"]:focus,
+        input[type="url"]:focus,
+        input[type="password"]:focus,
+        input[type="number"]:focus,
+        input[type="date"]:focus,
+        input[type="month"]:focus,
+        input[type="week"]:focus,
+        input[type="time"]:focus,
+        input[type="datetime"]:focus,
+        input[type="datetime-local"]:focus,
+        textarea:focus {
+            outline: none;
+            outline-width: 0;
+            border: #bbc7cc 1px solid;
+            background: #fff;
+        }
+
+        select {
+            width: 270px;
+            height: 30px;
+            line-height: 30px;
+        }
+
+        /* ==========================================================================
+           2. Utilities
+           ========================================================================== */
+
+        /* Clears shit */
+        .clearfix:before,
+        .clearfix:after {
+            content: " ";
+            display: table;
+        }
+        .clearfix:after {
+            clear: both;
+        }
+        .clearfix {
+            zoom: 1;
+        }
+
+        /* ==========================================================================
+           3. AMP Post
+           ========================================================================== */
+
+
+
+        .main-header {
+            position: relative;
+            display: table;
+            overflow: hidden;
+            box-sizing: border-box;
+            width: 100%;
+            height: 50px;
+            background: #5ba4e5 no-repeat center center;
+            background-size: cover;
+            text-align: left;
+
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+        }
+
+        .content {
+            background: #fff;
+            padding-top: 15px;
+        }
+        .blog-title,
+        .content {
+            margin: auto;
+            max-width: 600px;
+        }
+
+        .blog-title a {
+            display: block;
+            padding-right: 16px;
+            padding-left: 16px;
+            height: 50px;
+            color: #fff;
+            text-decoration: none;
+            font-family: "Open Sans", sans-serif;
+            font-size: 16px;
+            line-height: 50px;
+            font-weight: 600;
+        }
+
+        .post {
+            position: relative;
+            margin-top: 0;
+            margin-right: 16px;
+            margin-left: 16px;
+            padding-bottom: 0;
+            max-width: 100%;
+            border-bottom: #ebf2f6 1px solid;
+            word-wrap: break-word;
+            font-size: 0.95em;
+            line-height: 1.65em;
+        }
+
+        .post-header {
+            margin-bottom: 1rem;
+        }
+
+        .post-title {
+            margin-bottom: 0;
+        }
+
+        .post-title a {
+            text-decoration: none;
+        }
+
+        .post-meta {
+            display: block;
+            margin: 3px 0 0 0;
+            color: #9eabb3;
+            font-family: "Open Sans", sans-serif;
+            font-size: 1.3rem;
+            line-height: 2.2rem;
+        }
+
+        .post-meta a {
+            color: #9eabb3;
+            text-decoration: none;
+        }
+
+        .post-meta a:hover {
+            text-decoration: underline;
+        }
+
+        .post-meta .author {
+            margin: 0;
+            font-size: 1.3rem;
+            line-height: 1.3em;
+        }
+
+        .post-date {
+            display: inline-block;
+            text-transform: uppercase;
+            white-space: nowrap;
+            font-size: 1.2rem;
+            line-height: 1.2em;
+        }
+
+        .post-image {
+            margin: 0;
+            padding-top: 3rem;
+            padding-bottom: 30px;
+            border-top: 1px #E8E8E8 solid;
+        }
+
+        /* Keep images centered, and allow images wider than the main
+           text column to break out. */
+        .post-content amp-img,
+        .post-content amp-anim {
+            /* Centers an image by (1) pushing its left edge to the
+               center of its container and (2) shifting the entire image
+               in the opposite direction by half its own width.
+               Works for images that are larger than their containers. */
+            position: relative;
+            left: 50%;
+            display: block;
+            padding: 0;
+            min-width: 0;
+            max-width: 112%; /* fallback when calc doesn't work */
+            width: calc(100% + 32px); /* expand with to image + margins */
+            height: auto;
+            transform: translateX(-50%);
+
+            -webkit-transform: translateX(-50%); /* for Safari and iOS */
+            -ms-transform: translateX(-50%); /* for IE9 */
+        }
+
+        .footnotes {
+            font-size: 1.3rem;
+            line-height: 1.6em;
+            font-style: italic;
+        }
+
+        .footnotes li {
+            margin: 0.6rem 0;
+        }
+
+        .footnotes p {
+            margin: 0;
+        }
+
+        .footnotes p a:last-child {
+            text-decoration: none;
+        }
+
+        /* ==========================================================================
+           4. Footer - The bottom the AMP Post
+           ========================================================================== */
+
+        .site-footer {
+            position: relative;
+            margin: 0 auto 20px auto;
+            padding: 1rem 15px;
+            max-width: 600px;
+            color: rgba(0,0,0,0.5);
+            font-family: "Open Sans", sans-serif;
+            font-size: 1.1rem;
+            line-height: 1.75em;
+        }
+
+        .site-footer a {
+            color: rgba(0,0,0,0.5);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .site-footer a:hover {
+            border-bottom: #bbc7cc 1px solid;
+        }
+
+        .poweredby {
+            display: block;
+            float: right;
+            width: 45%;
+            text-align: right;
+        }
+
+        .copyright {
+            display: block;
+            float: left;
+            width: 45%;
+        }
+    </style>
+
+    <style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
+    <script async src="https://cdn.ampproject.org/v0.js"></script>
+
+    
+
+</head>
+
+<body class="amp-template">
+    <header class="main-header">
+        <nav class="blog-title">
+            <a href="../../">Program Lock</a>
+        </nav>
+    </header>
+
+    <main class="content" role="main">
+        <article class="post">
+
+            <header class="post-header">
+                <h1 class="post-title">Parameter  변경하기</h1>
+                <section class="post-meta">
+                    <p class="author">by <a href="../../author/sungtae/">SungTae Moon</a></p>
+                    <time class="post-date" datetime="2016-08-05">2016-08-05</time>
+                </section>
+            </header>
+            <section class="post-content">
+
+                <h5 id="introduction">Introduction</h5>
+
+<p>안녕하세요 여러분. 정말 오랫만에 포스팅하는 것 같습니다. 최근 제가 하고 있는 과제와 관련하여 일들이 많아 포스팅을 하지 못했습니다 ㅜㅜ. 많은 양해 부탁드립니다. 오늘은 조금 간단한 부분에 대해 다루어보고자 합니다. 오늘 말씀 드릴 것은 바로 설정값 변경 부분입니다. 자 그럼 본격적으로 시작해 보겠습니다.</p>
+
+<h5 id="whatisparameter">What is Parameter</h5>
+
+<p>Pixhawk의 가장 큰 특징 중 하나는 사용자가 쉽게 설정값을 변경할 수 있도록 하는 게 아닐까 싶습니다. 전에도 말씀드렸지만, Pixhawk를 개발한 Lorenz Meier는 ROS의 영향을 많이 받은것 같습니다. ROS도 마찬가지로 설정값을 XML 형태로 쉽게 변경할 수 있도록 해두었거든요. ROS와 마찬가지로 Pixhawk도 그런 특징이 있는 것입니다. 이 점은 추후에 튜닝 작업할 때 매우 유용합니다. 대부분 그러는 것은 아니지만, 일반적으로 실시간으로 게인 값들이 반영이 되기 때문입니다.</p>
+
+<h5 id="howtochangeparameter">How to change parameter</h5>
+
+<p>파라미터를 변경하는 것은 매우 쉽습니다. 우선 QGroundControl 프로그램에서 Setup의 "Parameters" 버튼을 클릭하여 변경하면 됩니다. 
+<amp-img src="http://localhost:2368/content/images/2016/08/PX4Parameters.jpg" alt="Image 수정" width="2108" height="1434" layout="responsive"></amp-img>
+잠깐 살펴보면, 그룹별로 파라미터 값들이 나누어져있는게 보입니다. 그리고 각 파라미터는 숫자값 혹은 문자가 적혀 있는게 보이는 군요. 여러분은 Pixhawk를 통해 이 많은 파라미터를 변경함으로써 우리에게 맞는 기체로 튜닝이 가능해집니다. 아.. 참고로 그룹별로 파라미터가 나누어져 있는데 이 그룹은 무엇을 의미할까요? 여러분 아시겠나요? 네 뭐 100% 그런것은 아니지만, 모듈별로 파라미터가 나누어져 있는 것이지요. 전에 말씀드린것 처럼 Pixhawk는 uORB 방식을 통해 모듈별로 나누어져 있다고 했지요? 그 모듈을 말하는 것입니다. 즉, 모듈별로 나누어져 있으니, 여러분이 필요한 그룹을 쉽게 찾을 수 있을 것입니다.</p>
+
+<p>자.. 여기까지 따라오셨다면, 파라미터 수정은 정말 쉬운것임을 알 수 있지요. QGroundControl만 있으면 되기 때문입니다. (물론 나중에 중요한 것은 파라미터 값을 얼마나 잘 튜닝하냐이지만요.) 여기서 잠깐.. 몇가지 팁을 드릴게요. 여러분께서 Pixhawk로 작업을 하시게 되면 아마 이 파라미터 값들을 정말 많이 수정하시게 됩니다. 그렇게 되면 아무래도 파라미터 값들을 저장해 놓는게 좋습니다. 파라미터를 이렇게 바꾸었더니 잘되더라, 못되더라 등등이 이지요. 하지만, 워낙 파라미터가 많다보니 하나하나 다 수기로 적어 놓는 것은 힘듭니다. 그래서 QGroundControl의 상단 오른쪽에 보시면 "Tools"라는게 보이실 겁니다. </p>
+
+<p><amp-img src="http://localhost:2368/content/images/2016/08/02_parameters_tools_01.png" alt width="770" height="134" layout="responsive"></amp-img></p>
+
+<p>여기에 보시면 "Save to file" 이라는 메뉴가 보이실 건데, 이걸 누르시면 Pixhawk에 있는 파라미터들을 모조리 긁어 파일로 만들어줍니다. 그 파일을 보시면 아시겠지만, 정말 많은 파라미터들이 들어 있는 것을 보실 수 있습니다. 잠깐 살펴 볼까요?</p>
+
+<pre><code># Onboard parameters for vehicle 1
+#
+# MAV ID  COMPONENT ID  PARAM NAME  VALUE (FLOAT)
+1       1       ATT_ACC_COMP    1       6  
+1       1       ATT_BIAS_MAX    0.050000000745058060    9  
+1       1       ATT_EXT_HDG_M   0       6  
+1       1       ATT_MAG_DECL    0.000000000000000000    9  
+</code></pre>
+
+<p>Pixhawk는 모든 게 MAV ID와 COMPONENT ID에 의해 구분됩니다. 이 정보는 매우 중요한 정보니 꼭 기억하시고 있으셔야 합니다. 기본값은 1이지만, 여러분께서 한대 이상의 드론을 가지고 계시다면, 필히 MAV ID를 다르게 가져가실 것을 당부드립니다. 다음은 PARAM NAME 입니다. 앞에서 보셨던 파라미터 이름이 됩니다. 다음은 VALUE입니다. 옆에 (FLOAT)이라고 써져있군요. 그런데 가만히 보면 VALUE에 해당되는 값이 있고 바로 옆에 또 하나의 값이 있군요. VALUE는 4번째 열을 나타내고 마지막인 5번째 열은 그 값의 TYPE을 나타냅니다. <br>
+예를 들어, ATT_ACC_COMP의 경우 VALUE는 1이고 TYPE은 6이라는 뜻입니다. 그러고 보니 VALUE는 값이니깐 잘 알겠고, TYPE은 뭘까요? TYPE은 VALUE의 값의 형태입니다. 정수값인지, 실수값인지 등등을 말합니다. 참고로 여기서 6은 정수 타입이고 9는 실수 타입이라고 생각하시면 됩니다.</p>
+
+<p>여기까지 잘 따라오셨나요? 이제 우리는 잘못하여 파라미터 값이 엉터리로 들어가거나 초기화 되는 경우 다시 복원할 수 있게 된것이지요. 복원은 어떻게 하냐구요? 당연히 "Load from file" 메뉴를 통해 할 수 있지요. 여기서 한가지 더.. 만약 우리에게 두 대의 드론이 있어서 MAV ID를 1과 2로 구분지어 놓았다고 하지요. (이렇게 하신 분은 정말 잘 따라오고 계신겁니다.) 그런데 생각해 보니 같은 형태의 드론인 경우, 굳이 1번에서 튜닝하여 겨우 획득한 파라미터 값을 2번에 그대로 복사하면 되겠군요. 이런 경우 어떻게 하면 될까요? 당연히 "Save to file"을 해서 "Load from file"을 하면 되겠지요? 하지만? 그렇게 하면 안됩니다. 왜냐.. MAV ID가 틀리기 때문이지요. QGroundControl이 버전이 올라가면서 현재 나와있는 Ver 3.0에서는 안됩니다. 이런 경우 MAV ID를 맞추어야 합니다. 어떻게 맞추면 될까요? MAV ID 항목을 바꾸고자 하는 MAV ID로 바꾸는 거지요. 그렇게 해야 "Load from file"이 됩니다. 그리고 다 바꾸신 다음 MAV ID도 바꾸는 것 잊지마세요.</p>
+
+<p>여기까지도 잘 따라오셨나요? 여기까지 따라오셨으면 파라미터 바꾸는 것은 이제 완벽하게 하시게 된 것입니다. 이제부터 할 것은 여러분이 모듈을 하나 추가하여 그 모듈을 위한 파라미터를 추가하고 싶을때를 대비해 말씀드릴려고 합니다. 오늘의 가장 핵심이기도 하구요. 이것을 하기 위해 우리는 파라미터가 어떻게 동작되는지를 알아야 합니다. 그럼 시작해보도록 하겠습니다.</p>
+
+<h5 id="operationprinciple">Operation Principle</h5>
+
+<p>파라미터 추가하는것에 앞서 우선 파라미터가 어떻게 변경되는지에 대해 알아보도록 하겠습니다. 앞 절에서 우리는 QGroundControl을 통해 파라미터 값을 변경했습니다. 그때 동작이 어떻게 되는지 살펴보죠. QGroundControl에서 하나의 파라미터 값을 변경하는 순간, QGroundControl은 PARAM_SET(#23) Mavlink 메세지를 생성하여 Pixhawk에게 보냅니다.</p>
+
+<p><amp-img src="http://localhost:2368/content/images/2016/08/param-interface-write-param-3.png" alt="HowtoWork" width="470" height="289" layout="responsive"></amp-img></p>
+
+<p>그럼 Pixhawk 내부에서는 수신 받은 PARAM<em>SET을 mavlink 모듈이 수신을 받습니다. (src/modules/mavlink/mavlink</em>parameters.cpp 를 참고하세요) 그리고 MAV ID와 COMPONENT ID를 확인한 후, 매칭이 되면 우선 파라미터 이름값이 정확한지 확인하기 위해 Pixhawk가 가지고 있는 파라미터 중에서 그 이름을 가지고 있는지 확인합니다.</p>
+
+<pre><code>param_t param = param_find_no_notification(name);  
+</code></pre>
+
+<p>파라미터 이름이 유효하면 파라미터 값을 설정합니다.</p>
+
+<pre><code>param_set(param, &amp;(set.param_value));  
+</code></pre>
+
+<p>그리고 Pixhawk는 ACK 신호를 보내고, 변경된 파라미터 정보를 다시 QGroundControl에 보냅니다.</p>
+
+<pre><code>send_param(param);  
+</code></pre>
+
+<p>그리 어렵지는 않지요? 생각해보면 매우 직관적이어서 쉽게 따라 할 수 있습니다. </p>
+
+<p>마지막으로 한가지 더... 그럼 파라미터는 어디에 저장될까요? sdcard 메모리에 저장될까요? 아닙니다. 원칙적으로는 자체 플래쉬에 저장이 됩니다. 따라서 메모리 카드를 꼽지 않은 경우에도 파라미터는 존재합니다. 참고로 만약 자체 플래쉬가 문제가 있거나 없는 경우에는 메모리 카드의 /fs/microsd/params 위치에 있는 params를 로딩합니다. 하지만 일반적인 경우는 아니므로 내부 플래쉬 메모리에 저장한다고 생각하시면 됩니다.</p>
+
+<h5 id="howtoaddnewparameter">How to add new parameter</h5>
+
+<p>이제 한번 새로운 파라미터를 추가해보도록 하겠습니다. 새로운 모듈을 만들거나 혹은 기존의 모듈에 새로운 파라미터를 추가하는 일이 생길 수 있겠지요. 만들어진 모듈들을 보시면 일반적으로 아래와 같습니다.</p>
+
+<pre><code>CMakeLists.txt  
+[모듈이름]_main.c(pp)
+[모듈이름]_params.c
+</code></pre>
+
+<p>주로 이런 규칙을 따르는 경우가 많습니다. 물론 개발자가 여러명이다 보니 이 규칙을 따르지 않은 경우도 있지만 어찌되었든 비슷합니다. 여러분은 이제 이 파일 이름들만 보아도 어디에 파라미터들을 추가할지 아실겁니다. 어딜까요? .. 맞습니다. [모듈이름]_params.c 파일입니다. 그럼 이 파일을 열어볼까요? </p>
+
+<pre><code>/**
+ * &lt;title&gt;
+ *
+ * &lt;longer description, can be multi-line&gt;
+ *
+ * @unit &lt;the unit, e.g. m for meters&gt;
+ * @min &lt;the minimum sane value. Can be overriden by the user&gt;
+ * @max &lt;the maximum sane value. Can be overriden by the user&gt;
+ * @decimal &lt;the minimum sane value. Can be overriden by the user&gt;
+ * @increment &lt;the "ticks" in which this value will increment in the UI&gt;
+ * @reboot_required true &lt;add this if changing the param requires a system restart&gt;
+ * @group &lt;a title for parameters which form a group&gt;
+ */
+PARAM_DEFINE_FLOAT(MC_PITCH_P, 6.5f);  
+</code></pre>
+
+<p>이렇게 되어 있군요. 맞습니다. PARAM에 대한 자세한 설명과 함께 정의가 되어 있습니다. 그럼 우리는 여기에 하나 추가하면 되는거지요.</p>
+
+<p>다음은 이 파라미터를 사용해야 하는 곳은 ... 뭐 거의 당연히 [모듈이름]_main.c(pp) 이겠지요.  일반적으로 클래스로 모듈이 구현되어 있는데 _params_handles, _params 라는 멤버 변수를 이용합니다. 다시 한번 말씀드리지만, 앞에 "_"가 붙은 변수는 멤버 변수를 나타낸다는 것을 꼭 기억하시길 바랍니다. (코드가 길어지다 보면 이게 멤버 변수인지 지역 변수 인지 헷갈리는 경우가 많으니 "_"로 구분하시면 됩니다.) _params_handles는 파라미터를 처리할 수 있는 handle값을 나타내고, 실제 파리미터는 _params에 저장됩니다. 각 모듈마다 정말 많은 파라미터들이 있기 때문에 Pixhawks는 각 모듈들에게 _params와 같은 구조체를 만들어 사용하는 것이지요. </p>
+
+<p>일반적으로 각 모듈은 파라미터의 handle값을 얻기 위해 생성자에 handle값을 얻는 로직을 아래와 같이 넣어둡니다. </p>
+
+<pre><code>_params_handles.thr_max = param_find("MPC_THR_MAX");  
+_params_handles.thr_hover = param_find("MPC_THR_HOVER");  
+</code></pre>
+
+<p>참고로, param_find는 상당히 많은 리소스를 잡아 먹는 함수이므로 이 함수를 자주 부르는 것은 좋지 않습니다. 따라서 생성자 부분에서 한번만 부르고 그 handle값을 가지고 있도록 해주는게 바람직합니다.</p>
+
+<p>이후, 파라미터값들을 업데이트 하기 위한 멤버 함수를 하나 만들고, 이를 업데이트 합니다. </p>
+
+<pre><code>/* fetch initial parameter values */
+parameters_update(true);  
+</code></pre>
+
+<p>실제 parameters<em>update 함수를 보면 param</em>get을 사용하여 업데이트 하고 있음을 알 수 있습니다. C++ 타입과 C 타입에 따라 업데이트 방법이 틀리지만, 일반적으로 C 타입으로 주로 많이 쓰고 있습니다. 솔직히 저도 C++ 타입 시스템의 경우는 아직 분석을 해보지 않아 잘 모르겠습니다.. 좀더 공부하여 포스팅 하겠습니다!!</p>
+
+<pre><code>/* update C++ param system */
+updateParams();
+
+/* update legacy C interface params */
+param_get(_params_handles.thr_min, &amp;_params.thr_min);  
+</code></pre>
+
+<p>각 모듈마다 일부분은 틀리지만, 제가 말씀 드린 큰 로직은 변함이 별로 없습니다. 따라서 여러분들도 새로운 모듈을 생성하는 경우는 이러한 관례를 따라 작성하시는 게 좋습니다. 왜냐구요? 여러분의 코드가 Pixhawk의 메인 코드에 업데이트 되었을때 다른 사람도 쉽게 이해해야 하니깐요.</p>
+
+<p>중요한 사실 중 다른 하나는 이 parameters_update함수가 주기적으로 불릴 수 있다는 것입니다. 물론 이 또한 모듈마다 틀리지만, 대부분의 경우 실시간 변화가 필요합니다. 이말의 의미는 무엇일까요?... 맞습니다. 비행 중에 게인값들을 조정하면서 실험할 수 있다는 의미입니다. 즉, PID 게인값들 조정을 위해 한번 take off한 후 시험하고 landing하는 일을 반복하지 않고, 실시간으로 조정해 보면서 업데이트 할 수 있다는 얘기입니다.!! 하지만 그 시험에 대한 안정성은 장담못합니다. ㅋㅋ  따라서 게인값 바꾸실때 너무 팍팍 바꾸지 마시고 적당히 바꾸시길 간곡히 부탁드립니다. </p>
+
+<h5 id="howtochangeparametersinnuttxoption">How to change parameters in NuttX (Option)</h5>
+
+<p>마무리로 들어갈려다가 한가지 더 말씀드리고 싶어서 좀더 적어봅니다. 앞에서 파라미터 수정하기 위해 QGroundControl을 이용하는 방법에 대해 알아보았습니다. 하지만, 사용하시다 보면, QGroundControl보다는 NuttX가 훨씬 유용할 때가 있습니다. 일단 GUI가 아니다 보니 간단합니다. GUI에 익숙하신 분들은 QGroundControl이 좋겠지만, QT도 있어야 하고 실행하기 위해 미리 갖추어야 할 부분이 많죠? 하지만, NuttX와 같은 콘솔은 간단하게 텍스트로 명령이 가능하지요.  그리고 GUI보다는 훨씬 많은 기능이 포함되어 있어 강력합니다. 따라서 NuttX의 콘솔에 꼭 익숙해 지시길 바랍니다.</p>
+
+<p>NuttX에 올라가는 명령들은 대부분 src/systemcmds/ 에 모여있습니다. 이중 파라미터 변경과 관련된 부분은 param 명령어 입니다. 우선 파라미터를 보는 명령을 수행해 보겠습니다.  </p>
+
+<pre><code>nsh&gt; param show  
+</code></pre>
+
+<p>
+NuttX에서 해보시면 엄청 많은 파라미터가 순식간에 주루룩 나오는 것을 볼 수 있습니다. 너무 많죠? 마우스로 스크롤해도 끝까지 보지도 못합니다. 여기서 한가지 팁을 드릴게요. 앞에서 말씀드렸다시피, 각 파라미터는 모듈별로 구분되어 있습니다. 따라서 모듈별로 앞에 아래와 같이 모듈 이름이 붙습니다. 대~부분 그렇습니다.  </p>
+
+<pre><code>[모듈이름]_[세부이름]
+ex) MC_ROLL_P  
+</code></pre>
+
+<p>그러면 우리는 이 모듈 이름을 가지고 부분적으로 찾기를 할수 있습니다. 어떻게요? 이렇게요..</p>
+
+<pre><code>nsh&gt; param show "MC_*"  
+</code></pre>
+
+<p>그럼 아래와 같이 결과가 나옴을 알 수 있습니다.</p>
+
+<pre><code>Symbols: x = used, + = saved, * = unsaved  
+x   MC_ROLL_TC [97,183] : 0.2000  
+x   MC_PITCH_TC [98,184] : 0.2000  
+x + MC_ROLL_P [99,185] : 7.0000  
+</code></pre>
+
+<p>이제 변경을 해보겠습니다. MC<em>ROLL</em>P값을 변경해보죠. 현재는 7.0인데 8.0으로 바꾸어보겠습니다.</p>
+
+<pre><code>nsh&gt; param set MC_ROLL_P 8.0  
++ MC_ROLL_P: curr: 7.0000 -&gt; new: 8.0000
+</code></pre>
+
+<p>자 이제 바뀐것을 보실 수 있습니다. 이제 이 내용을 플래쉬에 저장해보겠습니다.</p>
+
+<pre><code>nsh&gt; param save  
+</code></pre>
+
+<p>param 명령은 이 외에도 외부 파일로 부터 load하고 save하는 것도 가능하며 다양한 기능들이 있습니다. 이런 명령을 잘 활용하시면 좋을 것 같습니다.</p>
+
+<pre><code>nsh&gt; param  
+param: expected a command, try 'load', 'import', 'show', 'set', 'compare',  
+'index', 'index_used', 'select' or 'save'  
+</code></pre>
+
+<h5 id="conclusion">Conclusion</h5>
+
+<p>파라미터값은 드론을 프로페셔널하게 동작시키기 위해 정말 정말 잘 알아야 하는 것 중 하나입니다. 이 값을 어떻게 바꾸냐에 따라 많은 변화가 생기기 때문이지요. 따라서 전체적인 큰 맥락을 잘 짚으시면 아마 추후에 많은 도움이 되실 거라 믿어의심치 않습니다. 그럼 더운 여름에도 몸 관리 잘하시면서 공부하시길 바랍니다. 홧팅!!</p>
+
+            </section>
+
+        </article>
+    </main>
+    <footer class="site-footer clearfix">
+        <section class="copyright"><a href="../../">Program Lock</a> © 2017</section>
+        <section class="poweredby">Proudly published with <a href="https://ghost.org">Ghost</a></section>
+    </footer>
+</body>

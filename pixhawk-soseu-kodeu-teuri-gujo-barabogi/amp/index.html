@@ -1,22 +1,17 @@
 
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <title>Pixhawk 소스 코드 트리 구조 바라보기</title>
     <meta name="description" content="">
 
     <meta name="HandheldFriendly" content="True">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
 
-    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="shortcut icon" href="../../favicon.ico">
 
-    <link rel="stylesheet" type="text/css" href="../assets/css/screen.css?v=d1acd4112c">
-    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic%7COpen+Sans:700,400">
-
-    <link rel="canonical" href="index.html">
+    <link rel="canonical" href="../index.html">
     <meta name="referrer" content="no-referrer-when-downgrade">
-    <link rel="amphtml" href="amp/index.html">
     
     <meta property="og:site_name" content="Program Lock">
     <meta property="og:type" content="article">
@@ -71,49 +66,799 @@
     </script>
 
     <meta name="generator" content="Ghost 0.11">
-    <link rel="alternate" type="application/rss+xml" title="Program Lock" href="../rss/index.html">
+    <link rel="alternate" type="application/rss+xml" title="Program Lock" href="../../rss/index.html">
+
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic%7COpen+Sans:700,600,400">
+    <style amp-custom>
+        /* ==========================================================================
+           Table of Contents
+           ========================================================================== */
+
+        /*
+
+            0. Normalize
+            1. General
+            2. Utilities
+            3. AMP Post
+            4. Footer
+
+        */
+
+        /* ==========================================================================
+           0. normalize.css v3.0.3 | MIT License | git.io/normalize | (minified)
+           ========================================================================== */
+
+        html {
+            font-family: sans-serif;
+
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+        }
+        body {
+            margin: 0;
+        }
+        article,
+        aside,
+        details,
+        figcaption,
+        figure,
+        footer,
+        header,
+        main,
+        menu,
+        nav,
+        section,
+        summary {
+            display: block;
+        }
+        audio,
+        canvas,
+        progress,
+        video {
+            display: inline-block;
+            vertical-align: baseline;
+        }
+        audio:not([controls]) {
+            display: none;
+            height: 0;
+        }
+        [hidden],
+        template {
+            display: none;
+        }
+        a {
+            background-color: transparent;
+        }
+        a:active,
+        a:hover {
+            outline: 0;
+        }
+        abbr[title] {
+            border-bottom: 1px dotted;
+        }
+        b,
+        strong {
+            font-weight: bold;
+        }
+        dfn {
+            font-style: italic;
+        }
+        h1 {
+            margin: 0.67em 0;
+            font-size: 2em;
+        }
+        mark {
+            background: #ff0;
+            color: #000;
+        }
+        small {
+            font-size: 80%;
+        }
+        sub,
+        sup {
+            position: relative;
+            vertical-align: baseline;
+            font-size: 75%;
+            line-height: 0;
+        }
+        sup {
+            top: -0.5em;
+        }
+        sub {
+            bottom: -0.25em;
+        }
+        img {
+            border: 0;
+        }
+        amp-img {
+            border: 0;
+        }
+        svg:not(:root) {
+            overflow: hidden;
+        }
+        figure {
+            margin: 1em 40px;
+        }
+        hr {
+            box-sizing: content-box;
+            height: 0;
+        }
+        pre {
+            overflow: auto;
+        }
+        code,
+        kbd,
+        pre,
+        samp {
+            font-family: monospace, monospace;
+            font-size: 1em;
+        }
+        button,
+        input,
+        optgroup,
+        select,
+        textarea {
+            margin: 0;
+            color: inherit;
+            font: inherit;
+        }
+        button {
+            overflow: visible;
+        }
+        button,
+        select {
+            text-transform: none;
+        }
+        button,
+        html input[type="button"],
+        input[type="reset"],
+        input[type="submit"] {
+            cursor: pointer;
+
+            -webkit-appearance: button;
+        }
+        button[disabled],
+        html input[disabled] {
+            cursor: default;
+        }
+        button::-moz-focus-inner,
+        input::-moz-focus-inner {
+            padding: 0;
+            border: 0;
+        }
+        input {
+            line-height: normal;
+        }
+        input[type="checkbox"],
+        input[type="radio"] {
+            box-sizing: border-box;
+            padding: 0;
+        }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            height: auto;
+        }
+        input[type="search"] {
+            -webkit-appearance: textfield;
+        }
+        input[type="search"]::-webkit-search-cancel-button,
+        input[type="search"]::-webkit-search-decoration {
+            -webkit-appearance: none;
+        }
+        fieldset {
+            margin: 0 2px;
+            padding: 0.35em 0.625em 0.75em;
+            border: 1px solid #c0c0c0;
+        }
+        legend {
+            padding: 0;
+            border: 0;
+        }
+        textarea {
+            overflow: auto;
+        }
+        optgroup {
+            font-weight: bold;
+        }
+        table {
+            border-spacing: 0;
+            border-collapse: collapse;
+        }
+        td,
+        th {
+            padding: 0;
+        }
+
+
+        /* ==========================================================================
+           1. General - Setting up some base styles
+           ========================================================================== */
+
+        html {
+            max-height: 100%;
+            height: 100%;
+            font-size: 62.5%;
+
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        }
+
+        body {
+            max-height: 100%;
+            height: 100%;
+            color: #3a4145;
+            background: #f4f8fb;
+            letter-spacing: 0.01rem;
+            font-family: "Merriweather", serif;
+            font-size: 1.8rem;
+            line-height: 1.75em;
+            text-rendering: geometricPrecision;
+
+            -webkit-font-feature-settings: "kern" 1;
+            -moz-font-feature-settings: "kern" 1;
+            -o-font-feature-settings: "kern" 1;
+        }
+
+        ::-moz-selection {
+            background: #d6edff;
+        }
+
+        ::selection {
+            background: #d6edff;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            margin: 0 0 0.3em 0;
+            color: #2e2e2e;
+            font-family: "Open Sans", sans-serif;
+            line-height: 1.15em;
+            text-rendering: geometricPrecision;
+
+            -webkit-font-feature-settings: "dlig" 1, "liga" 1, "lnum" 1, "kern" 1;
+            -moz-font-feature-settings: "dlig" 1, "liga" 1, "lnum" 1, "kern" 1;
+            -o-font-feature-settings: "dlig" 1, "liga" 1, "lnum" 1, "kern" 1;
+        }
+
+        h1 {
+            text-indent: -2px;
+            letter-spacing: -1px;
+            font-size: 2.6rem;
+        }
+
+        h2 {
+            letter-spacing: 0;
+            font-size: 2.4rem;
+        }
+
+        h3 {
+            letter-spacing: -0.6px;
+            font-size: 2.1rem;
+        }
+
+        h4 {
+            font-size: 1.9rem;
+        }
+
+        h5 {
+            font-size: 1.8rem;
+        }
+
+        h6 {
+            font-size: 1.8rem;
+        }
+
+        a {
+            color: #4a4a4a;
+        }
+
+        a:hover {
+            color: #111;
+        }
+
+        p,
+        ul,
+        ol,
+        dl {
+            margin: 0 0 2.5rem 0;
+            font-size: 1.5rem;
+            text-rendering: geometricPrecision;
+
+            -webkit-font-feature-settings: "liga" 1, "onum" 1, "kern" 1;
+            -moz-font-feature-settings: "liga" 1, "onum" 1, "kern" 1;
+            -o-font-feature-settings: "liga" 1, "onum" 1, "kern" 1;
+        }
+
+        ol,
+        ul {
+            padding-left: 2em;
+        }
+
+        ol ol,
+        ul ul,
+        ul ol,
+        ol ul {
+            margin: 0 0 0.4em 0;
+            padding-left: 2em;
+        }
+
+        dl dt {
+            float: left;
+            clear: left;
+            overflow: hidden;
+            margin-bottom: 1em;
+            width: 180px;
+            text-align: right;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-weight: 700;
+        }
+
+        dl dd {
+            margin-bottom: 1em;
+            margin-left: 200px;
+        }
+
+        li {
+            margin: 0.4em 0;
+        }
+
+        li li {
+            margin: 0;
+        }
+
+        hr {
+            display: block;
+            margin: 1.75em 0;
+            padding: 0;
+            height: 1px;
+            border: 0;
+            border-top: #efefef 1px solid;
+        }
+
+        blockquote {
+            box-sizing: border-box;
+            margin: 1.75em 0 1.75em 0;
+            padding: 0 0 0 1.75em;
+            border-left: #4a4a4a 0.4em solid;
+
+            -moz-box-sizing: border-box;
+        }
+
+        blockquote p {
+            margin: 0.8em 0;
+            font-style: italic;
+        }
+
+        blockquote small {
+            display: inline-block;
+            margin: 0.8em 0 0.8em 1.5em;
+            color: #ccc;
+            font-size: 0.9em;
+        }
+
+        blockquote small:before {
+            content: "\2014 \00A0";
+        }
+
+        blockquote cite {
+            font-weight: 700;
+        }
+
+        blockquote cite a {
+            font-weight: normal;
+        }
+
+        mark {
+            background-color: #fdffb6;
+        }
+
+        code,
+        tt {
+            padding: 1px 3px;
+            border: #e3edf3 1px solid;
+            background: #f7fafb;
+            border-radius: 2px;
+            white-space: pre-wrap;
+            font-family: Inconsolata, monospace, sans-serif;
+            font-size: 0.85em;
+            font-feature-settings: "liga" 0;
+
+            -webkit-font-feature-settings: "liga" 0;
+            -moz-font-feature-settings: "liga" 0;
+        }
+
+        pre {
+            overflow: auto;
+            box-sizing: border-box;
+            margin: 0 0 1.75em 0;
+            padding: 10px;
+            width: 100%;
+            border: #e3edf3 1px solid;
+            background: #f7fafb;
+            border-radius: 3px;
+            white-space: pre;
+            font-family: Inconsolata, monospace, sans-serif;
+            font-size: 0.9em;
+
+            -moz-box-sizing: border-box;
+        }
+
+        pre code,
+        pre tt {
+            padding: 0;
+            border: none;
+            background: transparent;
+            white-space: pre-wrap;
+            font-size: inherit;
+        }
+
+        kbd {
+            display: inline-block;
+            margin-bottom: 0.4em;
+            padding: 1px 8px;
+            border: #ccc 1px solid;
+            background: #f4f4f4;
+            border-radius: 4px;
+            box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2),
+            0 1px 0 0 #fff inset;
+            color: #666;
+            text-shadow: #fff 0 1px 0;
+            font-size: 0.9em;
+            font-weight: 700;
+        }
+
+        table {
+            box-sizing: border-box;
+            margin: 1.75em 0;
+            max-width: 100%;
+            width: 100%;
+            background-color: transparent;
+
+            -moz-box-sizing: border-box;
+        }
+
+        table th,
+        table td {
+            padding: 8px;
+            border-top: #efefef 1px solid;
+            vertical-align: top;
+            text-align: left;
+            line-height: 20px;
+        }
+
+        table th {
+            color: #000;
+        }
+
+        table caption + thead tr:first-child th,
+        table caption + thead tr:first-child td,
+        table colgroup + thead tr:first-child th,
+        table colgroup + thead tr:first-child td,
+        table thead:first-child tr:first-child th,
+        table thead:first-child tr:first-child td {
+            border-top: 0;
+        }
+
+        table tbody + tbody {
+            border-top: #efefef 2px solid;
+        }
+
+        table table table {
+            background-color: #fff;
+        }
+
+        table tbody > tr:nth-child(odd) > td,
+        table tbody > tr:nth-child(odd) > th {
+            background-color: #f6f6f6;
+        }
+
+        table.plain tbody > tr:nth-child(odd) > td,
+        table.plain tbody > tr:nth-child(odd) > th {
+            background: transparent;
+        }
+
+        iframe,
+        amp-iframe,
+        .fluid-width-video-wrapper {
+            display: block;
+            margin: 1.75em 0;
+        }
+
+        /* When a video is inside the fitvids wrapper, drop the
+        margin on the iframe, cause it breaks stuff. */
+        .fluid-width-video-wrapper iframe,
+        .fluid-width-video-wrapper amp-iframe {
+            margin: 0;
+        }
+
+        textarea,
+        select,
+        input {
+            margin: 0 0 5px 0;
+            padding: 6px 9px;
+            width: 260px;
+            outline: 0;
+            border: #e7eef2 1px solid;
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: none;
+            font-family: "Open Sans", sans-serif;
+            font-size: 1.6rem;
+            line-height: 1.4em;
+            font-weight: 100;
+
+            -webkit-appearance: none;
+        }
+
+        textarea {
+            min-width: 250px;
+            min-height: 80px;
+            max-width: 340px;
+            width: 100%;
+            height: auto;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="search"]:focus,
+        input[type="tel"]:focus,
+        input[type="url"]:focus,
+        input[type="password"]:focus,
+        input[type="number"]:focus,
+        input[type="date"]:focus,
+        input[type="month"]:focus,
+        input[type="week"]:focus,
+        input[type="time"]:focus,
+        input[type="datetime"]:focus,
+        input[type="datetime-local"]:focus,
+        textarea:focus {
+            outline: none;
+            outline-width: 0;
+            border: #bbc7cc 1px solid;
+            background: #fff;
+        }
+
+        select {
+            width: 270px;
+            height: 30px;
+            line-height: 30px;
+        }
+
+        /* ==========================================================================
+           2. Utilities
+           ========================================================================== */
+
+        /* Clears shit */
+        .clearfix:before,
+        .clearfix:after {
+            content: " ";
+            display: table;
+        }
+        .clearfix:after {
+            clear: both;
+        }
+        .clearfix {
+            zoom: 1;
+        }
+
+        /* ==========================================================================
+           3. AMP Post
+           ========================================================================== */
+
+
+
+        .main-header {
+            position: relative;
+            display: table;
+            overflow: hidden;
+            box-sizing: border-box;
+            width: 100%;
+            height: 50px;
+            background: #5ba4e5 no-repeat center center;
+            background-size: cover;
+            text-align: left;
+
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+        }
+
+        .content {
+            background: #fff;
+            padding-top: 15px;
+        }
+        .blog-title,
+        .content {
+            margin: auto;
+            max-width: 600px;
+        }
+
+        .blog-title a {
+            display: block;
+            padding-right: 16px;
+            padding-left: 16px;
+            height: 50px;
+            color: #fff;
+            text-decoration: none;
+            font-family: "Open Sans", sans-serif;
+            font-size: 16px;
+            line-height: 50px;
+            font-weight: 600;
+        }
+
+        .post {
+            position: relative;
+            margin-top: 0;
+            margin-right: 16px;
+            margin-left: 16px;
+            padding-bottom: 0;
+            max-width: 100%;
+            border-bottom: #ebf2f6 1px solid;
+            word-wrap: break-word;
+            font-size: 0.95em;
+            line-height: 1.65em;
+        }
+
+        .post-header {
+            margin-bottom: 1rem;
+        }
+
+        .post-title {
+            margin-bottom: 0;
+        }
+
+        .post-title a {
+            text-decoration: none;
+        }
+
+        .post-meta {
+            display: block;
+            margin: 3px 0 0 0;
+            color: #9eabb3;
+            font-family: "Open Sans", sans-serif;
+            font-size: 1.3rem;
+            line-height: 2.2rem;
+        }
+
+        .post-meta a {
+            color: #9eabb3;
+            text-decoration: none;
+        }
+
+        .post-meta a:hover {
+            text-decoration: underline;
+        }
+
+        .post-meta .author {
+            margin: 0;
+            font-size: 1.3rem;
+            line-height: 1.3em;
+        }
+
+        .post-date {
+            display: inline-block;
+            text-transform: uppercase;
+            white-space: nowrap;
+            font-size: 1.2rem;
+            line-height: 1.2em;
+        }
+
+        .post-image {
+            margin: 0;
+            padding-top: 3rem;
+            padding-bottom: 30px;
+            border-top: 1px #E8E8E8 solid;
+        }
+
+        /* Keep images centered, and allow images wider than the main
+           text column to break out. */
+        .post-content amp-img,
+        .post-content amp-anim {
+            /* Centers an image by (1) pushing its left edge to the
+               center of its container and (2) shifting the entire image
+               in the opposite direction by half its own width.
+               Works for images that are larger than their containers. */
+            position: relative;
+            left: 50%;
+            display: block;
+            padding: 0;
+            min-width: 0;
+            max-width: 112%; /* fallback when calc doesn't work */
+            width: calc(100% + 32px); /* expand with to image + margins */
+            height: auto;
+            transform: translateX(-50%);
+
+            -webkit-transform: translateX(-50%); /* for Safari and iOS */
+            -ms-transform: translateX(-50%); /* for IE9 */
+        }
+
+        .footnotes {
+            font-size: 1.3rem;
+            line-height: 1.6em;
+            font-style: italic;
+        }
+
+        .footnotes li {
+            margin: 0.6rem 0;
+        }
+
+        .footnotes p {
+            margin: 0;
+        }
+
+        .footnotes p a:last-child {
+            text-decoration: none;
+        }
+
+        /* ==========================================================================
+           4. Footer - The bottom the AMP Post
+           ========================================================================== */
+
+        .site-footer {
+            position: relative;
+            margin: 0 auto 20px auto;
+            padding: 1rem 15px;
+            max-width: 600px;
+            color: rgba(0,0,0,0.5);
+            font-family: "Open Sans", sans-serif;
+            font-size: 1.1rem;
+            line-height: 1.75em;
+        }
+
+        .site-footer a {
+            color: rgba(0,0,0,0.5);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .site-footer a:hover {
+            border-bottom: #bbc7cc 1px solid;
+        }
+
+        .poweredby {
+            display: block;
+            float: right;
+            width: 45%;
+            text-align: right;
+        }
+
+        .copyright {
+            display: block;
+            float: left;
+            width: 45%;
+        }
+    </style>
+
+    <style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
+    <script async src="https://cdn.ampproject.org/v0.js"></script>
+
+    
+
 </head>
-<body class="post-template tag-pixhawk nav-closed">
 
-    <div class="nav">
-    <h3 class="nav-title">Menu</h3>
-    <a href="index.html#" class="nav-close">
-        <span class="hidden">Close</span>
-    </a>
-    <ul>
-            <li class="nav-home" role="presentation"><a href="../">Home</a></li>
-            <li class="nav-admin" role="presentation"><a href="http://localhost:2368/ghost/">admin</a></li>
-            <li class="nav-pixhawk" role="presentation"><a href="../tag/pixhawk/">Pixhawk</a></li>
-    </ul>
-    <a class="subscribe-button icon-feed" href="../rss/index.rss">Subscribe</a>
-</div>
-<span class="nav-cover"></span>
+<body class="amp-template">
+    <header class="main-header">
+        <nav class="blog-title">
+            <a href="../../">Program Lock</a>
+        </nav>
+    </header>
 
+    <main class="content" role="main">
+        <article class="post">
 
-    <div class="site-wrapper">
+            <header class="post-header">
+                <h1 class="post-title">Pixhawk 소스 코드 트리 구조 바라보기</h1>
+                <section class="post-meta">
+                    <p class="author">by <a href="../../author/sungtae/">SungTae Moon</a></p>
+                    <time class="post-date" datetime="2016-05-14">2016-05-14</time>
+                </section>
+            </header>
+            <section class="post-content">
 
-        
-
-
-<header class="main-header post-head no-cover">
-    <nav class="main-nav  clearfix">
-        
-            <a class="menu-button icon-menu" href="index.html#"><span class="word">Menu</span></a>
-    </nav>
-</header>
-
-<main class="content" role="main">
-    <article class="post tag-pixhawk">
-
-        <header class="post-header">
-            <h1 class="post-title">Pixhawk 소스 코드 트리 구조 바라보기</h1>
-            <section class="post-meta">
-                <time class="post-date" datetime="2016-05-14">14 May 2016</time>  on <a href="../tag/pixhawk/">pixhawk</a>
-            </section>
-        </header>
-
-        <section class="post-content">
-            <h5 id="introduction">Introduction</h5>
+                <h5 id="introduction">Introduction</h5>
 
 <p>안녕하세요 오랫만에 찾아뵙습니다. 항상 업데이트가 늦어서 미안한 마음으로 연재를 시작하겠습니다. 글 쓰는 재주가 그리 없지만, 'Pixhwak 까발리기' 글에 많은 관심을 가주시는 분들이 많아 너무 감사합니다. 그래서 많은 분들이 네이버 쪽지나 혹은 네이버 이메일로 문의를 주시는 분들이 계시는데, 제가 네이버 메일과 쪽지를 사용하지 않아서 거기에 올려주시는 글을 잘 읽지 못합니다. 그래서 가능하시면 오로카 계시판에 문의를 해주시면 최선을 다해 답변해드리도록 하겠습니다.
 자.. 그럼 오늘은 Pixhawk 소스 코드에 대해 한번 알아보고자 합니다. 시작해볼까요... 홧팅!!</p>
@@ -125,14 +870,14 @@
 
 <p>오픈소스를 잘 이용하셨다면, 이제 하셔야 할 부분은 전체 구조를 파악하는 것입니다. 루트 디렉토리에서 디렉토리 구조로 먼저 살펴보시길 바랍니다. 디렉토리 이름을 보면 대충 어떤 구조로 되어있구나를 알 수 있습니다. 실제 Pixhawk 구조를 보시죠.</p>
 
-<p><img src="../content/images/2016/05/Pixhawk_directory.jpg" alt="Pixhawk Directory"></p>
+<p><amp-img src="http://localhost:2368/content/images/2016/05/Pixhawk_directory.jpg" alt="Pixhawk Directory" width="828" height="109" layout="responsive"></amp-img></p>
 
 <p>대충 살펴보시면, Image, Tools, src, ROMFS, NuttX 등이 나오는 것을 보실 수 있습니다. 정확하게 무엇인지는 모르겠지만, src 디렉토리에는 실제 소스코드가 들어있을 것 같고, Tools에는 Pixhawk 펌웨어를 만들기 위한 도구들이 들어있을 것 같군요. NuttX라는 익숙한 용어도 나오구요. ROMFS도 나오네요... (전에 한번 설명드린 기억이...)  이걸 통해 우리는 대충 이런 구조로 되어있구나를 알 수 있습니다. 디렉토리 말고 파일만 봐도, 몇가지 단서를 알 수 있습니다. CMakeLists.txt를 보니, cmake를 사용한 것을 알 수 있고, Firmware.sublime-project를 보고, sublime text 툴을 IDE로 사용하나보다도 알 수 있습니다. launch를 보고 왠지 ROS와 연동될 것 같다는 느낌도 받으시구요. 지금까지 말씀드린 느낌이 오지 않으셨다면 많은 툴들에 대한 경험이 없으시기 때문입니다. 사실 상관없습니다. 그런데 많은 오픈소스를 살펴보다보면 금방 느낌이 오실 겁니다. </p>
 
 <p>자 다음으로 하실 일은 README 파일을 찾아보시길 바랍니다. README 파일은 많은 정보가 함축되어 있을 가능성이 높습니다. 어떤 경우는 INSTALL도 있지만, README 파일에 모두 포함되는 경우도 많습니다. 그래서 이 README는 꼭 살펴보시고, 여기에서 부터 시작하시는 게 좋습니다. 설치하는 방법이라든지, 아니면, 버전 정보라든지 참고 사이트 등이 나오니깐요.</p>
 
 <p>다음으로 가능하면 github에서 디렉토리 구조를 살펴보시길 바랍니다.
-<img src="../content/images/2016/05/pixhawdirectory_github.png" alt="Pixhawk Directory at github">
+<amp-img src="http://localhost:2368/content/images/2016/05/pixhawdirectory_github.png" alt="Pixhawk Directory at github" width="1486" height="796" layout="responsive"></amp-img>
 전에도 한번 말씀드렸지만, 오픈소스는 다른 오픈소스를 많이 사용하는 경우가 많습니다. 물론 단순한 오픈소스는 그렇지 않겠지만요. 그래서 다른 오픈소스를 사용하는 경우는 분석하는 부분에서 우선 제외시킵니다. 그냥 가져다 쓰는 거다라는 거지요. 만약 내가 분석하고자 하는 부분이 가져다 쓰는 오픈소스 부분이었다면 현재 분석하는 오픈소스에 대해 "여긴 아닌가벼" 하고 가져다 쓰는 오프소스를 분석하시길 바랍니다. github에서는 그런 가져다 쓰는 오픈소스 부분을 쉽게 알수 있습니다. 그림에서 보시면 회색으로된 디렉토리 그림이 보이시죠? NuttX 부분이네요. </p>
 
 <pre><code>NuttX@f0f4dbc  
@@ -149,7 +894,7 @@
 
 <p>앞에서 설명한 github 디렉토리 그림을 다시 사용하겠습니다.</p>
 
-<p><img src="../content/images/2016/05/pixhawdirectory_github.png" alt="Pixhawk Directory at github"></p>
+<p><amp-img src="http://localhost:2368/content/images/2016/05/pixhawdirectory_github.png" alt="Pixhawk Directory at github" width="1486" height="796" layout="responsive"></amp-img></p>
 
 <p>우선 각 디렉토리에 대해 자세히 설명드리겟습니다. (저도 잘 사용하지 않은 부분도 많이 있지만 아는만큼 설명드리겠습니다. 많은 양해 부탁드립니다. 꾸벅 -- __)</p>
 
@@ -182,7 +927,7 @@ PARAM_DEFINE_INT32(SDLOG_UTC_OFFSET, 0);
 
 <p>`
 이런 주석이 doxygen을 통해 문서화 되면 PDF나 html방식으로 생성됩니다.
-<img src="../content/images/2016/05/Doxygen_example.png" alt="Doxygen Sample">
+<amp-img src="http://localhost:2368/content/images/2016/05/Doxygen_example.png" alt="Doxygen Sample" width="792" height="683" layout="responsive"></amp-img>
 놀랍게도 아주 좋은 형태로 바뀌지요. 아. 이 그림은 예제입니다 Pixhawk 관련 문서는 아닙니다. 아쉽게도 Pixhawk는 문서화가 처음에는 잘 나가다가 최근 몇년동안은 업데이트를 하지 않는 것 같습니다. 하지만, 처음 보시는 분들은 한번 정도 내부 디렉토리 안에 있는 파일들을 열어 살펴보시길 바랍니다. 의외로 좋은 정보들이 많이 있으니깐요.</p>
 
 <h6 id="images">Images</h6>
@@ -298,111 +1043,16 @@ drivers  examples  firmware  include  lib  modules  platforms  systemcmds
 
 <p>unittests 디렉토리는 말그대로 unit test를 하기 위한 코드들이 여기에 들어있습니다. 개발을 하다보면 unit test는 꼭해야하는데, 그런 부분이 여기에 들어있네요. 이걸 보면, "아. 그냥 코드를 중구난방으로 개발하는게 아니고, 뭔가 프로세스가 있구나"라고 생각하게 됩니다. 나중에 내부 코드를 보시면 그 코드 개발자의 철학도 어느정도 보이시게 될겁니다.</p>
 
-<h5 id="">마치며</h5>
+<h5 id>마치며</h5>
 
 <p>여러분 어느정도 Pixhawk 코드 구조를 확인하셨는데, 대략 어느 부분을 집중적으로 분석해야겠다는게 보이시나요? 오픈소스라는게 음.. 그냥 가져다 쓰면 되겠네.. 라고 생각할 수 있지만, 그리 쉽지 않다는 건 여러분도 잘 아실겁니다. 특히나 처음 접하실때는 정말 어렵지요. 하지만, 내가 원하는 부분만 잘 찾은다면, 어느정도 찾아갈 방향이 보이게 되고, 그 방향으로 가다보면, 전체 그림이 머리속에 들어오게 되어 분석하기 쉬워지게 됩니다. 그 전체 그림을 머리속에 집어넣기가 어렵지만, 여러분은 분명 잘 하실거라 믿어 의심치 않습니다. 그럼 절대 포기하지 마시고, 끝까지 한번 해보시길 바랍니다. (생각해 보니 저에게 할말이네요.. ㅜㅜ)</p>
-        </section>
 
-        <footer class="post-footer">
-
-
-            <figure class="author-image">
-                <a class="img" href="../author/sungtae/" style="background-image: url(../content/images/2016/03/140901_drone_writer_hei-100x113-1.jpg)"><span class="hidden">SungTae Moon's Picture</span></a>
-            </figure>
-
-            <section class="author">
-                <h4><a href="../author/sungtae/">SungTae Moon</a></h4>
-
-                    <p>Read <a href="../author/sungtae/">more posts</a> by this author.</p>
-                <div class="author-meta">
-                    
-                    
-                </div>
             </section>
 
-
-            <section class="share">
-                <h4>Share this post</h4>
-                <a class="icon-twitter" href="https://twitter.com/intent/tweet?text=Pixhawk%20%EC%86%8C%EC%8A%A4%20%EC%BD%94%EB%93%9C%20%ED%8A%B8%EB%A6%AC%20%EA%B5%AC%EC%A1%B0%20%EB%B0%94%EB%9D%BC%EB%B3%B4%EA%B8%B0&amp;url=http://localhost:2368/pixhawk-soseu-kodeu-teuri-gujo-barabogi/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-                    <span class="hidden">Twitter</span>
-                </a>
-                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:2368/pixhawk-soseu-kodeu-teuri-gujo-barabogi/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-                    <span class="hidden">Facebook</span>
-                </a>
-                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://localhost:2368/pixhawk-soseu-kodeu-teuri-gujo-barabogi/" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-                    <span class="hidden">Google+</span>
-                </a>
-            </section>
-
-        </footer>
-
-    </article>
-</main>
-
-<aside class="read-next">
-    <a class="read-next-story no-cover" href="../hils-hardware-in-the-loop-siseutem-gucughagi/">
-        <section class="post">
-            <h2>SITL (Software In The Loop) 시스템 구축하기</h2>
-            <p>Introduction 여러분 안녕하세요 그 동안 잘 지내셨는지요. 이전 연재 "Pixhawk 소스 코드로 빌드하기"의 마지막에서 SITL에 대한 설명을 드린다고…</p>
-        </section>
-    </a>
-    <a class="read-next-story prev no-cover" href="../pixhawk-soseukodeuro-bildeuhaebogi/">
-        <section class="post">
-            <h2>Pixhawk 소스코드로 빌드해보기</h2>
-            <p>Introduction 안녕하세요 또 오랫만에 찾아뵙습니다. 요즘 많은 분들이 제가 쓴 글에 관심을 가져주셔서 정말 정말 감사합니다. 한분한분 질문하신 내용…</p>
-        </section>
-    </a>
-</aside>
-
-
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>  
-
-
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_shortname = 'stmoon'; // required: replace example with your forum shortname
-    var disqus_identifier = '12';
-	 
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-
-
-        <footer class="site-footer clearfix">
-            <section class="copyright"><a href="../">Program Lock</a> © 2017</section>
-            <section class="poweredby">Proudly published with <a href="https://ghost.org">Ghost</a></section>
-        </footer>
-
-    </div>
-
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
-    
-
-    <script type="text/javascript" src="../assets/js/jquery.fitvids.js?v=d1acd4112c"></script>
-    <script type="text/javascript" src="../assets/js/index.js?v=d1acd4112c"></script>
-
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>  
-
-    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>  
-
-
-    <script type="text/javascript">
-    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-    var disqus_shortname = 'stmoon'; // required: replace example with your forum shortname
-
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function () {
-     var s = document.createElement('script'); s.async = true;
-     s.type = 'text/javascript';
-     s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
-     (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
-     }());
-     </script>
-
+        </article>
+    </main>
+    <footer class="site-footer clearfix">
+        <section class="copyright"><a href="../../">Program Lock</a> © 2017</section>
+        <section class="poweredby">Proudly published with <a href="https://ghost.org">Ghost</a></section>
+    </footer>
 </body>
