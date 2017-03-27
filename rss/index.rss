@@ -1,4 +1,36 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Program Lock</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.11</generator><lastBuildDate>Mon, 27 Mar 2017 12:39:16 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>Parameter  변경하기</title><description>&lt;h5 id="introduction"&gt;Introduction&lt;/h5&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Program Lock</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.11</generator><lastBuildDate>Mon, 27 Mar 2017 12:54:56 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>MathJax사용하기</title><description>&lt;p&gt;Ghost와 함께 수식을 사용해야하다 보니, 찾아본게 MathJax였다.&lt;/p&gt;
+
+&lt;h4 id="mathjax"&gt;MathJax 설치&lt;/h4&gt;
+
+&lt;p&gt;MathJax를 사용하는 방법은 두가지가 있다. 첫번째로는 Injection이 있고 두번째는 직접 theme에 추가하는 방법이다. 여기서는 후자인 theme에 직접 추가하는 방법에 대해 설명하낟.&lt;/p&gt;
+
+&lt;p&gt;content가 설치된 폴더는 /home/user/ghost라고 하면, 여기에 theme 폴더에 MathJax.js를 다운로드 받아 복사해 놓는다. 이후 default.hbs 파일을&lt;/p&gt;</description><link>http://localhost:2368/mathjaxsayonghagi/</link><guid isPermaLink="false">38a62fce-8737-47b3-8c7a-0b570d70034d</guid><dc:creator>SungTae Moon</dc:creator><pubDate>Mon, 27 Mar 2017 12:54:37 GMT</pubDate><content:encoded>&lt;p&gt;Ghost와 함께 수식을 사용해야하다 보니, 찾아본게 MathJax였다.&lt;/p&gt;
+
+&lt;h4 id="mathjax"&gt;MathJax 설치&lt;/h4&gt;
+
+&lt;p&gt;MathJax를 사용하는 방법은 두가지가 있다. 첫번째로는 Injection이 있고 두번째는 직접 theme에 추가하는 방법이다. 여기서는 후자인 theme에 직접 추가하는 방법에 대해 설명하낟.&lt;/p&gt;
+
+&lt;p&gt;content가 설치된 폴더는 /home/user/ghost라고 하면, 여기에 theme 폴더에 MathJax.js를 다운로드 받아 복사해 놓는다. 이후 default.hbs 파일을 열어 &lt;head&gt; section에 아래 코드를 집어 넣는다.&lt;/head&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;script type="text/javascript" src="{{asset "js/MathJax.js"}}"&amp;gt;  
+&amp;lt;/script&amp;gt;  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;그리고 다시 시작하면 끝!!&lt;/p&gt;
+
+&lt;h4 id=""&gt;사용 방법&lt;/h4&gt;
+
+&lt;p&gt;$$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$&lt;/p&gt;
+
+&lt;p&gt;위 수식을 입력할려면, 수식 앞뒤에 "$$"에 입력하면 된다.
+a  &lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id="reference"&gt;Reference&lt;/h4&gt;
+
+&lt;p&gt;[1] &lt;a href="http://academy.ghost.org/adding-mathjax-to-your-ghost-blog/"&gt;http://academy.ghost.org/adding-mathjax-to-your-ghost-blog/&lt;/a&gt;&lt;/p&gt;</content:encoded></item><item><title>Parameter  변경하기</title><description>&lt;h5 id="introduction"&gt;Introduction&lt;/h5&gt;
 
 &lt;p&gt;안녕하세요 여러분. 정말 오랫만에 포스팅하는 것 같습니다. 최근 제가 하고 있는 과제와 관련하여 일들이 많아 포스팅을 하지 못했습니다 ㅜㅜ. 많은 양해 부탁드립니다. 오늘은 조금 간단한 부분에 대해 다루어보고자 합니다. 오늘 말씀 드릴 것은 바로 설정값 변경 부분입니다. 자 그럼 본격적으로 시작해 보겠습니다.&lt;/p&gt;
 
