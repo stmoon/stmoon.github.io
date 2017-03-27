@@ -1,10 +1,48 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Program Lock</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.11</generator><lastBuildDate>Mon, 27 Mar 2017 12:54:56 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>MathJax사용하기</title><description>&lt;p&gt;Ghost와 함께 수식을 사용해야하다 보니, 찾아본게 MathJax였다.&lt;/p&gt;
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Program Lock</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.11</generator><lastBuildDate>Mon, 27 Mar 2017 13:02:38 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>install ghost in Docker</title><description>&lt;p&gt;개인적으로 Ghost를 좋아한다. 심플하면서도 Markdown으로 파워풀하다.
+그런데 최근 여러작업을 하다보니 컴퓨터를 여러개를 사용하게 되었고, 그 결과 개발환경이 중복적으로 필요하게 되어 docker를 사용해보기로 했다.&lt;/p&gt;
+
+&lt;p&gt;하지만 익숙해지는데 엄청난 시간이 걸렸다. ㅜㅜ&lt;/p&gt;
+
+&lt;p&gt;암튼, 주 목적은 다음과 같다. 
+ghost와 같은 개발환경과 소스코드를 하나의 컨테이너에 묶어두어 다른 컴퓨터에서도 동일하게 사용하게 한다. 이렇게 되면 다른 프로젝트와도&lt;/p&gt;</description><link>http://localhost:2368/install-ghost-in-docker/</link><guid isPermaLink="false">9b013417-7524-4e77-80c9-73d29eb422fa</guid><category>ghost</category><dc:creator>SungTae Moon</dc:creator><pubDate>Mon, 27 Mar 2017 13:01:51 GMT</pubDate><content:encoded>&lt;p&gt;개인적으로 Ghost를 좋아한다. 심플하면서도 Markdown으로 파워풀하다.
+그런데 최근 여러작업을 하다보니 컴퓨터를 여러개를 사용하게 되었고, 그 결과 개발환경이 중복적으로 필요하게 되어 docker를 사용해보기로 했다.&lt;/p&gt;
+
+&lt;p&gt;하지만 익숙해지는데 엄청난 시간이 걸렸다. ㅜㅜ&lt;/p&gt;
+
+&lt;p&gt;암튼, 주 목적은 다음과 같다. 
+ghost와 같은 개발환경과 소스코드를 하나의 컨테이너에 묶어두어 다른 컴퓨터에서도 동일하게 사용하게 한다. 이렇게 되면 다른 프로젝트와도 분리가 되므로 라이브러리 버전 문제도 생기지 않고 추후 주 개발 컴퓨터가 변경되어도 이미지만 복사해 이동하면 끝이다.  &lt;/p&gt;
+
+&lt;p&gt;우선 아래 주소로 부터 설치와 관련 Dockerfile 및 스크립트 파일을 다운로드 받는다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://github.com/docker-library/ghost.git"&gt;https://github.com/docker-library/ghost.git&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;그리고 이미지를 생성한다. 이때 위치는 Dockerfile이 있는 위치여야 한다.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+docker build -t [tag 이름] . &lt;br&gt;
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;다음으로 실행한다.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+docker run --name [실행이름]  -p 2368:2368 [tag 이름] &lt;br&gt;
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;이후 buster등을 설치해야 하는데, buster는 pip로 설치를 해야 한다. &lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+apt-get install python-pip &lt;br&gt;
+apt-get install libxml2-dev libxslt1-dev python-dev &lt;br&gt;
+apt-get install lib32z1-dev &lt;br&gt;
+apt-get install git &lt;br&gt;
+pip install buster &lt;br&gt;
+&lt;/code&gt;&lt;/p&gt;</content:encoded></item><item><title>MathJax사용하기</title><description>&lt;p&gt;Ghost와 함께 수식을 사용해야하다 보니, 찾아본게 MathJax였다.&lt;/p&gt;
 
 &lt;h4 id="mathjax"&gt;MathJax 설치&lt;/h4&gt;
 
 &lt;p&gt;MathJax를 사용하는 방법은 두가지가 있다. 첫번째로는 Injection이 있고 두번째는 직접 theme에 추가하는 방법이다. 여기서는 후자인 theme에 직접 추가하는 방법에 대해 설명하낟.&lt;/p&gt;
 
-&lt;p&gt;content가 설치된 폴더는 /home/user/ghost라고 하면, 여기에 theme 폴더에 MathJax.js를 다운로드 받아 복사해 놓는다. 이후 default.hbs 파일을&lt;/p&gt;</description><link>http://localhost:2368/mathjaxsayonghagi/</link><guid isPermaLink="false">38a62fce-8737-47b3-8c7a-0b570d70034d</guid><dc:creator>SungTae Moon</dc:creator><pubDate>Mon, 27 Mar 2017 12:54:37 GMT</pubDate><content:encoded>&lt;p&gt;Ghost와 함께 수식을 사용해야하다 보니, 찾아본게 MathJax였다.&lt;/p&gt;
+&lt;p&gt;content가 설치된 폴더는 /home/user/ghost라고 하면, 여기에 theme 폴더에 MathJax.js를 다운로드 받아 복사해 놓는다. 이후 default.hbs 파일을&lt;/p&gt;</description><link>http://localhost:2368/mathjaxsayonghagi/</link><guid isPermaLink="false">38a62fce-8737-47b3-8c7a-0b570d70034d</guid><category>ghost</category><dc:creator>SungTae Moon</dc:creator><pubDate>Mon, 27 Mar 2017 12:54:00 GMT</pubDate><content:encoded>&lt;p&gt;Ghost와 함께 수식을 사용해야하다 보니, 찾아본게 MathJax였다.&lt;/p&gt;
 
 &lt;h4 id="mathjax"&gt;MathJax 설치&lt;/h4&gt;
 
