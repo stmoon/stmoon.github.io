@@ -1,3 +1,4 @@
+
 <head>
     <meta charset="utf-8">
 
@@ -18,7 +19,7 @@
     <meta property="og:description" content="개인적으로 Ghost를 좋아한다. 심플하면서도 Markdown으로 파워풀하다. 그런데 최근 여러작업을 하다보니 컴퓨터를 여러개를 사용하게 되었고, 그 결과 개발환경이 중복적으로 필요하게 되어 docker를 사용해보기로 했다. 하지만 익숙해지는데 엄청난 시간이 걸렸다. ㅜㅜ 암튼, 주 목적은 다음과 같다.  ghost와 같은 개발환경과 소스코드를 하나의 컨테이너에 묶어두어 다른 컴퓨터에서도 동일하게 사용하게 한다. 이렇게 되면 다른 프로젝트와도">
     <meta property="og:url" content="http://localhost:2368/install-ghost-in-docker/">
     <meta property="article:published_time" content="2017-03-27T13:01:51.000Z">
-    <meta property="article:modified_time" content="2017-03-27T13:02:00.000Z">
+    <meta property="article:modified_time" content="2017-03-28T04:25:07.000Z">
     <meta property="article:tag" content="ghost">
     
     <meta name="twitter:card" content="summary">
@@ -54,7 +55,7 @@
     "headline": "install ghost in Docker",
     "url": "http://localhost:2368/install-ghost-in-docker/",
     "datePublished": "2017-03-27T13:01:51.000Z",
-    "dateModified": "2017-03-27T13:02:00.000Z",
+    "dateModified": "2017-03-28T04:25:07.000Z",
     "keywords": "ghost",
     "description": "개인적으로 Ghost를 좋아한다. 심플하면서도 Markdown으로 파워풀하다. 그런데 최근 여러작업을 하다보니 컴퓨터를 여러개를 사용하게 되었고, 그 결과 개발환경이 중복적으로 필요하게 되어 docker를 사용해보기로 했다. 하지만 익숙해지는데 엄청난 시간이 걸렸다. ㅜㅜ 암튼, 주 목적은 다음과 같다.  ghost와 같은 개발환경과 소스코드를 하나의 컨테이너에 묶어두어 다른 컴퓨터에서도 동일하게 사용하게 한다. 이렇게 되면 다른 프로젝트와도",
     "mainEntityOfPage": {
@@ -871,25 +872,22 @@ ghost와 같은 개발환경과 소스코드를 하나의 컨테이너에 묶어
 
 <p>그리고 이미지를 생성한다. 이때 위치는 Dockerfile이 있는 위치여야 한다.</p>
 
-<p><code>
-docker build -t [tag 이름] . <br>
-</code></p>
+<pre><code>docker build -t [tag 이름] .  
+</code></pre>
 
 <p>다음으로 실행한다.</p>
 
-<p><code>
-docker run --name [실행이름]  -p 2368:2368 [tag 이름] <br>
-</code></p>
+<pre><code>docker run --name [실행이름]  -p 2368:2368 [tag 이름]  
+</code></pre>
 
 <p>이후 buster등을 설치해야 하는데, buster는 pip로 설치를 해야 한다. </p>
 
-<p><code>
-apt-get install python-pip <br>
-apt-get install libxml2-dev libxslt1-dev python-dev <br>
-apt-get install lib32z1-dev <br>
-apt-get install git <br>
-pip install buster <br>
-</code></p>
+<pre><code>apt-get install python-pip  
+apt-get install libxml2-dev libxslt1-dev python-dev  
+apt-get install lib32z1-dev  
+apt-get install git  
+pip install buster  
+</code></pre>
 
             </section>
 

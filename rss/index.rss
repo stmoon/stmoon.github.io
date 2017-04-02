@@ -1,4 +1,102 @@
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Program Lock</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.11</generator><lastBuildDate>Mon, 27 Mar 2017 13:02:38 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>install ghost in Docker</title><description>&lt;p&gt;개인적으로 Ghost를 좋아한다. 심플하면서도 Markdown으로 파워풀하다.
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"><channel><title>Program Lock</title><description>Thoughts, stories and ideas.</description><link>http://localhost:2368/</link><generator>Ghost 0.11</generator><lastBuildDate>Sun, 02 Apr 2017 08:52:34 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title>[docker] enter running container with new tty</title><description>&lt;h4 id="intro"&gt;Intro&lt;/h4&gt;
+
+&lt;p&gt;docker를 사용할때 문제가 터미널 창이 하나 밖에 사용이 안된다는 것이다. 예를 들어, ghost를 띄워주기 위해 docker를 사용하고 있는데, content를 buster를 이용하여 github.io에 올려주고 싶다면, frontend로 npm을 실행시킬 수 없다. 따라서 새로운 터미널을 열어 새로운 명령을 실행시키고 싶다는 것이다.&lt;/p&gt;
+
+&lt;h4 id="solution"&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;우선 실행되고 있는 docker container가 있는 경우&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;docker exec&lt;/code&gt;&lt;/pre&gt;</description><link>http://localhost:2368/docker-enter-running-container-with-new-tty/</link><guid isPermaLink="false">e33897b2-e5f9-409c-b02c-7f72cf44a4a8</guid><category>docker</category><dc:creator>SungTae Moon</dc:creator><pubDate>Sun, 02 Apr 2017 08:50:26 GMT</pubDate><content:encoded>&lt;h4 id="intro"&gt;Intro&lt;/h4&gt;
+
+&lt;p&gt;docker를 사용할때 문제가 터미널 창이 하나 밖에 사용이 안된다는 것이다. 예를 들어, ghost를 띄워주기 위해 docker를 사용하고 있는데, content를 buster를 이용하여 github.io에 올려주고 싶다면, frontend로 npm을 실행시킬 수 없다. 따라서 새로운 터미널을 열어 새로운 명령을 실행시키고 싶다는 것이다.&lt;/p&gt;
+
+&lt;h4 id="solution"&gt;Solution&lt;/h4&gt;
+
+&lt;p&gt;우선 실행되고 있는 docker container가 있는 경우&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;docker exec -it [container-id] bash  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;로 해주면 끝!!&lt;/p&gt;
+
+&lt;p&gt;참 쉽죠잉~~&lt;/p&gt;</content:encoded></item><item><title>[QT] KillTimer Warning</title><description>&lt;h4 id=""&gt;문제 현상&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;QT5에서 동작 시 문제 발생 (QT4에서는 문제 발생하지 않았음)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;QObject::killTimer: Timers cannot be stopped from another thread  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=""&gt;문제 원인&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;MainWindow에서 소멸자가 불려 mManagerThread가 종료가 된 후에, mManager를 delete함&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;MainWindow::~MainWindow()  
+{    
+    mManagerThread.quit();
+    if(!mManagerThread.wait(3000)) //Wait until it actually has terminated (max. 3 sec)
+    {
+        mManagerThread.terminate(&lt;/code&gt;&lt;/pre&gt;</description><link>http://localhost:2368/qt-timer-2/</link><guid isPermaLink="false">18ae2c5f-1b93-4405-8b2f-2af223c78d2a</guid><category>QT</category><dc:creator>SungTae Moon</dc:creator><pubDate>Thu, 30 Mar 2017 06:10:41 GMT</pubDate><content:encoded>&lt;h4 id=""&gt;문제 현상&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;QT5에서 동작 시 문제 발생 (QT4에서는 문제 발생하지 않았음)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;QObject::killTimer: Timers cannot be stopped from another thread  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=""&gt;문제 원인&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;MainWindow에서 소멸자가 불려 mManagerThread가 종료가 된 후에, mManager를 delete함&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;MainWindow::~MainWindow()  
+{    
+    mManagerThread.quit();
+    if(!mManagerThread.wait(3000)) //Wait until it actually has terminated (max. 3 sec)
+    {
+        mManagerThread.terminate(); //Thread didn't exit in time, probably deadlocked, terminate it!
+        mManagerThread.wait(); //We have to wait again here!
+    }
+        ... (생략) ...
+        delete mManager;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;mManager가 종료되어 소멸자가 불리면, 쓰레드가 이미 종료된 상태이기 때문에 Manager 소멸자에서 QTimer를 stop할려고 할때 위와 같은 문제가 발생함 &lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;다른 Thread에서 Timer를 stop 시킬려고 해서 생기는 문제였음&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;CManager::~CManager()  
+{
+    QMap&amp;lt;int, IAgent*&amp;gt;::iterator i;
+    for (i = mAgents.begin(); i != mAgents.end(); ++i) {
+        delete i.value();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=""&gt;해결책&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;finished signal을 활성화 시켜 종료시 event를 emit할때 delete를 수행하도록 변경함&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;connect(&amp;amp;mManagerThread, SIGNAL(finished()), mManager, SLOT(onTerminated()));  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;void CManager::onTerminated()  
+{ 
+    QMap&amp;lt;int, IAgent*&amp;gt;::iterator i;
+    for (i = mAgents.begin(); i != mAgents.end(); ++i) {
+        delete i.value();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;</content:encoded></item><item><title>install ghost in Docker</title><description>&lt;p&gt;개인적으로 Ghost를 좋아한다. 심플하면서도 Markdown으로 파워풀하다.
 그런데 최근 여러작업을 하다보니 컴퓨터를 여러개를 사용하게 되었고, 그 결과 개발환경이 중복적으로 필요하게 되어 docker를 사용해보기로 했다.&lt;/p&gt;
 
 &lt;p&gt;하지만 익숙해지는데 엄청난 시간이 걸렸다. ㅜㅜ&lt;/p&gt;
@@ -18,25 +116,22 @@ ghost와 같은 개발환경과 소스코드를 하나의 컨테이너에 묶어
 
 &lt;p&gt;그리고 이미지를 생성한다. 이때 위치는 Dockerfile이 있는 위치여야 한다.&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;
-docker build -t [tag 이름] . &lt;br&gt;
-&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;docker build -t [tag 이름] .  
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;다음으로 실행한다.&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;
-docker run --name [실행이름]  -p 2368:2368 [tag 이름] &lt;br&gt;
-&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;docker run --name [실행이름]  -p 2368:2368 [tag 이름]  
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;이후 buster등을 설치해야 하는데, buster는 pip로 설치를 해야 한다. &lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;
-apt-get install python-pip &lt;br&gt;
-apt-get install libxml2-dev libxslt1-dev python-dev &lt;br&gt;
-apt-get install lib32z1-dev &lt;br&gt;
-apt-get install git &lt;br&gt;
-pip install buster &lt;br&gt;
-&lt;/code&gt;&lt;/p&gt;</content:encoded></item><item><title>MathJax사용하기</title><description>&lt;p&gt;Ghost와 함께 수식을 사용해야하다 보니, 찾아본게 MathJax였다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;apt-get install python-pip  
+apt-get install libxml2-dev libxslt1-dev python-dev  
+apt-get install lib32z1-dev  
+apt-get install git  
+pip install buster  
+&lt;/code&gt;&lt;/pre&gt;</content:encoded></item><item><title>MathJax사용하기</title><description>&lt;p&gt;Ghost와 함께 수식을 사용해야하다 보니, 찾아본게 MathJax였다.&lt;/p&gt;
 
 &lt;h4 id="mathjax"&gt;MathJax 설치&lt;/h4&gt;
 
